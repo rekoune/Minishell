@@ -1,0 +1,89 @@
+#include "minishell.h"
+
+int	str_len(char *str, char separator)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return(0);
+	while (str[i] && str[i] != separator)
+		i++;
+	return (i);
+}
+char *str_dup(char *str, int size)
+{
+	int	i;
+	char *return_str;
+
+	i = 0;
+	return_str = malloc(sizeof(char) * (str_len(str, '\0') + 1));
+	if(!return_str)
+		return(NULL);
+	while (str[i] && i < size)
+	{
+		return_str[i] = str[i];
+		i++;
+	}
+	return_str[i] = '\0';
+	return(return_str);
+}
+
+
+int word_counter(char *str, char	separator)
+{
+	int	i;
+	int counter;
+	int	flag;
+
+	flag = 1;
+	counter = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (flag == 1 && str[i] != separator && str[i] != ' ')
+		{
+			flag = 0;
+			counter++;
+		}
+		if(str[i] == separator)
+			flag = 1;
+		i++;
+	}
+	return (counter);
+}
+
+char **ft_split(char *str, char separator)
+{
+	char **return_str;
+	int	counter;
+	int	i;
+
+	i = 0;
+	counter = word_counter(str, separator);
+	return_str = malloc(sizeof(char *) * (counter + 1));
+	if (!return_str)
+		return(NULL);
+	while(i < counter)
+	{
+		while(*str == separator || *str == ' ')
+			str++;
+		return_str[i] = str_dup(str, str_len(str, separator));
+		str += str_len(str, separator);
+		i++;
+	}
+	return_str[i] = NULL;
+	return(return_str);
+}
+
+// int main()
+// {
+// 	char **str = ft_split("wc -l | ls -l", '|');
+// 	int i = 0;
+
+// 	while(str[i])
+// 	{
+// 		printf("|%s|\n", str[i]);
+// 		i++;
+// 	}
+// }
