@@ -1,4 +1,4 @@
-CFILES = minishell.c
+CFILES = minishell.c list_utils.c ft_split.c
 OFILES = $(CFILES:.c=.o)
 
 CFLAGS = -Wall -Wextra -Werror
@@ -9,7 +9,7 @@ NAME = minishell
 all: $(NAME)
 
 $(NAME) : $(OFILES) minishell.h
-		$(CC) $(CFLAGS) $(OFILES) -o $(NAME)
+		$(CC) $(CFLAGS) $(OFILES) -o $(NAME) -lreadline
 
 %.o:%.c
 	$(CC) $(CFLAGS) -c $< -o $@
