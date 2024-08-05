@@ -22,6 +22,7 @@ int main()
 		cmd = cmd->next;
 	}
 	printf("aaaaaaaaaaaaaaaaaaaaa\n");
+	printf("hamza aouky\n");
 	}
 
 }
