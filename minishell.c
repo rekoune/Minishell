@@ -21,6 +21,7 @@ int main()
 			printf("|%s|\n", cmd->command[i++]);
 		cmd = cmd->next;
 	}
+	printf("aaaaaaaaaaaaaaaaaaaaa\n");
 	}
 
 }
