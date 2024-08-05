@@ -28,5 +28,6 @@ int			str_len(char *str, char separator);
 
 //parcing.c
 char 		**parcing(char *str);
+t_cmd_list	*get_commands(char *str);
 
 #endif

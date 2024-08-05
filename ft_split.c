@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/05 09:43:18 by haouky            #+#    #+#             */
+/*   Updated: 2024/08/05 09:43:21 by haouky           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	str_len(char *str, char separator)
@@ -76,14 +88,3 @@ char **ft_split(char *str, char separator)
 	return(return_str);
 }
 
-// int main()
-// {
-// 	char **str = ft_split("wc -l | ls -l", '|');
-// 	int i = 0;
-
-// 	while(str[i])
-// 	{
-// 		printf("|%s|\n", str[i]);
-// 		i++;
-// 	}
-// }
