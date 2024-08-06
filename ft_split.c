@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 09:43:18 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/05 09:43:21 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/06 12:38:13 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ char *str_dup(char *str, int size)
 	char *return_str;
 
 	i = 0;
-	return_str = malloc(sizeof(char) * (str_len(str, '\0') + 1));
+	return_str = malloc(sizeof(char) * (size + 1));
 	if(!return_str)
 		return(NULL);
-	while (str[i] && i < size)
+	while (i < size)
 	{
 		return_str[i] = str[i];
 		i++;

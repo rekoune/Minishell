@@ -8,17 +8,16 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-typedef struct s_cmd_list
+typedef struct s_list
 {
-	char **command;
+	char *str;
 	void *next;
-}t_cmd_list;
+}t_list;
+
 
 //minishell.c
 
 //list_utils.c
-t_cmd_list	*new_node(char **str);
-void		add_back(t_cmd_list **head, t_cmd_list *new);
 
 //ft_split.c
 char		**ft_split(char *str, char separator);
@@ -28,6 +27,54 @@ int			str_len(char *str, char separator);
 
 //parcing.c
 char 		**parcing(char *str);
-t_cmd_list	*get_commands(char *str);
+
+//sturct and 
+enum e_token
+{
+	WORD = -1,
+	WHITE_SPACE = ' ',
+	NEW_LINE = '\n',
+	QOUTE = '\'',
+	DOUBLE_QUOTE = '\"',
+	ESCAPE = '\\',
+	ENV = '$',
+	PIPE_LINE = '|',
+	REDIR_IN = '<',
+	REDIR_OUT = '>',
+	HERE_DOC,
+	DREDIR_OUT,
+};
+
+enum e_state
+{
+	IN_DQUOTE,
+	IN_QUOTE,
+	GENERAL,
+};
+
+typedef struct    s_lexer_list
+{
+    char                *content;
+    int                  len;
+    enum e_token        type;
+    enum e_state        state;
+    struct    s_lexer_list             *next;
+    struct    s_lexer_list         *prev;
+}t_lexer_list;
+
+typedef struct  s_work_before_cmd
+{
+	enum e_token state_before;
+	char *filebefore;
+	enum e_token state_after;
+	char *fileafter;
+	int pipe;
+}   t_action;
+typedef struct s_excution
+{
+	char **cmd;
+	char *path;
+	t_action action;
+} t_excution;
 
 #endif
