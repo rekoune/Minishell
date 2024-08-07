@@ -1,4 +1,4 @@
-CFILES = minishell.c list_utils.c ft_split.c parcing.c tools.c linked_list.c 
+CFILES = minishell.c utils.c ft_split.c parcing.c tools.c linked_list.c 
 OFILES = $(CFILES:.c=.o)
 
 CFLAGS = -Wall -Wextra -Werror

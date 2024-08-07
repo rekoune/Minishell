@@ -67,6 +67,7 @@ typedef struct s_excution
 //list_utils.c
 void    add_back_lst(t_list **head, t_list *new);
 t_list *lst_new(char *s);
+int	ft_lstsize(t_list *lst);
 
 //ft_split.c
 char		**ft_split(char *str, char separator);
@@ -83,5 +84,6 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, enum e_state state);
 
 //helper func
 char *str_join(char *s1, char *s2);
+char	**getarray(t_list *lst);
 
 #endif
