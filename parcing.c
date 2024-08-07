@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/07 08:38:47 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/07 08:54:28 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,34 +33,6 @@ char *str_join(char *s1, char *s2)
 	}
 	s[i + l] = 0;
 	return (s);
-}
-
-t_list *lst_new(char *s)
-{
-	t_list *lst;
-
-	lst = malloc (sizeof(t_list));
-	if(!lst)
-		return (0);
-	lst->str = s;
-	lst->next = 0;
-	return(lst);	
-}
-
-void    add_back_lst(t_list **head, t_list *new)
-{
-    t_list *node;
-    node = *head;
-    if(!head)
-        return;
-    if(*head == NULL)
-    {
-        (*head) = new;
-        return;
-    }
-    while(node->next)
-        node = node->next;
-    node->next = new;
 }
 
 t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, enum e_state state)
@@ -115,6 +87,7 @@ t_excution *parce(t_lexer_list *lxr)
 		}
 		lexer = lexer->next;
 	}
+	execution->cmd = getarray(some);
 	execution->next = parce(lexer);
 	return (execution);
 }
