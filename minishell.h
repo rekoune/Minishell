@@ -48,7 +48,7 @@ typedef struct    s_lexer_list
     struct    s_lexer_list         *prev;
 }t_lexer_list;
 
-typedef struct  s_work_before_cmd
+typedef struct  s_cmd_rederctions
 {
 	t_list *input;
 	t_list *output;
