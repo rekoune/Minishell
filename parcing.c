@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/06 15:28:45 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/07 08:38:47 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,13 @@ t_list *lst_new(char *s)
 	if(!lst)
 		return (0);
 	lst->str = s;
-	lst->next = 0;	
+	lst->next = 0;
+	return(lst);	
 }
 
 void    add_back_lst(t_list **head, t_list *new)
 {
-    t_lexer_list *node;
+    t_list *node;
     node = *head;
     if(!head)
         return;
@@ -83,20 +84,37 @@ t_excution *parce(t_lexer_list *lxr)
 	t_excution *execution;
 	t_lexer_list *lexer;
 	t_list *some;
-	
+
+	if(!lxr)
+		return (0);
 	some = 0;
 	execution = malloc(sizeof(t_excution));
+	if(!execution)
+		return (0);
+	execution->action = malloc(sizeof(t_action));
+	if(!execution->action)
+		return (0);
 	lexer = lxr;
 	while (lexer && lexer->type == PIPE_LINE)
 	{
-		if((lexer->type == DOUBLE_QUOTE && lexer->next->state == IN_DQUOTE ) ||(lexer->type == QOUTE && lexer->next->state == IN_QUOTE) )
+		if((lexer->type == DOUBLE_QUOTE && lexer->next->state == IN_DQUOTE ) || (lexer->type == QOUTE && lexer->next->state == IN_QUOTE) )
 			lexer = fqouts(&some,lexer,lexer->next->state);
-		else if(lexer->type == WORD);
+		else if(lexer->type == WORD)
 			add_back_lst(&some,lst_new(str_dup(lexer->content,lexer->len)));
-		else if(lexer->type == REDIR_IN)
+		else if(lexer->type == REDIR_IN || lexer->type == HERE_DOC)
 		{
-				
+			add_back_lst(&execution->action->input,lst_new(str_dup(lexer->content,lexer->len)));
+			lexer = lexer->next;
+			add_back_lst(&execution->action->input,lst_new(str_dup(lexer->content,lexer->len)));
+		}
+		else if(lexer->type == REDIR_OUT || lexer->type == DREDIR_OUT)
+		{
+			add_back_lst(&execution->action->output,lst_new(str_dup(lexer->content,lexer->len)));
+			lexer = lexer->next;
+			add_back_lst(&execution->action->output,lst_new(str_dup(lexer->content,lexer->len)));
 		}
 		lexer = lexer->next;
 	}
+	execution->next = parce(lexer);
+	return (execution);
 }
