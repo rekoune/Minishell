@@ -8,27 +8,13 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+//sturct and 
 typedef struct s_list
 {
 	char *str;
 	void *next;
 }t_list;
 
-
-//minishell.c
-
-//list_utils.c
-
-//ft_split.c
-char		**ft_split(char *str, char separator);
-int 		word_counter(char *str, char	separator);
-char		*str_dup(char *str, int size);
-int			str_len(char *str, char separator);
-
-//parcing.c
-char 		**parcing(char *str);
-
-//sturct and 
 enum e_token
 {
 	WORD = -1,
@@ -64,17 +50,38 @@ typedef struct    s_lexer_list
 
 typedef struct  s_work_before_cmd
 {
-	enum e_token state_before;
-	char *filebefore;
-	enum e_token state_after;
-	char *fileafter;
+	t_list *input;
+	t_list *output;
 	int pipe;
 }   t_action;
 typedef struct s_excution
 {
 	char **cmd;
 	char *path;
-	t_action action;
+	t_action *action;
+	struct s_excution *next;
 } t_excution;
+
+//minishell.c
+
+//list_utils.c
+void    add_back_lst(t_list **head, t_list *new);
+t_list *lst_new(char *s);
+
+//ft_split.c
+char		**ft_split(char *str, char separator);
+int 		word_counter(char *str, char	separator);
+char		*str_dup(char *str, int size);
+int			str_len(char *str, char separator);
+
+//parcing.c
+char 		**parcing(char *str);
+t_excution *parce(t_lexer_list *lxr);
+
+//parcing utils
+t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, enum e_state state);
+
+//helper func
+char *str_join(char *s1, char *s2);
 
 #endif
