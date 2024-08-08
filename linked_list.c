@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:56:22 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/07 08:53:17 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/08 13:13:14 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,23 @@ void    add_back_lst(t_list **head, t_list *new)
         node = node->next;
     node->next = new;
 }
+
+void    fadd_back_lst(t_oip **head, t_oip *new)
+{
+    t_oip *node;
+    node = *head;
+    if(!head)
+        return;
+    if(*head == NULL)
+    {
+        (*head) = new;
+        return;
+    }
+    while(node->next)
+        node = node->next;
+    node->next = new;
+}
+
 int	ft_lstsize(t_list *lst)
 {
 	int	i;
@@ -49,6 +66,18 @@ t_list *lst_new(char *s)
 	if(!lst)
 		return (0);
 	lst->str = s;
+	lst->next = 0;
+	return(lst);	
+}
+
+t_oip *flst_new(char *s)
+{
+	t_oip *lst;
+
+	lst = malloc (sizeof(t_oip));
+	if(!lst)
+		return (0);
+	lst->name = s;
 	lst->next = 0;
 	return(lst);	
 }

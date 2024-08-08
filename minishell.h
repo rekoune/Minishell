@@ -48,10 +48,18 @@ typedef struct    s_lexer_list
     struct    s_lexer_list         *prev;
 }t_lexer_list;
 
+typedef struct  s_out_in_put
+{
+	enum e_token type;
+	char *name;
+	char *s;
+	struct  s_out_in_put *next
+}    t_oip;
+
 typedef struct  s_cmd_rederctions
 {
-	t_list *input;
-	t_list *output;
+	t_oip *input;
+	t_oip *output;
 	int pipe;
 }   t_action;
 typedef struct s_excution
@@ -66,7 +74,9 @@ typedef struct s_excution
 
 //list_utils.c
 void    add_back_lst(t_list **head, t_list *new);
+void    fadd_back_lst(t_oip **head, t_oip *new);
 t_list *lst_new(char *s);
+t_oip *flst_new(char *s);
 int	ft_lstsize(t_list *lst);
 
 //ft_split.c
