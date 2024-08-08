@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/07 08:54:28 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/08 13:17:04 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,14 @@ char *str_join(char *s1, char *s2)
 t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, enum e_state state)
 {
 	char *s;
-
+	char *tmp;
 	s = str_dup(lxr->content,lxr->len);
 	lxr = lxr->next;
 	while (lxr && lxr->state == state)
 	{
+		tmp = s;
 		s = str_join(s,lxr->content);
+		free(tmp);
 		lxr = lxr->next;	
 	}
 	add_back_lst(head, lst_new(s));
@@ -75,19 +77,23 @@ t_excution *parce(t_lexer_list *lxr)
 			add_back_lst(&some,lst_new(str_dup(lexer->content,lexer->len)));
 		else if(lexer->type == REDIR_IN || lexer->type == HERE_DOC)
 		{
-			add_back_lst(&execution->action->input,lst_new(str_dup(lexer->content,lexer->len)));
 			lexer = lexer->next;
-			add_back_lst(&execution->action->input,lst_new(str_dup(lexer->content,lexer->len)));
+			fadd_back_lst(&execution->action->input,flst_new(str_dup(lexer->content,lexer->len)));
+			execution->action->input->type = lexer->prev->type;
 		}
 		else if(lexer->type == REDIR_OUT || lexer->type == DREDIR_OUT)
 		{
-			add_back_lst(&execution->action->output,lst_new(str_dup(lexer->content,lexer->len)));
 			lexer = lexer->next;
-			add_back_lst(&execution->action->output,lst_new(str_dup(lexer->content,lexer->len)));
+			fadd_back_lst(&execution->action->output,flst_new(str_dup(lexer->content,lexer->len)));
+			execution->action->output->type = lexer->prev->type;
 		}
 		lexer = lexer->next;
 	}
 	execution->cmd = getarray(some);
+	if(lexer && lexer->type == PIPE_LINE)
+		execution->action->pipe = 1;
+	else
+		execution->action->pipe = 0;
 	execution->next = parce(lexer);
 	return (execution);
 }
