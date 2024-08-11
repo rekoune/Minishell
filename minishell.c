@@ -1,43 +1,33 @@
 #include "minishell.h"
 
-
-t_cmd_list	*get_commands(char *str)
+void print(t_lexer_list *head)
 {
-	t_cmd_list	*head;
-	t_cmd_list	*node;
-	char		**commands;
-	int			i;
+	char *type;
+	char *state;
 
-	i = 0;
-	commands = ft_split(str, '|');
-	free(str);
-	while(commands[i])
+	printf(" content       len          type                state\n");
+		printf("=========================================================\n");
+	while (head)
 	{
-		node = new_node(parcing(commands[i], ' '));
-		add_back(&head, node);
-		i++; 
+		state = n_state(head->state);
+		type = n_type(head->type);
+		
+		printf("|%s|         %d,           %s,             %s\n",head->content, head->len, type, state);
+		head = head->next;
 	}
-	return(head);
 }
 
 int main()
 {
 	char		*str;
-	t_cmd_list	*cmd;
-	int i = 0;
+	t_lexer_list	*cmd;
 
 	while (1)
 	{
-	str = readline("\033[32mminishell \033[0m> ");
-	cmd = get_commands(str);
-	while (cmd)
-	{
-		i = 0;
-		printf("================================================\n");
-		while (cmd->command[i])
-			printf("|%s|\n", cmd->command[i++]);
-		cmd = cmd->next;
-	}
+		str = readline("\033[32mminishell \033[0m> ");
+		add_history(str);
+		cmd = is_tokenized(str);
+		print(cmd);
 	}
 
 }
