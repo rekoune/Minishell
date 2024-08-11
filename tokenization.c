@@ -57,7 +57,7 @@ void	check_syntax(t_lexer_list *node)
 	return;
 }
 
-t_lexer_list *sum_qoutes (t_lexer_list *head, enum e_token type)
+t_lexer_list *set_quote_state (t_lexer_list *head, enum e_token type)
 {
 	enum e_state state;
 	
@@ -96,7 +96,7 @@ void	add_state(t_lexer_list *head)
 	while (head)
 	{
 		if (head->type == QOUTE || head->type == DOUBLE_QUOTE)
-			head = sum_qoutes(head, head->type);
+			head = set_quote_state(head, head->type);
 		else
 		{
 			head->state = GENERAL;
