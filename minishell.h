@@ -70,14 +70,44 @@ typedef struct s_excution
 	struct s_excution *next;
 } t_excution;
 
+
+enum e_token
+{
+	WORD = -1,
+	WHITE_SPACE = ' ',
+	NEW_LINE = '\n',
+	QOUTE = '\'',
+	DOUBLE_QUOTE = '\"',
+	ESCAPE = '\\',
+	ENV = '$',
+	PIPE_LINE = '|',
+	REDIR_IN = '<',
+	REDIR_OUT = '>',
+	HERE_DOC,
+	DREDIR_OUT,
+};
+
+enum	e_state
+{
+	GENERAL,
+	IN_QUOTE,
+	IN_DQUOTE,
+};
+
+typedef struct	s_lexer_list
+{
+	char			    *content;
+	int				    len;
+	enum e_token		type;
+	enum e_state		state;
+	struct	s_lexer_list		 *next;
+	struct	s_lexer_list		  *prev;
+}t_lexer_list;
 //minishell.c
 
 //list_utils.c
-void    add_back_lst(t_list **head, t_list *new);
-void    fadd_back_lst(t_oip **head, t_oip *new);
-t_list *lst_new(char *s);
-t_oip *flst_new(char *s);
-int	ft_lstsize(t_list *lst);
+t_lexer_list	*new_node(char **str);
+void		add_back(t_lexer_list **head, t_lexer_list *new);
 
 //ft_split.c
 char		**ft_split(char *str, char separator);
@@ -95,5 +125,19 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, enum e_token state);
 //helper func
 char 	*str_join(char *s1, char *s2);
 char	**getarray(t_list *lst);
+
+//tools.c
+char	*str_ncopy(char *str, int size);
+int		check_char(char c);
+int		str_comp(char *s1, char *s2);
+void	error(char *str);
+
+//tokenization.c
+t_lexer_list	*is_tokenized(char *str);
+char 			*n_state(enum e_state state);
+char 			*n_type (enum e_token type);
+void			add_state(t_lexer_list *head);
+void			check_syntax(t_lexer_list *node);
+enum e_token	add_type(t_lexer_list *node);
 
 #endif

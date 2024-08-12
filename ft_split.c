@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 09:43:18 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/12 09:08:58 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/12 09:22:21 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,3 +70,4 @@ char	**ft_split(char *str, char separator)
 	return_str[i] = NULL;
 	return (return_str);
 }
+
