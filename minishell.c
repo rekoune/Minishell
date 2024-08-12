@@ -1,12 +1,10 @@
 #include "minishell.h"
 
-
-
-int main()
+int	main(void)
 {
 	// char		*str;
 	// int i = 0;
-	// cahr 
+	// cahr
 	// while (1)
 	// {
 	// str = readline("\033[32mminishell \033[0m> ");

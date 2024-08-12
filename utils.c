@@ -6,40 +6,11 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 08:52:12 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/07 08:53:44 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/12 09:09:17 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// void	add_back(t_cmd_list **head, t_cmd_list *new)
-// {
-// 	t_cmd_list *node;
-
-// 	node = *head;
-// 	if(!head)
-// 		return;
-// 	if(*head == NULL)
-// 	{
-// 		*head = new;
-// 		return;
-// 	}
-// 	while(node->next)
-// 		node = node->next;
-// 	node->next = new;
-// }
-
-// t_cmd_list *new_node(char **str)
-// {
-// 	t_cmd_list	*node;
-
-// 	node = malloc(sizeof(t_cmd_list));
-// 	if(!node)
-// 		return(NULL);
-// 	node->command = str;
-// 	node->next = NULL;
-// 	return(node);
-// }
 
 char	**getarray(t_list *lst)
 {
@@ -58,4 +29,44 @@ char	**getarray(t_list *lst)
 	}
 	str[i] = 0;
 	return (str);
+}
+
+char	*str_join(char *s1, char *s2)
+{
+	char	*s;
+	int		i;
+	int		l;
+
+	i = 0;
+	l = 0;
+	s = malloc(str_len(s1, '\0') + str_len(s1, '\0') + 1);
+	while (s1[i])
+	{
+		s[i] = s1[i];
+		i++;
+	}
+	while (s2[l])
+	{
+		s[i + l] = s2[l];
+		l++;
+	}
+	s[i + l] = 0;
+	return (s);
+}
+char	*str_dup(char *str, int size)
+{
+	int		i;
+	char	*return_str;
+
+	i = 0;
+	return_str = malloc(sizeof(char) * (size + 1));
+	if (!return_str)
+		return (NULL);
+	while (i < size)
+	{
+		return_str[i] = str[i];
+		i++;
+	}
+	return_str[i] = '\0';
+	return (return_str);
 }
