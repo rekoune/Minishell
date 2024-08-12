@@ -74,37 +74,33 @@ typedef struct s_excution
 
 //list_utils.c
 t_lexer_list	*new_node(char *str);
-void		add_back(t_lexer_list **head, t_lexer_list *new);
+void			add_back(t_lexer_list **head, t_lexer_list *new);
 
 //linked_list_utils
-void	add_back_lst(t_list **head, t_list *new);
-void	fadd_back_lst(t_oip **head, t_oip *new);
-int	ft_lstsize(t_list *lst);
-t_oip	*flst_new(char *s);
-t_list	*lst_new(char *s);
+void			add_back_lst(t_list **head, t_list *new);
+void			fadd_back_lst(t_oip **head, t_oip *new);
+int				ft_lstsize(t_list *lst);
+t_oip			*flst_new(char *s);
+t_list			*lst_new(char *s);
 
-//ft_split.c
-char		**ft_split(char *str, char separator);
-int 		word_counter(char *str, char	separator);
-char		*str_dup(char *str, int size);
-int			str_len(char *str, char separator);
+char			*str_dup(char *str, int size);
 
 //parcing.c
-char 		**parcing(char *str);
-t_excution *parce(t_lexer_list *lxr);
+t_excution 		*parce(t_lexer_list *lxr);
 
 //parcing utils
-t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, enum e_token state);
+t_lexer_list  	*fqouts(t_list **head,t_lexer_list *lxr, enum e_token state);
 
 //helper func
-char 	*str_join(char *s1, char *s2);
-char	**getarray(t_list *lst);
+char 			*str_join(char *s1, char *s2);
+char			**getarray(t_list *lst);
 
 //tools.c
-char	*str_ncopy(char *str, int size);
-int		check_char(char c);
-int		str_comp(char *s1, char *s2);
-void	error(char *str);
+char			*str_ncopy(char *str, int size);
+int				check_char(char c);
+int				str_comp(char *s1, char *s2);
+void			error(char *str);
+int				str_len(char *str, char separator);
 
 //tokenization.c
 t_lexer_list	*is_tokenized(char *str);
