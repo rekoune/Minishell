@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 09:43:18 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/06 12:38:13 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/12 09:08:58 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,34 +18,17 @@ int	str_len(char *str, char separator)
 
 	i = 0;
 	if (!str)
-		return(0);
+		return (0);
 	while (str[i] && str[i] != separator)
 		i++;
 	return (i);
 }
-char *str_dup(char *str, int size)
+
+
+int	word_counter(char *str, char separator)
 {
 	int	i;
-	char *return_str;
-
-	i = 0;
-	return_str = malloc(sizeof(char) * (size + 1));
-	if(!return_str)
-		return(NULL);
-	while (i < size)
-	{
-		return_str[i] = str[i];
-		i++;
-	}
-	return_str[i] = '\0';
-	return(return_str);
-}
-
-
-int word_counter(char *str, char	separator)
-{
-	int	i;
-	int counter;
+	int	counter;
 	int	flag;
 
 	flag = 1;
@@ -58,33 +41,32 @@ int word_counter(char *str, char	separator)
 			flag = 0;
 			counter++;
 		}
-		if(str[i] == separator)
+		if (str[i] == separator)
 			flag = 1;
 		i++;
 	}
 	return (counter);
 }
 
-char **ft_split(char *str, char separator)
+char	**ft_split(char *str, char separator)
 {
-	char **return_str;
-	int	counter;
-	int	i;
+	char	**return_str;
+	int		counter;
+	int		i;
 
 	i = 0;
 	counter = word_counter(str, separator);
 	return_str = malloc(sizeof(char *) * (counter + 1));
 	if (!return_str)
-		return(NULL);
-	while(i < counter)
+		return (NULL);
+	while (i < counter)
 	{
-		while(*str == separator || *str == ' ')
+		while (*str == separator || *str == ' ')
 			str++;
 		return_str[i] = str_dup(str, str_len(str, separator));
 		str += str_len(str, separator);
 		i++;
 	}
 	return_str[i] = NULL;
-	return(return_str);
+	return (return_str);
 }
-

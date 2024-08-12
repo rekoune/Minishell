@@ -22,7 +22,6 @@ enum e_token
 	NEW_LINE = '\n',
 	QOUTE = '\'',
 	DOUBLE_QUOTE = '\"',
-	ESCAPE = '\\',
 	ENV = '$',
 	PIPE_LINE = '|',
 	REDIR_IN = '<',
@@ -53,7 +52,8 @@ typedef struct  s_out_in_put
 	enum e_token type;
 	char *name;
 	char *s;
-	struct  s_out_in_put *next
+	struct  s_out_in_put *next;
+	struct  s_out_in_put *herdoc_next;
 }    t_oip;
 
 typedef struct  s_cmd_rederctions
@@ -90,10 +90,10 @@ char 		**parcing(char *str);
 t_excution *parce(t_lexer_list *lxr);
 
 //parcing utils
-t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, enum e_state state);
+t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, enum e_token state);
 
 //helper func
-char *str_join(char *s1, char *s2);
+char 	*str_join(char *s1, char *s2);
 char	**getarray(t_list *lst);
 
 #endif
