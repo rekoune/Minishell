@@ -6,14 +6,10 @@ enum e_token	add_type(t_lexer_list *node)
 		return (WORD);
 	else if(node->content[0] ==  ' ')
 		return (WHITE_SPACE);
-	else if(node->content[0] ==  '\n')
-		return (NEW_LINE);
 	else if(node->content[0] ==  '\'')
 		return (QOUTE);
 	else if(node->content[0] ==  '\"')
 		return (DOUBLE_QUOTE);
-	else if(node->content[0] ==  '\\')
-		return (ESCAPE);
 	else if(node->content[0] == '$')
 		return (ENV);
 	else if(node->content[0] ==  '|')
@@ -118,7 +114,8 @@ t_lexer_list	*is_tokenized(char *str)
 	i = 0;
 	spe_char = ' ';
 	list = NULL;
-	while (i < str_len(str, '\0') && str[i])
+
+	while (str[i])
 	{
 		if(check_char(str[i + j]))
 		{
@@ -126,7 +123,7 @@ t_lexer_list	*is_tokenized(char *str)
 			while(str[i + j] == spe_char)
 			{
 				j++;
-				if ((spe_char == '\"' || spe_char == '\'') && str[i + j] == spe_char)
+				if ((spe_char == '\"' || spe_char == '\''))
 					break;
 			}
 			node = new_node(str_ncopy(&str[i], j));
@@ -137,7 +134,7 @@ t_lexer_list	*is_tokenized(char *str)
 		} 
 		else 
 		{
-			while (!check_char(str[i + j]) && str[i + j])
+			while ( str[i + j] && !check_char(str[i + j]))
 				j++;
 			node = new_node(str_ncopy(&str[i], j));
 			node->len = j;
@@ -172,14 +169,10 @@ char *n_type (enum e_token type)
 		str = "WORD";
 	else if (type == WHITE_SPACE)
 		str = "WHITE_SPACE";
-	else if (type == NEW_LINE)
-		str = "NEW_LINE";
 	else if (type == QOUTE)
 		str = "QOUTE";
 	else if (type == DOUBLE_QUOTE)
 		str = "DOUBLE_QUOTE";
-	else if (type == ESCAPE)
-		str = "ESCAPE";
 	else if (type == ENV)
 		str = "ENV";
 	else if (type == PIPE_LINE)

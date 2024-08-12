@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/12 09:23:25 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/12 10:47:13 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ t_excution *parce(t_lexer_list *lxr)
 	enum e_token type;
 
 	if(!lxr)
+	{
+		printf("lxr == null\n");
 		return (0);
+	}
 	some = 0;
 	execution = malloc(sizeof(t_excution));
 	if(!execution)
@@ -52,14 +55,30 @@ t_excution *parce(t_lexer_list *lxr)
 	if(!execution->action)
 		return (0);
 	lexer = lxr;
-	while (lexer && lexer->type == PIPE_LINE && lexer->state == GENERAL)
+	
+	printf(">>>>>>>>>>>>>>>>>> %s\n",lexer->content);
+	while (lexer && (lexer->type != PIPE_LINE || lexer->state != GENERAL))
 	{
+		printf("in the while \n");
 		if((lexer->type == DOUBLE_QUOTE && lexer->next->state == IN_DQUOTE ) || (lexer->type == QOUTE && lexer->next->state == IN_QUOTE))
+		{
+			printf("get qouts\n");
 			lexer = fqouts(&some,lexer,lexer->type);
-		else if(lexer->type == WORD && lexer->next->type != '\'' && lexer->next->type != '\"')
-			add_back_lst(&some,lst_new(str_dup(lexer->content,lexer->len)));	
+			printf("end get qouts\n");
+		}
+		else if(lexer->type == WORD)
+		{
+			printf("get word\n");
+			if(!lxr->next || (lexer->next->type != '\'' && lexer->next->type != '\"'))
+			{
+				printf("get word2\n");
+				add_back_lst(&some,lst_new(str_dup(lexer->content,lexer->len)));
+				printf("get word3\n");
+			}
+		}
 		else if(lexer->type == REDIR_IN || lexer->type == HERE_DOC)
 		{
+			printf("get input\n");
 			type = lexer->type;
 			lexer = lexer->next;
 			if(lexer->type == WHITE_SPACE)
@@ -69,6 +88,7 @@ t_excution *parce(t_lexer_list *lxr)
 		}
 		else if(lexer->type == REDIR_OUT || lexer->type == DREDIR_OUT)
 		{
+			printf("get output\n");
 			type = lexer->type;
 			lexer = lexer->next;
 			if(lexer->type == WHITE_SPACE)
@@ -78,14 +98,22 @@ t_excution *parce(t_lexer_list *lxr)
 		}
 		lexer = lexer->next;
 	}
+	printf("end node\n");
+	if(lexer)
+		printf("22>>>>>>>>>>>>>>>>>> %s\n",lexer->content);
 	execution->cmd = getarray(some);
 	if(lexer && lexer->type == PIPE_LINE)
 	{
+		printf("set pipe\n");
 		execution->action->pipe = 1;
 		lexer = lexer->next;
 	}
 	else
+	{
+		printf("set pipe whith zero\n");
 		execution->action->pipe = 0;
+	}
+	sleep(30);
 	execution->next = parce(lexer);
 	return (execution);
 }
