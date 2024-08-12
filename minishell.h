@@ -19,12 +19,10 @@ enum e_token
 {
 	WORD = -1,
 	WHITE_SPACE = ' ',
-	NEW_LINE = '\n',
 	QOUTE = '\'',
 	DOUBLE_QUOTE = '\"',
 	ENV = '$',
 	PIPE_LINE = '|',
-	ESCAPE = '\\',
 	REDIR_IN = '<',
 	REDIR_OUT = '>',
 	HERE_DOC,
