@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/12 13:07:54 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:01:01 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,8 @@ t_excution *parce(t_lexer_list *lxr)
 	execution = malloc(sizeof(t_excution));
 	if(!execution)
 		return (0);
-	execution->action = malloc(sizeof(t_action));
-	if(!execution->action)
-		return (0);
+	execution->output = 0;
+	execution->input = 0;
 	lexer = lxr;
 	
 	printf(">>>>>>>>>>>>>>>>>> %s\n",lexer->content);
@@ -83,8 +82,8 @@ t_excution *parce(t_lexer_list *lxr)
 			lexer = lexer->next;
 			if(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
-			fadd_back_lst(&execution->action->input,flst_new(str_dup(lexer->content,lexer->len)));
-			execution->action->input->type = type;
+			fadd_back_lst(&execution->input,flst_new(str_dup(lexer->content,lexer->len)));
+			execution->input->type = type;
 		}
 		else if(lexer->type == REDIR_OUT || lexer->type == DREDIR_OUT)
 		{
@@ -93,8 +92,8 @@ t_excution *parce(t_lexer_list *lxr)
 			lexer = lexer->next;
 			if(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
-			fadd_back_lst(&execution->action->output,flst_new(str_dup(lexer->content,lexer->len)));
-			execution->action->output->type = type;
+			fadd_back_lst(&execution->output,flst_new(str_dup(lexer->content,lexer->len)));
+			execution->output->type = type;
 		}
 		lexer = lexer->next;
 	}
@@ -105,13 +104,13 @@ t_excution *parce(t_lexer_list *lxr)
 	if(lexer && lexer->type == PIPE_LINE)
 	{
 		printf("set pipe\n");
-		execution->action->pipe = 1;
+		execution->pipe = 1;
 		lexer = lexer->next;
 	}
 	else
 	{
 		printf("set pipe whith zero\n");
-		execution->action->pipe = 0;
+		execution->pipe = 0;
 	}
 	sleep(30);
 	execution->next = parce(lexer);
