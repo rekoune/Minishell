@@ -55,17 +55,13 @@ typedef struct  s_out_in_put
 	struct  s_out_in_put *herdoc_next;
 }    t_oip;
 
-typedef struct  s_cmd_rederctions
-{
-	t_oip *input;
-	t_oip *output;
-	int pipe;
-}   t_action;
 typedef struct s_excution
 {
 	char **cmd;
 	char *path;
-	t_action *action;
+	t_oip *input;
+	t_oip *output;
+	int pipe;
 	struct s_excution *next;
 } t_excution;
 
@@ -90,11 +86,11 @@ char		*str_dup(char *str, int size);
 int			str_len(char *str, char separator);
 
 //parcing.c
-char 		**parcing(char *str);
-t_excution *parce(t_lexer_list *lxr);
+t_excution *parse(t_lexer_list *lxr);
 
 //parcing utils
-t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, enum e_token state);
+t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr);
+t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type);
 
 //helper func
 char 	*str_join(char *s1, char *s2);

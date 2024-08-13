@@ -22,29 +22,44 @@ int main()
 	char		*str;
 	t_lexer_list	*cmd;
 	t_excution *exuction;
-	int	 i = 0;
+	int	 i;
+	char *type;
+
 	while (1)
 	{
 		str = readline("\033[32mminishell \033[0m> ");
 		add_history(str);
 		cmd = is_tokenized(str);
 		print(cmd);
-		exuction = parce(cmd);
+		exuction = parse(cmd);
+		printf("---------------------------------------------------------------------\n");
 		while (exuction)
 		{
+			printf("******************************************************************\n");
+			i = 0;
 			while(exuction->cmd[i])
-				printf("exection == %s\n", exuction->cmd[i++]);
-			while (exuction->action->input)
+				printf("exection>>>>>>>>>>>> == %s\n", exuction->cmd[i++]);
+			while (exuction->input)
 			{
-				printf("input type : %s, name == %s\n", n_type(exuction->action->input->type), exuction->action->input->name);
-				exuction->action->input = exuction->action->input->next;
+				// printf("/*/checkin \n");
+				// if(exuction->input->type == REDIR_IN|| exuction->input->type == HERE_DOC)
+				// 	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>in\n");
+				// printf("/*/endcheckin \n");
+				type = n_type(exuction->input->type);
+				printf("input type : %s, name == %s\n", type, exuction->input->name);
+				exuction->input = exuction->input->next;
 			}
-			while (exuction->action->output)
+			while (exuction->output)
 			{
-				printf("input type : %s, name == %s\n", n_type(exuction->action->output->type), exuction->action->output->name);
-				exuction->action->output = exuction->action->output->next;
+				// printf("/*/checkout \n");
+				// if(exuction->output->type == REDIR_OUT || exuction->output->type == DREDIR_OUT)
+				// 	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>out\n");
+				// printf("/*/endcheckout \n");
+				type = n_type(exuction->output->type);
+				printf("input type : %s, name == %s\n", type, exuction->output->name);
+				exuction->output = exuction->output->next;
 			}
-			printf("pipe == %d\n", exuction->action->pipe);
+			printf("pipe == %d\n", exuction->pipe);
 			exuction = exuction->next;
 		}
 	}
