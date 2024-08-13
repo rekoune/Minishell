@@ -24,7 +24,11 @@ int main(int ac, char **av, char **env)
 	t_excution *exuction;
 	int	 i;
 	char *type;
+	t_list *enva;
+	(void) ac;
+	(void) av;
 
+	enva = get_env(env);
 	while (1)
 	{
 		str = readline("\033[32mminishell \033[0m> ");
