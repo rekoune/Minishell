@@ -28,22 +28,3 @@ t_list	*get_env(char **env)
 	}
 	return(head);
 }
-
-int main(int ac, char **av, char **env)
-{
-	(void) ac; 
-	(void) av;
-	// t_list *head;
-	char *str[3];
-
-	str[0] = "rekoune\n";
-	str[1] = "abdellah            ";
-	str[2] = NULL;
-	// head = get_env(env);
-	// while(head)
-	// {
-	// 	printf("%s\n", head->str);
-	// 	head = head->next;
-	// }
-	ft_echo(str);
-}
