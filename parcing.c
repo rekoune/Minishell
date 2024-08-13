@@ -6,23 +6,21 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/13 10:01:01 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/13 13:06:24 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, enum e_token type)
+t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr)
 {
 	char *s;
 	char *tmp;
 
 	s = 0;
-	if(lxr->prev->type == WORD)
-		s = str_dup(lxr->prev->content,lxr->prev->len);
 	while (lxr && (lxr->type != ' ' || lxr->state != GENERAL) && (lxr->type != '|' || lxr->state != GENERAL))
 	{
-		if(lxr->type != type || lxr->state != GENERAL)
+		if((lxr->type != QOUTE && lxr->type != DOUBLE_QUOTE ) || lxr->state != GENERAL)
 		{
 			tmp = s;
 			s = str_join(s,lxr->content);
@@ -34,15 +32,36 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, enum e_token type)
 	return (lxr);
 }
 
+t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type)
+{
+	char *s;
+	char *tmp;
+	t_oip *node;
+	
+	s = 0;
+	while (lxr && (lxr->type != ' ' || lxr->state != GENERAL) && (lxr->type != '|' || lxr->state != GENERAL))
+	{
+		if((lxr->type != QOUTE && lxr->type != DOUBLE_QUOTE ) || lxr->state != GENERAL)
+		{
+			tmp = s;
+			s = str_join(s,lxr->content);
+			free(tmp);
+		}
+		lxr = lxr->next;
+	}
+	node = flst_new(s);
+	node->type = type;
+	fadd_back_lst(head, node);
+	return (lxr);
+}
 
-t_excution *parce(t_lexer_list *lxr)
+t_excution *parse(t_lexer_list *lexer)
 {
 	t_excution *execution;
-	t_lexer_list *lexer;
 	t_list *some;
 	enum e_token type;
 
-	if(!lxr)
+	if(!lexer)
 	{
 		printf("lxr == null\n");
 		return (0);
@@ -51,68 +70,40 @@ t_excution *parce(t_lexer_list *lxr)
 	execution = malloc(sizeof(t_excution));
 	if(!execution)
 		return (0);
-	execution->output = 0;
 	execution->input = 0;
-	lexer = lxr;
+	execution->output = 0;
 	
-	printf(">>>>>>>>>>>>>>>>>> %s\n",lexer->content);
 	while (lexer && (lexer->type != PIPE_LINE || lexer->state != GENERAL))
 	{
-		printf("in the while \n");
-		if((lexer->type == DOUBLE_QUOTE && lexer->next->state == IN_DQUOTE ) || (lexer->type == QOUTE && lexer->next->state == IN_QUOTE))
+		if(lexer->type == REDIR_IN || lexer->type == HERE_DOC)
 		{
-			printf("get qouts\n");
-			lexer = fqouts(&some,lexer,lexer->type);
-			printf("end get qouts\n");
-		}
-		else if(lexer->type == WORD)
-		{
-			printf("get word\n");
-			if(!lxr->next || (lexer->next->type != '\'' && lexer->next->type != '\"'))
-			{
-				printf("get word2\n");
-				add_back_lst(&some,lst_new(str_dup(lexer->content,lexer->len)));
-				printf("get word3\n");
-			}
-		}
-		else if(lexer->type == REDIR_IN || lexer->type == HERE_DOC)
-		{
-			printf("get input\n");
 			type = lexer->type;
 			lexer = lexer->next;
 			if(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
-			fadd_back_lst(&execution->input,flst_new(str_dup(lexer->content,lexer->len)));
-			execution->input->type = type;
+			lexer = ftqouts(&execution->input,lexer, type);
 		}
 		else if(lexer->type == REDIR_OUT || lexer->type == DREDIR_OUT)
 		{
-			printf("get output\n");
 			type = lexer->type;
 			lexer = lexer->next;
 			if(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
-			fadd_back_lst(&execution->output,flst_new(str_dup(lexer->content,lexer->len)));
-			execution->output->type = type;
+			lexer = ftqouts(&execution->output,lexer, type);
 		}
-		lexer = lexer->next;
+		else if(lexer->type != WHITE_SPACE)
+			lexer = fqouts(&some,lexer);
+		if(lexer)
+			lexer = lexer->next;
 	}
-	printf("end node\n");
-	if(lexer)
-		printf("22>>>>>>>>>>>>>>>>>> %s\n",lexer->content);
 	execution->cmd = getarray(some);
 	if(lexer && lexer->type == PIPE_LINE)
 	{
-		printf("set pipe\n");
 		execution->pipe = 1;
 		lexer = lexer->next;
 	}
 	else
-	{
-		printf("set pipe whith zero\n");
 		execution->pipe = 0;
-	}
-	sleep(30);
-	execution->next = parce(lexer);
+	execution->next = parse(lexer);
 	return (execution);
 }
