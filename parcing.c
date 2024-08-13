@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/13 12:18:24 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/13 12:41:04 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ t_excution *parse(t_lexer_list *lexer)
 	}
 	else
 		execution->pipe = 0;
-	// sleep(30);
 	execution->next = parse(lexer);
 	return (execution);
 }
