@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parcing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/13 12:18:24 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/13 12:48:50 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ t_excution *parse(t_lexer_list *lexer)
 	execution = malloc(sizeof(t_excution));
 	if(!execution)
 		return (0);
-	execution->input = 0;
 	execution->output = 0;
 	
 	while (lexer && (lexer->type != PIPE_LINE || lexer->state != GENERAL))
@@ -91,9 +90,6 @@ t_excution *parse(t_lexer_list *lexer)
 				lexer = lexer->next;
 			lexer = ftqouts(&execution->output,lexer, type);
 		}
-		else if(lexer->type != WHITE_SPACE)
-			lexer = fqouts(&some,lexer);
-		if(lexer)
 			lexer = lexer->next;
 	}
 	execution->cmd = getarray(some);
