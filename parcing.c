@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/13 12:48:50 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/13 12:51:26 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ t_excution *parse(t_lexer_list *lexer)
 	}
 	else
 		execution->pipe = 0;
-	// sleep(30);
 	execution->next = parse(lexer);
 	return (execution);
 }
