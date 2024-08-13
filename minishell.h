@@ -73,24 +73,24 @@ t_lexer_list	*new_node(char *str);
 void			add_back(t_lexer_list **head, t_lexer_list *new);
 
 //linked_list_utils
-void	add_back_lst(t_list **head, t_list *new);
-void	fadd_back_lst(t_oip **head, t_oip *new);
-int	ft_lstsize(t_list *lst);
-t_oip	*flst_new(char *s);
-t_list	*lst_new(char *s);
+void			add_back_lst(t_list **head, t_list *new);
+void			fadd_back_lst(t_oip **head, t_oip *new);
+int				ft_lstsize(t_list *lst);
+t_oip			*flst_new(char *s);
+t_list			*lst_new(char *s);
 
 //parcing.c
 t_excution *parse(t_lexer_list *lxr);
 
 //parcing utils
-t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr);
-t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type);
+t_lexer_list 	 *fqouts(t_list **head,t_lexer_list *lxr);
+t_lexer_list 	 *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type);
 
 //helper func
-char 	*str_join(char *s1, char *s2);
-char	**getarray(t_list *lst);
-char		*str_dup(char *str, int size);
-int			str_len(char *str, char separator);
+char 			*str_join(char *s1, char *s2);
+char			**getarray(t_list *lst);
+char			*str_dup(char *str, int size);
+int				str_len(char *str, char separator);
 
 
 //tools.c
