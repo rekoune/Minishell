@@ -79,12 +79,6 @@ int	ft_lstsize(t_list *lst);
 t_oip	*flst_new(char *s);
 t_list	*lst_new(char *s);
 
-//ft_split.c
-char		**ft_split(char *str, char separator);
-int 		word_counter(char *str, char	separator);
-char		*str_dup(char *str, int size);
-int			str_len(char *str, char separator);
-
 //parcing.c
 t_excution *parse(t_lexer_list *lxr);
 
@@ -95,6 +89,9 @@ t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type);
 //helper func
 char 	*str_join(char *s1, char *s2);
 char	**getarray(t_list *lst);
+char		*str_dup(char *str, int size);
+int			str_len(char *str, char separator);
+
 
 //tools.c
 char	*str_ncopy(char *str, int size);
