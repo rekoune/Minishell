@@ -17,18 +17,27 @@ void print(t_lexer_list *head)
 	}
 }
 
-int main()
+int main(int ac, char **av, char **env)
 {
 	char		*str;
 	t_lexer_list	*cmd;
+	t_list			*enva;
+
 	// t_excution *exuction;
 	// int	 i = 0;
+
+	(void) 	ac;
+	(void)	av;
+	enva = get_env(env);
 	while (1)
 	{
 		str = readline("\033[32mminishell \033[0m> ");
-		add_history(str);
-		cmd = is_tokenized(str);
-		print(cmd);
+		if(str && str[0])
+		{
+			add_history(str);
+			cmd = is_tokenized(str);
+			print(cmd);
+		}
 		// exuction = parce(cmd);
 		// while (exuction)
 		// {

@@ -11,8 +11,8 @@
 //sturct and 
 typedef struct s_list
 {
-	char *str;
-	void *next;
+	char 			*str;
+	struct s_list	*next;
 }t_list;
 
 enum e_token
@@ -55,17 +55,13 @@ typedef struct  s_out_in_put
 	struct  s_out_in_put *herdoc_next;
 }    t_oip;
 
-typedef struct  s_cmd_rederctions
-{
-	t_oip *input;
-	t_oip *output;
-	int pipe;
-}   t_action;
 typedef struct s_excution
 {
 	char **cmd;
 	char *path;
-	t_action *action;
+	t_oip *input;
+	t_oip *output;
+	int pipe;
 	struct s_excution *next;
 } t_excution;
 
@@ -109,5 +105,8 @@ char 			*n_type (enum e_token type);
 void			add_state(t_lexer_list *head);
 void			check_syntax(t_lexer_list *node);
 enum e_token	add_type(t_lexer_list *node);
+
+//builtins_func.c
+t_list			*get_env(char **env);
 
 #endif
