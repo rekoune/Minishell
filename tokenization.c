@@ -21,11 +21,44 @@ enum e_token	add_type(t_lexer_list *node)
 	return(0);
 }
 
-void	check_syntax(t_lexer_list *node)
+void	more_check(t_lexer_list *head)
 {
 	int	n_quote;
 
 	n_quote = 0;
+	if (head->type == PIPE_LINE)
+		error("ERROR : syntax error\n");
+	while (head)
+	{
+		if ((head->type == QOUTE || head->type == DOUBLE_QUOTE) && head->state == GENERAL)
+			n_quote++;
+		else if ((head->type == REDIR_IN || head->type == REDIR_OUT || 
+				head->type == DREDIR_OUT|| head->type == HERE_DOC) && head->state == GENERAL)
+		{
+			if (head->next && head->next->type == WHITE_SPACE)
+				head = head->next;
+			if (head->next == NULL || head->next->type == PIPE_LINE || head->next->type == REDIR_IN ||
+				 head->next->type == REDIR_OUT || head->next->type == DREDIR_OUT|| head->next->type == HERE_DOC)
+				error("ERROR : syntax error\n");
+		}
+		else if (head->type == PIPE_LINE && head->state == GENERAL)
+		{
+			if (head->next && head->next->type == WHITE_SPACE)
+				head = head->next;
+			if (head->next == NULL)
+				error("ERROR : syntax error\n");
+		}
+		head = head->next;
+	}
+	if (n_quote % 2 != 0)
+		error("ERROR : syntax error\n");
+}
+
+void	check_syntax(t_lexer_list *head)
+{
+	t_lexer_list *node;
+
+	node = head;
 	while(node)
 	{
 		if (node->type == REDIR_OUT)
@@ -44,12 +77,9 @@ void	check_syntax(t_lexer_list *node)
 		}
 		else if (node->type == PIPE_LINE  && node->len > 1 && node->state == GENERAL)
 			error("ERROR : syntax error\n");
-		else if ((node->type == QOUTE || node->type == DOUBLE_QUOTE) && node->state == GENERAL)
-			n_quote++;
 		node = node->next;
 	}
-	if (n_quote % 2 != 0)
-		error("ERROR : syntax error\n");
+	more_check(head);
 	return;
 }
 

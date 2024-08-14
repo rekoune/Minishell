@@ -11,8 +11,8 @@
 //sturct and 
 typedef struct s_list
 {
-	char *str;
-	void *next;
+	char 			*str;
+	struct s_list	*next;
 }t_list;
 
 enum e_token
@@ -70,21 +70,22 @@ typedef struct s_excution
 
 //list_utils.c
 t_lexer_list	*new_node(char *str);
-void		add_back(t_lexer_list **head, t_lexer_list *new);
+void			add_back(t_lexer_list **head, t_lexer_list *new);
 
 //linked_list_utils
-void	add_back_lst(t_list **head, t_list *new);
-void	fadd_back_lst(t_oip **head, t_oip *new);
-int	ft_lstsize(t_list *lst);
-t_oip	*flst_new(char *s);
-t_list	*lst_new(char *s);
+void			add_back_lst(t_list **head, t_list *new);
+void			fadd_back_lst(t_oip **head, t_oip *new);
+int				ft_lstsize(t_list *lst);
+t_oip			*flst_new(char *s);
+t_list			*lst_new(char *s);
 
 //parcing.c
-t_excution *parse(t_lexer_list *lxr);
+t_excution *parse(t_lexer_list *lxr, t_list *env);
 
 //parcing utils
-t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr);
-t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type);
+t_lexer_list 	 *fqouts(t_list **head,t_lexer_list *lxr, t_list *env);
+t_lexer_list 	 *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type, t_list *env);
+t_lexer_list *fenv(t_lexer_list *lxr, t_list **head, t_list *env);
 
 //helper func
 char 	*str_join(char *s1, char *s2);
@@ -95,10 +96,11 @@ int	     ft_strncmp(char *s1, char *s2, int n);
 
 
 //tools.c
-char	*str_ncopy(char *str, int size);
-int		check_char(char c);
-int		str_comp(char *s1, char *s2);
-void	error(char *str);
+char			*str_ncopy(char *str, int size);
+int				check_char(char c);
+int				str_comp(char *s1, char *s2);
+void			error(char *str);
+int				str_len(char *str, char separator);
 
 //tokenization.c
 t_lexer_list	*is_tokenized(char *str);
@@ -107,5 +109,8 @@ char 			*n_type (enum e_token type);
 void			add_state(t_lexer_list *head);
 void			check_syntax(t_lexer_list *node);
 enum e_token	add_type(t_lexer_list *node);
+
+//builtins_func.c
+t_list			*get_env(char **env);
 
 #endif
