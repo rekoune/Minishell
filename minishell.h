@@ -91,6 +91,7 @@ char 	*str_join(char *s1, char *s2);
 char	**getarray(t_list *lst);
 char		*str_dup(char *str, int size);
 int			str_len(char *str, char separator);
+int	     ft_strncmp(char *s1, char *s2, int n);
 
 
 //tools.c
