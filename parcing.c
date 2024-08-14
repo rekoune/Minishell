@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/13 12:41:04 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/13 19:53:40 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,13 @@ t_excution *parse(t_lexer_list *lexer)
 	enum e_token type;
 
 	if(!lexer)
-	{
-		printf("lxr == null\n");
 		return (0);
-	}
 	some = 0;
 	execution = malloc(sizeof(t_excution));
 	if(!execution)
 		return (0);
 	execution->input = 0;
 	execution->output = 0;
-	
 	while (lexer && (lexer->type != PIPE_LINE || lexer->state != GENERAL))
 	{
 		if(lexer->type == REDIR_IN || lexer->type == HERE_DOC)
