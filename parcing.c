@@ -3,76 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   parcing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/13 13:06:24 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/15 11:18:14 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr)
-{
-	char *s;
-	char *tmp;
-
-	s = 0;
-	while (lxr && (lxr->type != ' ' || lxr->state != GENERAL) && (lxr->type != '|' || lxr->state != GENERAL))
-	{
-		if((lxr->type != QOUTE && lxr->type != DOUBLE_QUOTE ) || lxr->state != GENERAL)
-		{
-			tmp = s;
-			s = str_join(s,lxr->content);
-			free(tmp);
-		}
-		lxr = lxr->next;
-	}
-	add_back_lst(head, lst_new(s));
-	return (lxr);
-}
-
-t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type)
-{
-	char *s;
-	char *tmp;
-	t_oip *node;
-	
-	s = 0;
-	while (lxr && (lxr->type != ' ' || lxr->state != GENERAL) && (lxr->type != '|' || lxr->state != GENERAL))
-	{
-		if((lxr->type != QOUTE && lxr->type != DOUBLE_QUOTE ) || lxr->state != GENERAL)
-		{
-			tmp = s;
-			s = str_join(s,lxr->content);
-			free(tmp);
-		}
-		lxr = lxr->next;
-	}
-	node = flst_new(s);
-	node->type = type;
-	fadd_back_lst(head, node);
-	return (lxr);
-}
-
-t_excution *parse(t_lexer_list *lexer)
+t_excution *parse(t_lexer_list *lexer, t_list *env)
 {
 	t_excution *execution;
 	t_list *some;
 	enum e_token type;
 
 	if(!lexer)
-	{
-		printf("lxr == null\n");
 		return (0);
-	}
 	some = 0;
 	execution = malloc(sizeof(t_excution));
 	if(!execution)
 		return (0);
 	execution->input = 0;
 	execution->output = 0;
-	
 	while (lexer && (lexer->type != PIPE_LINE || lexer->state != GENERAL))
 	{
 		if(lexer->type == REDIR_IN || lexer->type == HERE_DOC)
@@ -81,7 +34,7 @@ t_excution *parse(t_lexer_list *lexer)
 			lexer = lexer->next;
 			if(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
-			lexer = ftqouts(&execution->input,lexer, type);
+			lexer = ftqouts(&execution->input,lexer, type, env);
 		}
 		else if(lexer->type == REDIR_OUT || lexer->type == DREDIR_OUT)
 		{
@@ -89,11 +42,11 @@ t_excution *parse(t_lexer_list *lexer)
 			lexer = lexer->next;
 			if(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
-			lexer = ftqouts(&execution->output,lexer, type);
+			lexer = ftqouts(&execution->output,lexer, type, env);
 		}
 		else if(lexer->type != WHITE_SPACE)
-			lexer = fqouts(&some,lexer);
-		if(lexer)
+			lexer = fqouts(&some,lexer, env);
+		else
 			lexer = lexer->next;
 	}
 	execution->cmd = getarray(some);
@@ -104,6 +57,7 @@ t_excution *parse(t_lexer_list *lexer)
 	}
 	else
 		execution->pipe = 0;
-	execution->next = parse(lexer);
+	execution->path = get_path(execution->cmd[0], env);
+	execution->next = parse(lexer, env);
 	return (execution);
 }
