@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:56:22 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/14 12:37:23 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/15 09:43:44 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,7 @@ t_list	*lst_new(char *s)
 	lst = malloc(sizeof(t_list));
 	if (!lst)
 		return (0);
-	// printf("S in lenk >>>>%s\n",s);
-	lst->str = str_dup(s,str_len(s, 0));
-	free(s);
-	// printf("|||----------------->after S int lenk >>>>|>%s\n",s);
+	lst->str = s;
 	lst->next = 0;
 	return (lst);
 }

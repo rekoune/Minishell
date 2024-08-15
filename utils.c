@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 08:52:12 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/14 13:23:29 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/15 09:55:16 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*str_join(char *s1, char *s2)
 
 	i = 0;
 	l = 0;
-	s = malloc(str_len(s1, '\0') + str_len(s1, '\0') + 1);
+	s = malloc(str_len(s1, '\0') + str_len(s2, '\0') + 1);
 	while (s1 && s1[i])
 	{
 		s[i] = s1[i];
