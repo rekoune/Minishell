@@ -43,6 +43,7 @@ int main(int ac, char **av, char **env)
 			i = 0;
 			while(exuction->cmd[i])
 				printf("exection>>>>>>>>>>>> == %s\n", exuction->cmd[i++]);
+			printf("exuction->path >>>>>>>>> ==%s\n ",exuction->path);
 			while (exuction->input)
 			{
 				// printf("/*/checkin \n");

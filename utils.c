@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 08:52:12 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/15 10:00:11 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/15 11:22:10 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,41 @@ char	*str_dup(char *str, int size)
 	}
 	return_str[i] = '\0';
 	return (return_str);
+}
+static char	*sub(char const *s, unsigned int st, size_t l)
+{
+	size_t	i;
+	char	*c;
+
+	i = 0;
+	while (s[st + i] != 0 && i < l)
+		i++;
+	c = malloc (i + 1);
+	if (c == 0)
+		return (0);
+	i = 0;
+	while (s[st + i] != 0 && i < l)
+	{
+		c[i] = s[st + i];
+		i++;
+	}
+	c[i] = '\0';
+	return (c);
+}
+
+char	*ft_substr(char *s, int st, size_t l)
+{
+	char	*c;
+
+	if (!s)
+		return (0);
+	if (str_len(s, 0) < st)
+	{
+		c = malloc(1);
+		if (c == 0)
+			return (0);
+		c[0] = '\0';
+		return (c);
+	}
+	return (sub(s, st, l));
 }

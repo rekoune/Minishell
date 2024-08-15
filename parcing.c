@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/15 09:59:48 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/15 11:18:14 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ t_excution *parse(t_lexer_list *lexer, t_list *env)
 	}
 	else
 		execution->pipe = 0;
+	execution->path = get_path(execution->cmd[0], env);
 	execution->next = parse(lexer, env);
 	return (execution);
 }
