@@ -85,7 +85,8 @@ t_excution *parse(t_lexer_list *lxr, t_list *env);
 //parcing utils
 t_lexer_list 	 *fqouts(t_list **head,t_lexer_list *lxr, t_list *env);
 t_lexer_list 	 *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type, t_list *env);
-char *envv(t_lexer_list *lxr, t_list *env);
+char *envv(char *lxr, t_list *env);
+char *get_path(char *s, t_list *env);
 
 //helper func
 char 	*str_join(char *s1, char *s2);
@@ -93,6 +94,8 @@ char	**getarray(t_list *lst);
 char		*str_dup(char *str, int size);
 int			str_len(char *str, char separator);
 int	     ft_strncmp(char *s1, char *s2, int n);
+char	*ft_substr(char *s, int st, size_t l);
+char	**ft_split(char *s, char c);
 
 
 //tools.c

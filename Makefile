@@ -1,7 +1,7 @@
-CFILES = minishell.c utils.c parsing_utils.c parcing.c tools.c linked_list.c list_utils.c tokenization.c builtins_func.c
+CFILES = minishell.c utils.c ft_split.c parsing_utils.c parcing.c tools.c linked_list.c list_utils.c tokenization.c builtins_func.c
 OFILES = $(CFILES:.c=.o)
 
-CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 CC = cc
 
 NAME = minishell
