@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/16 16:46:51 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/17 10:44:01 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ t_excution *parse(t_lexer_list *lexer, t_list *env)
 	enum e_token type;
 
 	if(!lexer)
-		return (0);
-	some = 0;
+		return (NULL);
+	some = NULL;
 	execution = malloc(sizeof(t_excution));
 	if(!execution)
-		return (0);
-	execution->input = 0;
-	execution->output = 0;
+		return (NULL);
+	execution->input = NULL;
+	execution->output = NULL;
 	while (lexer && (lexer->type != PIPE_LINE || lexer->state != GENERAL))
 	{
 		if(lexer->type == REDIR_IN || lexer->type == HERE_DOC)

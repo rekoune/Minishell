@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 08:52:12 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/15 11:22:10 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/17 10:46:52 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*str_join(char *s1, char *s2)
 		s[i + l] = s2[l];
 		l++;
 	}
-	s[i + l] = 0;
+	s[i + l] = '\0';
 	return (s);
 }
 char	*str_dup(char *str, int size)
@@ -63,7 +63,7 @@ char	*str_dup(char *str, int size)
 	if (!return_str)
 		return (NULL);
 	if(!str)
-		return (0);
+		return (NULL);
 	while (i < size && str[i])
 	{
 		return_str[i] = str[i];
@@ -82,7 +82,7 @@ static char	*sub(char const *s, unsigned int st, size_t l)
 		i++;
 	c = malloc (i + 1);
 	if (c == 0)
-		return (0);
+		return (NULL);
 	i = 0;
 	while (s[st + i] != 0 && i < l)
 	{
@@ -98,12 +98,12 @@ char	*ft_substr(char *s, int st, size_t l)
 	char	*c;
 
 	if (!s)
-		return (0);
-	if (str_len(s, 0) < st)
+		return (NULL);
+	if (str_len(s, '\0') < st)
 	{
 		c = malloc(1);
 		if (c == 0)
-			return (0);
+			return (NULL);
 		c[0] = '\0';
 		return (c);
 	}

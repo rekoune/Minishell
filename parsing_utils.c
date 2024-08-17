@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/17 09:49:50 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/17 10:45:11 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char *envv(char *lxr, t_list *env)
 		}
 		env = env->next;
     }
-    return (0);
+    return (NULL);
 }
 
 char *get_path(char *s, t_list *env)
@@ -58,7 +58,7 @@ char *get_path(char *s, t_list *env)
 		free(path);
 		i++;
 	}
-	return (0);
+	return (NULL);
 }
 t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env)
 {
@@ -66,7 +66,7 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env)
 	char *tmp;
 	char *tmp1;
 
-	s = 0;
+	s = NULL;
 	while (lxr && ((lxr->state != GENERAL) || (lxr->type != ' ' && lxr->type != '|' && lxr->type != '<' && lxr->type != '>' && lxr->type != HERE_DOC && lxr->type != DREDIR_OUT)))
 	{
 		if((lxr->type != QOUTE && lxr->type != DOUBLE_QUOTE ) || lxr->state != GENERAL)
@@ -95,7 +95,7 @@ t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type, t_list
 	char *tmp1;
 	t_oip *node;
 	
-	s = 0;
+	s = NULL;
 	while (lxr && ((lxr->state != GENERAL) || (lxr->type != ' ' && lxr->type != '|' && lxr->type != '<' && lxr->type != '>' && lxr->type != HERE_DOC && lxr->type != DREDIR_OUT)))
 	{
 		if((lxr->type != QOUTE && lxr->type != DOUBLE_QUOTE ) || lxr->state != GENERAL)
