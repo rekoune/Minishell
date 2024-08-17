@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:15:02 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/14 15:32:15 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/15 17:05:18 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,17 @@ char	*str_ncopy(char *str, int size)
 
 int	check_char(char c)
 {
-	if (c == ' ' || c == '<' || c == '>' || c == '\'' || c == '\"' || c == '|')	
+	if (c == ' ' || c == '<' || c == '>' || c == '\'' || c == '\"' || c == '|' || c == '$')	
 		return(1);
 	return (0);
 }
 
-int	str_comp(char *s1, char *s2)
+int	str_ncomp(char *s1, char *s2, int size)
 {
 	int	i;
 
 	i = 0;
-	while (s1[i] && s2[i])
+	while (s1[i] && s2[i] && i < size)
 	{
 		if (s1[i] != s2[i])
 			return(s1[i] - s2[i]);

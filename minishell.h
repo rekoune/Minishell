@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/15 11:34:28 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/17 10:36:18 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,51 +81,56 @@ typedef struct s_excution
 //minishell.c
 
 //list_utils.c
-t_lexer_list	*new_node(char *str);
-void			add_back(t_lexer_list **head, t_lexer_list *new);
+t_lexer_list		*new_node(char *str);
+void				add_back(t_lexer_list **head, t_lexer_list *new);
 
 //linked_list_utils
-void			add_back_lst(t_list **head, t_list *new);
-void			fadd_back_lst(t_oip **head, t_oip *new);
-int				ft_lstsize(t_list *lst);
-t_oip			*flst_new(char *s);
-t_list			*lst_new(char *s);
+void				add_back_lst(t_list **head, t_list *new);
+void				fadd_back_lst(t_oip **head, t_oip *new);
+int					ft_lstsize(t_list *lst);
+t_oip				*flst_new(char *s);
+t_list				*lst_new(char *s);
 
 //parcing.c
 t_excution *parse(t_lexer_list *lxr, t_list *env);
 
 //parcing utils
-t_lexer_list 	 *fqouts(t_list **head,t_lexer_list *lxr, t_list *env);
-t_lexer_list 	 *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type, t_list *env);
-char *envv(char *lxr, t_list *env);
-char *get_path(char *s, t_list *env);
+t_lexer_list		*fqouts(t_list **head,t_lexer_list *lxr, t_list *env);
+t_lexer_list		*ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type, t_list *env);
+char				*envv(char *lxr, t_list *env);
+char				*get_path(char *s, t_list *env);
 
 //helper func
-char 	*str_join(char *s1, char *s2);
-char	**getarray(t_list *lst);
-char		*str_dup(char *str, int size);
-int			str_len(char *str, char separator);
-int	     ft_strncmp(char *s1, char *s2, int n);
-char	*ft_substr(char *s, int st, size_t l);
-char	**ft_split(char *s, char c);
+char				*str_join(char *s1, char *s2);
+char				**getarray(t_list *lst);
+char				*str_dup(char *str, int size);
+char				*ft_substr(char *s, int st, size_t l);
+char				**ft_split(char *s, char c);
 
 
 //tools.c
-char			*str_ncopy(char *str, int size);
-int				check_char(char c);
-int				str_comp(char *s1, char *s2);
-void			error(char *str);
-int				str_len(char *str, char separator);
+char				*str_ncopy(char *str, int size);
+int					check_char(char c);
+int					str_ncomp(char *s1, char *s2, int size);
+void				error(char *str);
+int					str_len(char *str, char separator);
 
 //tokenization.c
-t_lexer_list	*is_tokenized(char *str);
-char 			*n_state(enum e_state state);
-char 			*n_type (enum e_token type);
-void			add_state(t_lexer_list *head);
-void			check_syntax(t_lexer_list *node);
-enum e_token	add_type(t_lexer_list *node);
+t_lexer_list		*is_tokenized(char *str);
+char 				*n_state(enum e_state state);
+char 				*n_type (enum e_token type);
+void				add_state(t_lexer_list *head);
+void				check_syntax(t_lexer_list *node);
+enum e_token		add_type(t_lexer_list *node);
 
 //builtins_func.c
-t_list			*get_env(char **env);
+t_list				*get_env(char **env);
+void				ft_echo(char **str, char flag);
+void				ft_pwd();
+void				ft_env(t_list *env);
+int					is_exist(t_list *head, t_list **node, char *to_export);
+void				ft_export(t_list **env, char *to_export);
+int					check_param(char *str);
+void				ft_unset(t_list **env, char *to_unset);
 
 #endif

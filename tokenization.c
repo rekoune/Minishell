@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenization.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/17 10:36:48 by arekoune          #+#    #+#             */
+/*   Updated: 2024/08/17 10:36:49 by arekoune         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 enum e_token	add_type(t_lexer_list *node)
@@ -150,11 +162,20 @@ t_lexer_list	*is_tokenized(char *str)
 		if(check_char(str[i + j]))
 		{
 			spe_char = str[i + j];
-			while(str[i + j] == spe_char)
+			if (spe_char == '$')
 			{
 				j++;
-				if ((spe_char == '\"' || spe_char == '\''))
-					break;
+				while ( str[i + j] && !check_char(str[i + j]))
+					j++;
+			}
+			else
+			{
+				while(str[i + j] == spe_char)
+				{
+					j++;
+					if ((spe_char == '\"' || spe_char == '\''))
+						break;
+				}
 			}
 			node = new_node(str_ncopy(&str[i], j));
 			node->len = j;
