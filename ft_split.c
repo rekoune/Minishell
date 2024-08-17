@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:05:09 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/15 11:24:32 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/17 10:48:34 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ char	**ft_split(char *s, char c)
 	int		word;
 
 	if (!s)
-		return (0);
+		return (NULL);
 	word = cw(s, c);
 	str = malloc((word + 1) * sizeof(char *));
-	if (str == 0)
-		return (0);
+	if (str == NULL)
+		return (NULL);
 	return (msp(str, s, word, c));
 }
