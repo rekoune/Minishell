@@ -44,10 +44,14 @@ int main(int ac, char **av, char **env)
 	while (1)
 	{
 		str = readline("\033[32mminishell \033[0m> ");
+		if (str[0])
+		{
 		add_history(str);
 		cmd = is_tokenized(str);
 		print(cmd);
 		exuction = parse(cmd,get_env(env));
+
+		}
 		printf("---------------------------------------------------------------------\n");
 		while (exuction)
 		{
