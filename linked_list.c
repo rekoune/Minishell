@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:56:22 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/17 10:47:38 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/20 12:02:15 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,18 @@ void	fadd_back_lst(t_oip **head, t_oip *new)
 }
 
 int	ft_lstsize(t_list *lst)
+{
+	int	i;
+
+	i = 0;
+	while (lst)
+	{
+		lst = lst->next;
+		i++;
+	}
+	return (i);
+}
+int	cmd_lst_size(t_excution *lst)
 {
 	int	i;
 

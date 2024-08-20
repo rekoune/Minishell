@@ -57,66 +57,87 @@ void 	child_pross(t_excution *list, int in_fd, int out_fd, char **env)
 	printf("execve fails\n");
 }
 
-void	run_cmd(t_excution *list, char **env)
+int	get_in_fd(t_oip *input, int prev_pipe, int *flag)
 {
-	int	pipe_fd[2];
-	int	prev_pipe = 0;
 	int	in_fd;
-	int	out_fd;
-	int	flag;
-	pid_t pid;
 
 	in_fd = 0;
-	out_fd = 1;
-	flag = 0;
-	while(list)
+	if(input)
+		in_fd = open_in_files(input);
+	else if(*flag == 1)
 	{
-		if(list->input)
-			in_fd = open_in_files(list->input);
-		else if(flag == 1)
-		{
-			in_fd = dup(prev_pipe);
-			close(prev_pipe);
-			flag = 0;
-		}
-		else
-			in_fd = 0;
+		in_fd = dup(prev_pipe);
+		close(prev_pipe);
+		*flag = 0;
+	}
+	else
+		in_fd = 0;
+	return(in_fd);
+}
+
+int	get_out_fd(t_excution *list, int *prev_pipe, int *flag, int pipe_fd[2])
+{
+	int	out_fd;
+
+	out_fd = 1;
+	if(list->output)
+			out_fd = open_out_files(list->output);
+		else 
+			out_fd = 1;
 		if(list->pipe == 1)
 		{
 			if(pipe(pipe_fd) == -1)
 				error("ERROR : pipe fails\n");
-			prev_pipe = dup(pipe_fd[0]);
-			flag = 1;
-		}
-		if(list->output)
-			out_fd = open_out_files(list->output);
-		else if(list->pipe == 1 && list->output == NULL)
-		{
-			out_fd = dup(pipe_fd[1]);
-			close(prev_pipe);
-			prev_pipe = dup(pipe_fd[0]);
-			close(pipe_fd[1]);
+			*prev_pipe = dup(pipe_fd[0]);
 			close(pipe_fd[0]);
-			flag = 1;
+			*flag = 1;
+			if(list->output == NULL)
+			{
+				out_fd = dup(pipe_fd[1]);
+				close(pipe_fd[1]);
+			}
 		}
-		else 
-			out_fd = 1;
-		pid = fork();
-		if (pid == 0)
-		{
+	return(out_fd);
+}
+
+// void	ft_close(t_excution *list, int in_fd, int out_fd, char **env)
+// {
+	
+// }
+
+void	run_cmd(t_excution *list, char **env)
+{
+	int	pipe_fd[2];
+	int	prev_pipe;
+	int	in_fd;
+	int	out_fd;
+	int	flag;
+	pid_t *pid;
+	int	exit_status;
+	int	i = 0;
+	int	size;
+
+	flag = 0;
+	prev_pipe = 0;
+	exit_status = 0;
+	size = cmd_lst_size(list);
+	pid = malloc(sizeof(pid_t) * size);
+	while(list)
+	{
+		in_fd = get_in_fd(list->input, prev_pipe, &flag);
+		out_fd = get_out_fd(list, &prev_pipe, &flag, pipe_fd);
+		pid[i] = fork();
+		if (pid[i++] == 0)
 			child_pross(list, in_fd, out_fd, env);
-		}
-		waitpid(pid, NULL, 0);
 		if(in_fd != 0)
 			close(in_fd);
 		if(out_fd != 1)
 			close(out_fd);
-		if(flag == 1)
-		{
+		if(flag == 1 && list->output)
 			close(pipe_fd[1]);
-			close(pipe_fd[0]);
-		}
 		list = list->next;
 	}
-
+	i = 0;
+	while(i < size)
+		waitpid(pid[i++], NULL, 0);
 }
