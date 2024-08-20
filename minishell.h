@@ -6,21 +6,25 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/15 11:34:28 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/19 13:25:33 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 #define MINISHELL_H
 
-
+#include "GET_NEXT_LINE/get_next_line.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <fcntl.h>
 
 //sturct and 
+
+extern int g_status;
+
 typedef struct s_list
 {
 	char 			*str;
@@ -108,6 +112,7 @@ int			str_len(char *str, char separator);
 int	     ft_strncmp(char *s1, char *s2, int n);
 char	*ft_substr(char *s, int st, size_t l);
 char	**ft_split(char *s, char c);
+char *get_next_line(int fd);
 
 
 //tools.c
@@ -128,4 +133,8 @@ enum e_token	add_type(t_lexer_list *node);
 //builtins_func.c
 t_list			*get_env(char **env);
 
+//exuction
+void run_exuction(t_excution *exuction, t_list *env);
+void run_here_doc(t_oip *herdoc);
+t_oip  *get_here_doc(t_excution *exuction);
 #endif

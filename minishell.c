@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+int g_status = 1;
+
 void print(t_lexer_list *head)
 {
 	char *type;
@@ -22,51 +24,35 @@ int main(int ac, char **av, char **env)
 	char		*str;
 	t_lexer_list	*cmd;
 	t_excution *exuction;
-	int	 i;
-	char *type;
+	// int	 i;
+	// char *type;
 	t_list *enva;
 	(void) ac;
 	(void) av;
+	int pid;
 
 	enva = get_env(env);
 	while (1)
 	{
 		str = readline("\033[32mminishell \033[0m> ");
-		add_history(str);
-		cmd = is_tokenized(str);
-		print(cmd);
-		exuction = parse(cmd,get_env(env));
-		printf("---------------------------------------------------------------------\n");
-		while (exuction)
-		{
-			printf("******************************************************************\n");
-			i = 0;
-			while(exuction->cmd[i])
-				printf("exection>>>>>>>>>>>> == %s\n", exuction->cmd[i++]);
-			printf("exuction->path >>>>>>>>> ==%s\n ",exuction->path);
-			while (exuction->input)
+		if(str)
+		{ 
+			add_history(str);
+			cmd = is_tokenized(str);
+			exuction = parse(cmd,get_env(env));
+			printf("---------------------------------------------------------------------\n");
+			pid = fork();
+			printf("pid = %d\n",pid);
+			if(!pid)
 			{
-				// printf("/*/checkin \n");
-				// if(exuction->input->type == REDIR_IN|| exuction->input->type == HERE_DOC)
-				// 	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>in\n");
-				// printf("/*/endcheckin \n");
-				type = n_type(exuction->input->type);
-				printf("input type : %s, name == %s\n", type, exuction->input->name);
-				exuction->input = exuction->input->next;
+				printf("in\n");
+				run_exuction(exuction, enva);
+				exit(0);
 			}
-			while (exuction->output)
-			{
-				// printf("/*/checkout \n");
-				// if(exuction->output->type == REDIR_OUT || exuction->output->type == DREDIR_OUT)
-				// 	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>out\n");
-				// printf("/*/endcheckout \n");
-				type = n_type(exuction->output->type);
-				printf("input type : %s, name == %s\n", type, exuction->output->name);
-				exuction->output = exuction->output->next;
-			}
-			printf("pipe == %d\n", exuction->pipe);
-			exuction = exuction->next;
+			 wait(&g_status);
+			printf("status= %d\n",g_status);
 		}
+		
 	}
 
 }
