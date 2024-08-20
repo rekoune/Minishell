@@ -53,8 +53,14 @@ void 	child_pross(t_excution *list, int in_fd, int out_fd, char **env)
 		dup2(out_fd, 1);
 		close(out_fd);
 	}
+	if(!list->path)
+	{
+		write(2, "minishell: ", 12);
+		write(2, list->cmd[0], str_len(list->cmd[0], '\0'));
+		error(": command not found\n");
+	}
 	execve(list->path, list->cmd, env);
-	printf("execve fails\n");
+	error("execve fails\n");
 }
 
 int	get_in_fd(t_oip *input, int prev_pipe, int *flag)
@@ -140,5 +146,5 @@ void	run_cmd(t_excution *list, char **env)
 	i = 0;
 	while(i < size)
 		waitpid(pid[i++], NULL, 0);
-		
+
 }
