@@ -140,4 +140,5 @@ void	run_cmd(t_excution *list, char **env)
 	i = 0;
 	while(i < size)
 		waitpid(pid[i++], NULL, 0);
+		
 }
