@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
+/*   Updated: 2024/08/21 12:12:40 by haouky           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int g_status = 1;
@@ -18,7 +30,10 @@ void print(t_lexer_list *head)
 		head = head->next;
 	}
 }
-
+void handler(int n)
+{
+	n = 0;
+}
 int main(int ac, char **av, char **env)
 {
 	char		*str;
@@ -29,8 +44,9 @@ int main(int ac, char **av, char **env)
 	t_list *enva;
 	(void) ac;
 	(void) av;
-	int pid;
+	int pid = 0;
 
+	// signal(SIGINT,handler);
 	enva = get_env(env);
 	while (1)
 	{
@@ -41,18 +57,12 @@ int main(int ac, char **av, char **env)
 			cmd = is_tokenized(str);
 			exuction = parse(cmd,get_env(env));
 			printf("---------------------------------------------------------------------\n");
-			pid = fork();
-			printf("pid = %d\n",pid);
-			if(!pid)
-			{
-				printf("in\n");
-				run_exuction(exuction, enva);
-				exit(0);
-			}
-			 wait(&g_status);
-			printf("status= %d\n",g_status);
+			// signal(SIGINT, SIG_DFL);
+			run_exuction(exuction, enva);
+			
+			printf("endstatus= %d\n",g_status);
 		}
-		
 	}
 
 }
+
