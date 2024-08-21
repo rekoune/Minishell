@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/20 10:59:46 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/21 12:31:41 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,15 @@ typedef struct    s_lexer_list
     enum e_token        type;
     enum e_state        state;
     struct    s_lexer_list             *next;
-    struct    s_lexer_list         *prev;
 }t_lexer_list;
 
 typedef struct  s_out_in_put
 {
 	enum e_token type;
-	char *name;
-	char *s;
-	struct  s_out_in_put *next;
-	struct  s_out_in_put *herdoc_next;
+	char 					*name;
+	char 					*s;
+	struct  s_out_in_put	*next;
+	struct  s_out_in_put	*herdoc_next;
 }    t_oip;
 
 typedef struct s_excution
@@ -95,6 +94,7 @@ void				fadd_back_lst(t_oip **head, t_oip *new);
 int					ft_lstsize(t_list *lst);
 t_oip				*flst_new(char *s);
 t_list				*lst_new(char *s);
+int					cmd_lst_size(t_excution *lst);
 
 //parcing.c
 t_excution *parse(t_lexer_list *lxr, t_list *env);
@@ -132,14 +132,24 @@ void				check_syntax(t_lexer_list *node);
 enum e_token		add_type(t_lexer_list *node);
 
 //builtins_func.c
-t_list				*get_env(char **env);
 void				ft_echo(char **str, char flag);
 void				ft_pwd();
 void				ft_env(t_list *env);
-int					is_exist(t_list *head, t_list **node, char *to_export);
 void				ft_export(t_list **env, char *to_export);
-int					check_param(char *str);
 void				ft_unset(t_list **env, char *to_unset);
+int					is_exist(t_list *head, t_list **node, char *to_export);
+int					check_param(char *str);
+t_list				*get_env(char **env);
+void				ft_cd(char *str);
+void				ft_exit();
+
+//excu.c
+int					open_in_files(t_oip *list);
+int					open_out_files(t_oip *out_file);
+void				run_cmd(t_excution *list, t_list **env);
+
+//utils.c
+char				**getarray(t_list *lst);
 
 //exuction
 void run_exuction(t_excution *exuction, t_list *env);
