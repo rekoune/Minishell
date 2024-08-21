@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:56:22 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/15 09:43:44 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/17 10:47:38 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ t_list	*lst_new(char *s)
 
 	lst = malloc(sizeof(t_list));
 	if (!lst)
-		return (0);
+		return (NULL);
 	lst->str = s;
-	lst->next = 0;
+	lst->next = NULL;
 	return (lst);
 }
 
@@ -77,9 +77,9 @@ t_oip	*flst_new(char *s)
 
 	lst = malloc(sizeof(t_oip));
 	if (!lst)
-		return (0);
+		return (NULL);
 	lst->name = s;
-	lst->next = 0;
-	lst->herdoc_next = 0;
+	lst->next = NULL;
+	lst->herdoc_next = NULL;
 	return (lst);
 }
