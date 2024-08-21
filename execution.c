@@ -41,8 +41,48 @@ int	open_out_files(t_oip *out_file)
 	return(fd);
 }
 
-void 	child_pross(t_excution *list, int in_fd, int out_fd, char **env)
+int	check_builtins(char *str)
 {
+	if(!str_ncomp(str, "echo", 5))
+		return(1);
+	else if(!str_ncomp(str, "cd", 3))
+		return(2);
+	else if(!str_ncomp(str, "pwd", 4))
+		return(3);
+	else if(!str_ncomp(str, "export", 7))
+		return(4);
+	else if(!str_ncomp(str, "unset", 6))
+		return(5);
+	else if(!str_ncomp(str, "env", 4))
+		return(6);
+	else if(!str_ncomp(str, "exit", 5))
+		return(7);
+	return(0);
+}
+
+void	execute_builtins(char **cmd, t_list **env, int flag)
+{
+	if(flag == 1)
+		ft_echo(cmd, 'n');
+	else if(flag == 2)
+		ft_cd(cmd[0]);
+	else if(flag == 3)
+		ft_pwd();
+	else if(flag == 4)
+		ft_export(env, cmd[0]);
+	else if(flag == 5)
+		ft_unset(env, cmd[0]);
+	else if(flag == 6)
+		ft_env(*env);
+	else if(flag == 7)
+		ft_exit();
+}
+
+void 	child_pross(t_excution *list, int in_fd, int out_fd, t_list **env)
+{
+	int	flag;
+
+	flag = 0;
 	if (in_fd != 0)
 	{
 		dup2(in_fd, 0);
@@ -53,13 +93,16 @@ void 	child_pross(t_excution *list, int in_fd, int out_fd, char **env)
 		dup2(out_fd, 1);
 		close(out_fd);
 	}
+	flag = check_builtins(list->cmd[0]);
+	if(flag > 0)
+		execute_builtins(&list->cmd[1], env, flag);
 	if(!list->path)
 	{
 		write(2, "minishell: ", 12);
 		write(2, list->cmd[0], str_len(list->cmd[0], '\0'));
 		error(": command not found\n");
 	}
-	execve(list->path, list->cmd, env);
+	execve(list->path, list->cmd, getarray(*env));
 	error("execve fails\n");
 }
 
@@ -111,7 +154,7 @@ int	get_out_fd(t_excution *list, int *prev_pipe, int *flag, int pipe_fd[2])
 	
 // }
 
-void	run_cmd(t_excution *list, char **env)
+void	run_cmd(t_excution *list, t_list **env)
 {
 	int	pipe_fd[2];
 	int	prev_pipe;
@@ -135,6 +178,7 @@ void	run_cmd(t_excution *list, char **env)
 		pid[i] = fork();
 		if (pid[i++] == 0)
 			child_pross(list, in_fd, out_fd, env);
+		
 		if(in_fd != 0)
 			close(in_fd);
 		if(out_fd != 1)
