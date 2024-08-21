@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 08:52:12 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/17 10:46:52 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/21 10:30:13 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	**getarray(t_list *lst)
 		i++;
 		lst = lst->next;
 	}
-	str[i] = 0;
+	str[i] = NULL;
 	return (str);
 }
 

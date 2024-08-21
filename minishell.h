@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/20 12:02:43 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/21 11:03:37 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,15 @@ void				ft_unset(t_list **env, char *to_unset);
 int					is_exist(t_list *head, t_list **node, char *to_export);
 int					check_param(char *str);
 t_list				*get_env(char **env);
+void				ft_cd(char *str);
+void				ft_exit();
 
 //excu.c
 int					open_in_files(t_oip *list);
 int					open_out_files(t_oip *out_file);
-void				run_cmd(t_excution *list, char **env);
+void				run_cmd(t_excution *list, t_list **env);
+
+//utils.c
+char				**getarray(t_list *lst);
 
 #endif

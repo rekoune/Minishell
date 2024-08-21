@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/20 14:21:06 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/21 11:02:52 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int main(int ac, char **av, char **env)
 		add_history(str);
 		cmd = is_tokenized(str);
 		// print(cmd);
-		exuction = parse(cmd,get_env(env));
-		run_cmd(exuction, env);
+		exuction = parse(cmd,enva);
+		run_cmd(exuction, &enva);
 		}
 		// open_in_files(exuction);
 		// if(!exuction->input)
