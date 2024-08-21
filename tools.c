@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:15:02 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/15 17:05:18 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/20 15:43:35 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,11 @@ int	str_ncomp(char *s1, char *s2, int size)
 
 void	error(char *str)
 {
-	printf("%s", str);
+	int i;
+	
+	i = 0;
+	while (str[i])
+		write(2, &str[i++], 1);
 	exit(1);
 }
 

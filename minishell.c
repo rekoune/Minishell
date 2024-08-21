@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/21 12:12:40 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/21 12:33:50 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,49 @@ int main(int ac, char **av, char **env)
 	while (1)
 	{
 		str = readline("\033[32mminishell \033[0m> ");
-		if(str)
-		{ 
-			add_history(str);
-			cmd = is_tokenized(str);
-			exuction = parse(cmd,get_env(env));
-			printf("---------------------------------------------------------------------\n");
-			// signal(SIGINT, SIG_DFL);
-			run_exuction(exuction, enva);
-			
-			printf("endstatus= %d\n",g_status);
+		if (str[0])
+		{
+		add_history(str);
+		cmd = is_tokenized(str);
+		// print(cmd);
+		exuction = parse(cmd,enva);
+		run_cmd(exuction, &enva);
 		}
+		// open_in_files(exuction);
+		// if(!exuction->input)
+	
+		// printf("---------------------------------------------------------------------\n");
+		// while (exuction)
+		// {
+		// 	printf("******************************************************************\n");
+		// 	i = 0;
+		// 	while(exuction->cmd[i])
+		// 		printf("exection>>>>>>>>>>>> == %s\n", exuction->cmd[i++]);
+		// 	printf("exuction->path >>>>>>>>> ==%s\n ",exuction->path);
+		// 	while (exuction->input)
+		// 	{
+		// 		// printf("/*/checkin \n");
+		// 		// if(exuction->input->type == REDIR_IN|| exuction->input->type == HERE_DOC)
+		// 		// 	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>in\n");
+		// 		// printf("/*/endcheckin \n");
+		// 		type = n_type(exuction->input->type);
+		// 		printf("input type : %s, name == %s\n", type, exuction->input->name);
+		// 		exuction->input = exuction->input->next;
+		// 	}
+		// 	while (exuction->output)
+		// 	{
+		// 		// printf("/*/checkout \n");
+		// 		// if(exuction->output->type == REDIR_OUT || exuction->output->type == DREDIR_OUT)
+		// 		// 	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>out\n");
+		// 		// printf("/*/endcheckout \n");
+		// 		type = n_type(exuction->output->type);
+		// 		printf("input type : %s, name == %s\n", type, exuction->output->name);
+		// 		exuction->output = exuction->output->next;
+		// 	}
+		// 	printf("pipe == %d\n", exuction->pipe);
+			
+		// 	exuction = exuction->next;
+		// }
 	}
 
 }
