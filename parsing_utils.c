@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/17 10:45:11 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/23 18:18:58 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *envv(char *lxr, t_list *env)
+char *envv(char *lxr, t_list *env, int status)
 {
 	int j;
     char *s;
@@ -20,6 +20,11 @@ char *envv(char *lxr, t_list *env)
 	while (env)
 	{
 		j = 0;
+		if(lxr[j + 1] == '?')
+		{
+			s = ft_itoa(status);
+			return (s);
+		}
 		while (env->str[j] && lxr[j + 1] && lxr[j + 1] == env->str[j])
 			j++;
 		if(!lxr[j + 1] && env->str[j] == '=')
@@ -45,7 +50,7 @@ char *get_path(char *s, t_list *env)
 		return (0);
 	if (access(s, X_OK) == 0)
 			return (s);
-	p = envv("$PATH",env);
+	p = envv("$PATH",env, 0);
 	paths = ft_split(p, ':');
 	free (p);
 	while (paths && paths[i])
@@ -60,7 +65,7 @@ char *get_path(char *s, t_list *env)
 	}
 	return (NULL);
 }
-t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env)
+t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 {
 	char *s;
 	char *tmp;
@@ -74,7 +79,7 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env)
 			tmp = s;
             if(lxr->type == ENV && lxr->state != IN_QUOTE && lxr->len != 1)
 			{
-				tmp1 = envv(lxr->content, env);
+				tmp1 = envv(lxr->content, env, status);
                 s = str_join(s, tmp1);
 				free(tmp1);
 			}
@@ -88,7 +93,7 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env)
 	return (lxr);
 }
 
-t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type, t_list  *env)
+t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *env)
 {
 	char *s;
 	char *tmp;
@@ -101,9 +106,9 @@ t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type, t_list
 		if((lxr->type != QOUTE && lxr->type != DOUBLE_QUOTE ) || lxr->state != GENERAL)
 		{
 			tmp = s;
-			if(lxr->type == ENV && lxr->state != IN_QUOTE && type != HERE_DOC && lxr->len != 1)
+			if(lxr->type == ENV && lxr->state != IN_QUOTE && stat->type != HERE_DOC && lxr->len != 1)
 			{
-				tmp1 = envv(lxr->content, env);
+				tmp1 = envv(lxr->content, env, stat->exstat);
                 s = str_join(s, tmp1);
 				free(tmp1);
 			}
@@ -114,7 +119,7 @@ t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type, t_list
 		lxr = lxr->next;
 	}
 	node = flst_new(s);
-	node->type = type;
+	node->type = stat->type;
 	fadd_back_lst(head, node);
 	return (lxr);
 }
