@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/21 12:33:50 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/23 18:02:28 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int main(int ac, char **av, char **env)
 	t_list *enva;
 	(void) ac;
 	(void) av;
-	int pid = 0;
 
 	// signal(SIGINT,handler);
 	enva = get_env(env);
@@ -57,7 +56,7 @@ int main(int ac, char **av, char **env)
 		cmd = is_tokenized(str);
 		// print(cmd);
 		exuction = parse(cmd,enva);
-		run_cmd(exuction, &enva);
+		printf("exit status == %d\n",run_cmd(exuction, &enva));
 		}
 		// open_in_files(exuction);
 		// if(!exuction->input)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/21 12:31:41 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/23 16:23:00 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,27 +132,28 @@ void				check_syntax(t_lexer_list *node);
 enum e_token		add_type(t_lexer_list *node);
 
 //builtins_func.c
-void				ft_echo(char **str, char flag);
-void				ft_pwd();
-void				ft_env(t_list *env);
-void				ft_export(t_list **env, char *to_export);
-void				ft_unset(t_list **env, char *to_unset);
+int					ft_echo(char **str, int fd);
+int					ft_pwd(int fd);
+int					ft_env(t_list *env, int fd);
+int					ft_export(t_list **env, char *to_export);
+int					ft_unset(t_list **env, char *to_unset);
 int					is_exist(t_list *head, t_list **node, char *to_export);
 int					check_param(char *str);
 t_list				*get_env(char **env);
-void				ft_cd(char *str);
-void				ft_exit();
+int					ft_cd(char *str);
+int					ft_exit();
+int					ft_write(char *str, int fd);
 
 //excu.c
 int					open_in_files(t_oip *list);
 int					open_out_files(t_oip *out_file);
-void				run_cmd(t_excution *list, t_list **env);
+int				run_cmd(t_excution *list, t_list **env);
 
 //utils.c
 char				**getarray(t_list *lst);
 
 //exuction
-void run_exuction(t_excution *exuction, t_list *env);
-void run_here_doc(t_oip *herdoc);
-t_oip  *get_here_doc(t_excution *exuction);
+void 				run_exuction(t_excution *exuction, t_list *env);
+void 				run_here_doc(t_oip *herdoc);
+t_oip  				*get_here_doc(t_excution *exuction);
 #endif
