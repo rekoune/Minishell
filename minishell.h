@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/23 18:52:03 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/23 18:56:52 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@
 #include <signal.h>
 
 //sturct and 
-
-extern int g_status;
-
 typedef struct s_list
 {
 	char 			*str;
