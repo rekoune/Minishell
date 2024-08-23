@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parcing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/17 10:44:01 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/23 18:22:52 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_excution *parse(t_lexer_list *lexer, t_list *env)
+t_excution *parse(t_lexer_list *lexer, t_list *env, int status)
 {
 	t_excution *execution;
 	t_list *some;
-	enum e_token type;
+	t_stat stat;
 
 	if(!lexer)
 		return (NULL);
@@ -26,26 +26,27 @@ t_excution *parse(t_lexer_list *lexer, t_list *env)
 		return (NULL);
 	execution->input = NULL;
 	execution->output = NULL;
+	stat.exstat = status;
 	while (lexer && (lexer->type != PIPE_LINE || lexer->state != GENERAL))
 	{
 		if(lexer->type == REDIR_IN || lexer->type == HERE_DOC)
 		{
-			type = lexer->type;
+			stat.type = lexer->type;
 			lexer = lexer->next;
 			if(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
-			lexer = ftqouts(&execution->input,lexer, type, env);
+			lexer = ftqouts(&execution->input,lexer, &stat, env);
 		}
 		else if(lexer->type == REDIR_OUT || lexer->type == DREDIR_OUT)
 		{
-			type = lexer->type;
+			stat.type = lexer->type;
 			lexer = lexer->next;
 			if(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
-			lexer = ftqouts(&execution->output,lexer, type, env);
+			lexer = ftqouts(&execution->output,lexer, &stat, env);
 		}
 		else if(lexer->type != WHITE_SPACE)
-			lexer = fqouts(&some,lexer, env);
+			lexer = fqouts(&some,lexer, env, status);
 		else
 			lexer = lexer->next;
 	}
@@ -58,6 +59,6 @@ t_excution *parse(t_lexer_list *lexer, t_list *env)
 	else
 		execution->pipe = 0;
 	execution->path = get_path(execution->cmd[0], env);
-	execution->next = parse(lexer, env);
+	execution->next = parse(lexer, env, status);
 	return (execution);
 }
