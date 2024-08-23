@@ -131,7 +131,7 @@ int	get_out_fd(t_excution *list, int *prev_pipe, int *flag, int pipe_fd[2])
 	out_fd = 1;
 	if(list->output)
 			out_fd = open_out_files(list->output);
-		else 
+	else 
 			out_fd = 1;
 		if(list->pipe == 1)
 		{

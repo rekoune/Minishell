@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/21 12:31:41 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/23 18:18:07 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,18 @@ enum e_state
 	GENERAL,
 };
 
+typedef struct s_stat
+{
+	enum e_token type;
+	int exstat;
+}t_stat;
 typedef struct    s_lexer_list
 {
     char                *content;
     int                  len;
     enum e_token        type;
     enum e_state        state;
+	int 				exstatus;
     struct    s_lexer_list             *next;
 }t_lexer_list;
 
@@ -97,13 +103,14 @@ t_list				*lst_new(char *s);
 int					cmd_lst_size(t_excution *lst);
 
 //parcing.c
-t_excution *parse(t_lexer_list *lxr, t_list *env);
+t_excution *parse(t_lexer_list *lxr, t_list *env, int status);
 
 //parcing utils
-t_lexer_list		*fqouts(t_list **head,t_lexer_list *lxr, t_list *env);
-t_lexer_list		*ftqouts(t_oip **head,t_lexer_list *lxr, enum e_token type, t_list *env);
-char				*envv(char *lxr, t_list *env);
+t_lexer_list		*fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status);
+t_lexer_list  		*ftqouts(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *env);
+char				*envv(char *lxr, t_list *env, int status);
 char				*get_path(char *s, t_list *env);
+
 
 //helper func
 char 	*str_join(char *s1, char *s2);
@@ -122,6 +129,7 @@ int					check_char(char c);
 int					str_ncomp(char *s1, char *s2, int size);
 void				error(char *str);
 int					str_len(char *str, char separator);
+char				*ft_itoa(int nb);
 
 //tokenization.c
 t_lexer_list		*is_tokenized(char *str);
@@ -152,7 +160,7 @@ void				run_cmd(t_excution *list, t_list **env);
 char				**getarray(t_list *lst);
 
 //exuction
-void run_exuction(t_excution *exuction, t_list *env);
+int run_exuction(t_excution *exuction, t_list *env);
 void run_here_doc(t_oip *herdoc);
 t_oip  *get_here_doc(t_excution *exuction);
 #endif

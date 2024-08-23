@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exuction.c                                         :+:      :+:    :+:   */
+/*   herdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/21 12:21:43 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/22 09:00:38 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,3 @@ void run_here_doc(t_oip *herdoc)
     exit(0);
 }
 
-void run_exuction(t_excution *exuction, t_list *env)
-{
-    t_oip *herdoc;
-    int fd[2];
-
-    env = 0;
-    herdoc = get_here_doc(exuction);
-    printf("fgetid the herdoc\n");
-    if(herdoc)
-        run_here_doc(herdoc);
-    if(exuction->pipe)
-        if(pipe(fd))
-        ;
-}
