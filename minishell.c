@@ -6,13 +6,11 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/23 18:53:29 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/23 18:56:23 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int g_status = 1;
 
 void print(t_lexer_list *head)
 {
