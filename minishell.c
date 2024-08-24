@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/23 18:56:23 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/24 10:18:11 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ int main(int ac, char **av, char **env)
 {
 	char		*str;
 	t_lexer_list	*cmd;
-	t_excution *exuction;
+	t_execution *execution;
 	// int	 i;
 	// char *type;
 	t_list *enva;
 	(void) ac;
 	(void) av;
 
-	// signal(SIGINT,handler);
+	signal(SIGINT,handler);
 	enva = get_env(env);
 	int exit_status = 0;
 	while (1)
@@ -55,43 +55,44 @@ int main(int ac, char **av, char **env)
 		add_history(str);
 		cmd = is_tokenized(str);
 		// print(cmd);
-		exuction = parse(cmd,enva, exit_status);
-		exit_status = run_cmd(exuction, &enva);
+		execution = parse(cmd,enva, exit_status);
+		exit_status = run_cmd(execution, &enva);
+		printf("exit status = %d\n", exit_status);
 		}
-		// open_in_files(exuction);
-		// if(!exuction->input)
+		// open_in_files(execution);
+		// if(!execution->input)
 	
 		// printf("---------------------------------------------------------------------\n");
-		// while (exuction)
+		// while (execution)
 		// {
 		// 	printf("******************************************************************\n");
 		// 	i = 0;
-		// 	while(exuction->cmd[i])
-		// 		printf("exection>>>>>>>>>>>> == %s\n", exuction->cmd[i++]);
-		// 	printf("exuction->path >>>>>>>>> ==%s\n ",exuction->path);
-		// 	while (exuction->input)
+		// 	while(execution->cmd[i])
+		// 		printf("exection>>>>>>>>>>>> == %s\n", execution->cmd[i++]);
+		// 	printf("execution->path >>>>>>>>> ==%s\n ",execution->path);
+		// 	while (execution->input)
 		// 	{
 		// 		// printf("/*/checkin \n");
-		// 		// if(exuction->input->type == REDIR_IN|| exuction->input->type == HERE_DOC)
+		// 		// if(execution->input->type == REDIR_IN|| execution->input->type == HERE_DOC)
 		// 		// 	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>in\n");
 		// 		// printf("/*/endcheckin \n");
-		// 		type = n_type(exuction->input->type);
-		// 		printf("input type : %s, name == %s\n", type, exuction->input->name);
-		// 		exuction->input = exuction->input->next;
+		// 		type = n_type(execution->input->type);
+		// 		printf("input type : %s, name == %s\n", type, execution->input->name);
+		// 		execution->input = execution->input->next;
 		// 	}
-		// 	while (exuction->output)
+		// 	while (execution->output)
 		// 	{
 		// 		// printf("/*/checkout \n");
-		// 		// if(exuction->output->type == REDIR_OUT || exuction->output->type == DREDIR_OUT)
+		// 		// if(execution->output->type == REDIR_OUT || execution->output->type == DREDIR_OUT)
 		// 		// 	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>out\n");
 		// 		// printf("/*/endcheckout \n");
-		// 		type = n_type(exuction->output->type);
-		// 		printf("input type : %s, name == %s\n", type, exuction->output->name);
-		// 		exuction->output = exuction->output->next;
+		// 		type = n_type(execution->output->type);
+		// 		printf("input type : %s, name == %s\n", type, execution->output->name);
+		// 		execution->output = execution->output->next;
 		// 	}
-		// 	printf("pipe == %d\n", exuction->pipe);
+		// 	printf("pipe == %d\n", execution->pipe);
 			
-		// 	exuction = exuction->next;
+		// 	execution = execution->next;
 		// }
 	}
 

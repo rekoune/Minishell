@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:56:22 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/20 12:02:15 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/23 19:12:19 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	ft_lstsize(t_list *lst)
 	}
 	return (i);
 }
-int	cmd_lst_size(t_excution *lst)
+int	cmd_lst_size(t_execution *lst)
 {
 	int	i;
 

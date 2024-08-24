@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   parcing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/23 18:22:52 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/23 19:12:19 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_excution *parse(t_lexer_list *lexer, t_list *env, int status)
+t_execution *parse(t_lexer_list *lexer, t_list *env, int status)
 {
-	t_excution *execution;
+	t_execution *execution;
 	t_list *some;
 	t_stat stat;
 
 	if(!lexer)
 		return (NULL);
 	some = NULL;
-	execution = malloc(sizeof(t_excution));
+	execution = malloc(sizeof(t_execution));
 	if(!execution)
 		return (NULL);
 	execution->input = NULL;
