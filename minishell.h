@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/24 10:42:33 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/24 12:04:20 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,6 @@ char				**getarray(t_list *lst);
 
 //execution
 int 				run_execution(t_execution *execution, t_list *env);
-void 				run_here_doc(t_oip *herdoc);
+int 				run_here_doc(t_oip *herdoc);
 t_oip  				*get_here_doc(t_execution *execution);
 #endif

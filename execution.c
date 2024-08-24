@@ -35,7 +35,6 @@ int	open_in_files(t_oip *input)
 		if(!input->next && input->type == HERE_DOC)
 		{
 			fd = input->fd;
-			printf("int file %d\n", fd);
 		}
 		if(fd == -1)
 		{
@@ -47,6 +46,7 @@ int	open_in_files(t_oip *input)
 		}
 		input = input->next;
 	}
+	printf("int file %d\n", fd);
 	return(fd);
 }
 int	get_out_fd(t_execution *list, int *prev_pipe, int *flag, int pipe_fd[2])
@@ -180,11 +180,7 @@ void 	child_pross(t_execution *list, int in_fd, int out_fd, t_list **env)
 	error("execve fails\n");
 }
 
-void handl(int l)
-{
-	l = 130;
-	exit(l);
-}
+
 int run_cmd(t_execution *list, t_list **env)
 {
 	int	pipe_fd[2];
@@ -206,22 +202,16 @@ int run_cmd(t_execution *list, t_list **env)
 	exit_status = 0;
 	prev_pipe = 0;
 	exit_status = 0;
-	size = cmd_lst_size(list);
-	pid = malloc(sizeof(pid_t) * size);
 	if(her_doc)
 	{
-		pid[0] = fork();
-		if(pid[0] == 0)
-		{
-			signal(SIGINT,handl);
-			run_here_doc(her_doc);
-		}
-		waitpid(pid[0], &state, 0);
-		exit_status = WEXITSTATUS(state);
+		exit_status = run_here_doc(her_doc);
+	}		
 		// printf(">>>>>> %d\n", exit_status);
-		if(exit_status)
-			return(exit_status);
-	}
+	if(exit_status)
+		return(exit_status);
+	size = cmd_lst_size(list);
+	pid = malloc(sizeof(pid_t) * size);
+
 	while(list)
 	{
 		in_fd = get_in_fd(list->input, prev_pipe, &flag);
