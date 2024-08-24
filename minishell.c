@@ -6,13 +6,11 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/24 10:12:45 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/24 10:26:37 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int g_status = 1;
 
 void print(t_lexer_list *head)
 {
@@ -46,6 +44,8 @@ int main(int ac, char **av, char **env)
 	(void) av;
 	// int pid = 0;
 	signal(SIGINT,handler);
+
+	// signal(SIGINT,handler);
 	enva = get_env(env);
 	int exit_status = 0;
 	while (1)
@@ -58,7 +58,7 @@ int main(int ac, char **av, char **env)
 		cmd = is_tokenized(str);
 		// print(cmd);
 		exuction = parse(cmd,enva, exit_status);
-		run_cmd(exuction, &enva);
+		exit_status = run_cmd(exuction, &enva);
 		}
 		// open_in_files(exuction);
 		// if(!exuction->input)
