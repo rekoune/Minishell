@@ -7,7 +7,10 @@ int	get_in_fd(t_oip *input, int prev_pipe, int *flag)
 
 	in_fd = 0;
 	if(input)
+	{
 		in_fd = open_in_files(input);
+		
+	}
 	else if(*flag == 1)
 	{
 		in_fd = dup(prev_pipe);
@@ -29,6 +32,11 @@ int	open_in_files(t_oip *input)
 			close(fd);
 		if(input->type == REDIR_IN)
 			fd = open(input->name, O_RDWR);
+		if(!input->next && input->type == HERE_DOC)
+		{
+			fd = input->fd;
+			printf("int file %d\n", fd);
+		}
 		if(fd == -1)
 		{
 			ft_write("minishell: ", 2);
@@ -172,7 +180,11 @@ void 	child_pross(t_execution *list, int in_fd, int out_fd, t_list **env)
 	error("execve fails\n");
 }
 
-
+void handl(int l)
+{
+	l = 130;
+	exit(l);
+}
 int run_cmd(t_execution *list, t_list **env)
 {
 	int	pipe_fd[2];
@@ -186,7 +198,9 @@ int run_cmd(t_execution *list, t_list **env)
 	int	size;
 	int	state;
 	int nf;
+	t_oip *her_doc;
 
+	her_doc = get_here_doc(list);
 	nf = 0;
 	flag = 0;
 	exit_status = 0;
@@ -194,6 +208,20 @@ int run_cmd(t_execution *list, t_list **env)
 	exit_status = 0;
 	size = cmd_lst_size(list);
 	pid = malloc(sizeof(pid_t) * size);
+	if(her_doc)
+	{
+		pid[0] = fork();
+		if(pid[0] == 0)
+		{
+			signal(SIGINT,handl);
+			run_here_doc(her_doc);
+		}
+		waitpid(pid[0], &state, 0);
+		exit_status = WEXITSTATUS(state);
+		// printf(">>>>>> %d\n", exit_status);
+		if(exit_status)
+			return(exit_status);
+	}
 	while(list)
 	{
 		in_fd = get_in_fd(list->input, prev_pipe, &flag);
