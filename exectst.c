@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exectst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/23 16:53:19 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/24 10:17:14 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int out_fd(t_oip *output,int fd, int pipe)
     return (fd);
 }
 
-void exccmd(t_excution *exec, t_list *env, int *fd, int old_read)
+void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
 {
     int infd;
     int outfd;
@@ -80,7 +80,7 @@ void exccmd(t_excution *exec, t_list *env, int *fd, int old_read)
 		perror("execve");
     exit(1);
 }
-int run_exuction(t_excution *exuction, t_list *env)
+int run_execution(t_execution *execution, t_list *env)
 {
     t_oip *herdoc;
     int fd[2];
@@ -89,10 +89,10 @@ int run_exuction(t_excution *exuction, t_list *env)
     int i;
     
     i = 0;
-    herdoc = get_here_doc(exuction);
+    herdoc = get_here_doc(execution);
     // if(herdoc)
     //     run_here_doc(herdoc);
-    if(exuction->pipe)
+    if(execution->pipe)
     { 
         if(pipe(fd) == -1)
         {
@@ -102,7 +102,7 @@ int run_exuction(t_excution *exuction, t_list *env)
     }
     fd[0] = 0;
     fd[1] = 1;
-    while (exuction)
+    while (execution)
     {
         oldread = fd[0];
         if(pipe(fd) == -1)
@@ -117,11 +117,11 @@ int run_exuction(t_excution *exuction, t_list *env)
             return (1);
         }
         if(pid == 0)
-            exccmd(exuction, env, fd, oldread);
+            exccmd(execution, env, fd, oldread);
         if(oldread)
             close(oldread);
         close(fd[1]);
-        exuction = exuction->next;
+        execution = execution->next;
         i++;
     }
     close(fd[0]);

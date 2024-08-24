@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/23 18:56:52 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/24 10:17:14 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,20 +69,20 @@ typedef struct  s_out_in_put
 {
 	enum e_token type;
 	char 					*name;
-	char 					*s;
+	char					*s;
 	struct  s_out_in_put	*next;
 	struct  s_out_in_put	*herdoc_next;
 }    t_oip;
 
-typedef struct s_excution
+typedef struct s_execution
 {
 	char **cmd;
 	char *path;
 	t_oip *input;
 	t_oip *output;
 	int pipe;
-	struct s_excution *next;
-} t_excution;
+	struct s_execution *next;
+} t_execution;
 
 
 //minishell.c
@@ -97,10 +97,10 @@ void				fadd_back_lst(t_oip **head, t_oip *new);
 int					ft_lstsize(t_list *lst);
 t_oip				*flst_new(char *s);
 t_list				*lst_new(char *s);
-int					cmd_lst_size(t_excution *lst);
+int					cmd_lst_size(t_execution *lst);
 
 //parcing.c
-t_excution *parse(t_lexer_list *lxr, t_list *env, int status);
+t_execution *parse(t_lexer_list *lxr, t_list *env, int status);
 
 //parcing utils
 t_lexer_list		*fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status);
@@ -152,13 +152,13 @@ int					ft_write(char *str, int fd);
 //excu.c
 int					open_in_files(t_oip *list);
 int					open_out_files(t_oip *out_file);
-int					run_cmd(t_excution *list, t_list **env);
+int					run_cmd(t_execution *list, t_list **env);
 
 //utils.c
 char				**getarray(t_list *lst);
 
-//exuction
-int 				run_exuction(t_excution *exuction, t_list *env);
+//execution
+int 				run_execution(t_execution *execution, t_list *env);
 void 				run_here_doc(t_oip *herdoc);
-t_oip  				*get_here_doc(t_excution *exuction);
+t_oip  				*get_here_doc(t_execution *execution);
 #endif

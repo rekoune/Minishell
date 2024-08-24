@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   herdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/22 09:00:38 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/24 10:17:14 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "minishell.h"
 
 
-t_oip  *get_here_doc(t_excution *exuction)
+t_oip  *get_here_doc(t_execution *execution)
 {
     t_oip *inp;
     t_oip *sinp;
@@ -22,9 +22,9 @@ t_oip  *get_here_doc(t_excution *exuction)
 
     sinp = 0;
     firstehrdoc = 0;
-    while (exuction)
+    while (execution)
     {
-        inp = exuction->input;
+        inp = execution->input;
         while (inp)
         {
             if(inp->type == HERE_DOC)
@@ -37,7 +37,7 @@ t_oip  *get_here_doc(t_excution *exuction)
             }
             inp = inp->next;
         }
-        exuction = exuction->next;
+        execution = execution->next;
     }
     return (firstehrdoc);
 }
@@ -50,7 +50,7 @@ void run_here_doc(t_oip *herdoc)
 
     while (herdoc)
     {
-        herdoc->s = 0;
+        herdoc->s = NULL;
         dlm = str_join(herdoc->name, "\n");
         write(1,">",1);
         s = get_next_line(0);

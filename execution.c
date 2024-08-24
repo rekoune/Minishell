@@ -29,37 +29,50 @@ int	open_in_files(t_oip *input)
 			close(fd);
 		if(input->type == REDIR_IN)
 			fd = open(input->name, O_RDWR);
-		//here print in the standatd error
 		if(fd == -1)
-			error("ERROR: No such file or directory\n");
-		if(!input->next)
-			break;
+		{
+			ft_write("minishell: ", 2);
+			ft_write(input->name, 2);
+			ft_write(": ", 2);
+			perror("");
+			return(-1);
+		}
 		input = input->next;
 	}
 	return(fd);
 }
-int	get_out_fd(t_excution *list, int *prev_pipe, int *flag, int pipe_fd[2])
+int	get_out_fd(t_execution *list, int *prev_pipe, int *flag, int pipe_fd[2])
 {
 	int	out_fd;
 
 	out_fd = 1;
 	if(list->output)
-			out_fd = open_out_files(list->output);
-		else 
-			out_fd = 1;
-		if(list->pipe == 1)
+	{
+		out_fd = open_out_files(list->output);
+		if(out_fd == -1)
 		{
-			if(pipe(pipe_fd) == -1)
-				error("ERROR : pipe fails\n");
-			*prev_pipe = dup(pipe_fd[0]);
-			close(pipe_fd[0]);
-			*flag = 1;
-			if(list->output == NULL)
-			{
-				out_fd = dup(pipe_fd[1]);
-				close(pipe_fd[1]);
-			}
+			ft_write("minishell: ", 2);
+			ft_write(list->output->name, 2);
+			ft_write(": ", 2);
+			perror("");
+			return(-1);
 		}
+	}
+	else 
+		out_fd = 1;
+	if(list->pipe == 1)
+	{
+		if(pipe(pipe_fd) == -1)
+			error("ERROR : pipe fails\n");
+		*prev_pipe = dup(pipe_fd[0]);
+		close(pipe_fd[0]);
+		*flag = 1;
+		if(list->output == NULL)
+		{
+			out_fd = dup(pipe_fd[1]);
+			close(pipe_fd[1]);
+		}
+	}
 	return(out_fd);
 }
 
@@ -121,11 +134,13 @@ int	execute_builtins(char **cmd, t_list **env, int flag, int out_fd)
 	return(0);
 }
 
-void 	child_pross(t_excution *list, int in_fd, int out_fd, t_list **env)
+void 	child_pross(t_execution *list, int in_fd, int out_fd, t_list **env)
 {
 	int	flag;
 
 	flag = 0;
+	if(in_fd == -1 || out_fd == -1)
+		exit(1);
 	flag = check_builtins(list->cmd[0]);
 	if(flag > 0)
 		exit(execute_builtins(&list->cmd[1], env, flag, out_fd));
@@ -139,6 +154,13 @@ void 	child_pross(t_excution *list, int in_fd, int out_fd, t_list **env)
 		dup2(out_fd, 1);
 		close(out_fd);
 	}
+	if(!envv("$PATH",*env, 0))
+	{
+		ft_write("minishell: ", 2);
+		ft_write(list->cmd[0], 2);
+		ft_write(": No such file or directory\n", 2);
+		exit(127);
+	}
 	if(!list->path)
 	{
 		ft_write("minishell: ", 2);
@@ -151,7 +173,7 @@ void 	child_pross(t_excution *list, int in_fd, int out_fd, t_list **env)
 }
 
 
-int run_cmd(t_excution *list, t_list **env)
+int run_cmd(t_execution *list, t_list **env)
 {
 	int	pipe_fd[2];
 	int	prev_pipe;
