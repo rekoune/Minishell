@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/24 10:43:47 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/24 11:51:48 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void run_here_doc(t_oip *herdoc)
         s = str_join("/tmp/",tmp);
         free(tmp);
         if(!herdoc->next)
-           herdoc->fd = open(s, O_WRONLY | O_CREAT | O_APPEND, 0640);
+           herdoc->fd = open(s, O_RDWR | O_CREAT | O_TRUNC, 0640);
         free (s);
         dlm = str_join(herdoc->name, "\n");
         write(1,">",1);

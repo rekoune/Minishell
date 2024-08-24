@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/24 10:42:45 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/24 11:28:50 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void print(t_lexer_list *head)
 void handler(int n)
 {
 	n = 0;
+	// rl_replace_line("\033[32mminishell \033[0m> ", 1);
 }
 int main(int ac, char **av, char **env)
 {
@@ -43,7 +44,6 @@ int main(int ac, char **av, char **env)
 	(void) ac;
 	(void) av;
 	// int pid = 0;
-	signal(SIGINT,handler);
 
 	signal(SIGINT,handler);
 	enva = get_env(env);
@@ -52,6 +52,8 @@ int main(int ac, char **av, char **env)
 	{
 	
 		str = readline("\033[32mminishell \033[0m> ");
+		if(!str)
+			exit(1);
 		if (str[0])
 		{
 		add_history(str);
