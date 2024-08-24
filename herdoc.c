@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   herdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/24 12:44:18 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/24 13:14:35 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,7 @@ void thedoc(t_oip *herdoc)
      while (s)
     {
         if(!str_ncomp(s, dlm,strr_len(dlm)))
-        {
             break;
-        }
         if(!herdoc->next)
             write(herdoc->fd, s, strr_len(s));
         free(s);
@@ -63,6 +61,7 @@ void thedoc(t_oip *herdoc)
         s = get_next_line(0);
     } 
     free(dlm);
+    free(s);
     if(!herdoc->next)
         close(herdoc->fd);
     exit(0); 

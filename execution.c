@@ -34,7 +34,8 @@ int	open_in_files(t_oip *input)
 			fd = open(input->name, O_RDWR);
 		if(!input->next && input->type == HERE_DOC)
 		{
-			fd = input->fd;
+			fd = dup(input->fd);
+			close(input->fd);
 		}
 		if(fd == -1)
 		{
@@ -206,7 +207,6 @@ int run_cmd(t_execution *list, t_list **env)
 	{
 		exit_status = run_here_doc(her_doc);
 	}		
-		// printf(">>>>>> %d\n", exit_status);
 	if(exit_status)
 		return(exit_status);
 	size = cmd_lst_size(list);
@@ -216,6 +216,8 @@ int run_cmd(t_execution *list, t_list **env)
 	{
 		in_fd = get_in_fd(list->input, prev_pipe, &flag);
 		out_fd = get_out_fd(list, &prev_pipe, &flag, pipe_fd);
+		lseek(in_fd, 0, SEEK_SET);
+		printf("in_fd  == %d\n", in_fd);
 		if(check_builtins(list->cmd[0]) > 0 && size == 1)
 		{
 			exit_status = execute_builtins(&list->cmd[1], env, check_builtins(list->cmd[0]), out_fd);
