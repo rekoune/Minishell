@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/23 18:24:03 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/24 10:12:45 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int main(int ac, char **av, char **env)
 	(void) ac;
 	(void) av;
 	// int pid = 0;
-	// signal(SIGINT,handler);
+	signal(SIGINT,handler);
 	enva = get_env(env);
 	int exit_status = 0;
 	while (1)
