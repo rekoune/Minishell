@@ -6,27 +6,67 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 11:01:22 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/21 11:10:08 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/22 20:00:55 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_echo(char **str, char flag)
+int	ft_write(char *str, int fd)
 {
-	int	i;
+	int i;
 
 	i = 0;
+	while(str[i])
+	{
+		if(write(fd, &str[i++], 1) == -1)
+			return(EXIT_FAILURE);
+	}
+	return(EXIT_SUCCESS);
+}
+int skip_n(char *str)
+{
+	int i;
+	
+	i = 0;
+	if(str[i] == '-')
+	{
+		i++;
+		while(str[i] && str[i] == 'n')
+			i++;
+	}
+	if(i == str_len(str, '\0'))
+		return(0);
+	return(1);
+}
+
+int	ft_echo(char **str, int fd)
+{
+	int	i;
+	char flag;
+
+	i = 0;
+	flag = 'n';
 	if (!str)
-		exit(0);
+		return (EXIT_FAILURE);
+	while(str[i] && (!str_ncomp(str[i], "-n", 3) || !skip_n(str[i])))
+	{
+		flag = 'y';
+		i++;
+	}
 	while (str[i])
 	{
-		printf("%s", str[i]);
+		if (ft_write(str[i], fd) == EXIT_FAILURE)
+				return (EXIT_FAILURE);
+		if(str[i + 1] != NULL)
+			if (ft_write(" ", fd) == EXIT_FAILURE)	
+				return(EXIT_FAILURE);
 		i++;
 	}
 	if (flag == 'n')
-		printf("\n");
-	exit(0);
+		if (ft_write("\n", fd) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 t_list	*get_env(char **env)
@@ -44,31 +84,33 @@ t_list	*get_env(char **env)
 	return(head);
 }
 
-void	ft_pwd()
+int	ft_pwd(int fd)
 {
 	char buff[1024];
 
 	if(getcwd(buff, sizeof(buff)) == NULL)
-		error("ERROR : getwcd fails!!");
-	printf("%s\n", buff);
-	exit(0);
+		return (EXIT_FAILURE);
+	if (ft_write(buff, fd) == EXIT_FAILURE || ft_write("\n", fd) == EXIT_FAILURE)
+		return(EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
-void	ft_env(t_list *env)
+int	ft_env(t_list *env, int fd)
 {
 	while(env)
 	{
-		printf("%s\n", env->str);
+		if(ft_write(env->str, fd) == EXIT_FAILURE || ft_write("\n", fd) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
 		env = env->next;
 	}
-	exit(0);
+	return (EXIT_SUCCESS);
 }
 
 int	is_exist(t_list *head, t_list **node, char *to_export)
 {
 	while(head)
 	{
-		if(str_ncomp(head->str, to_export, str_len(to_export, '=') - 1) == 0)
+		if(str_ncomp(head->str, to_export, str_len(to_export, '=')) == 0)
 		{
 			*node = head;
 			return(1);
@@ -78,7 +120,7 @@ int	is_exist(t_list *head, t_list **node, char *to_export)
 	return(0);
 }
 
-void	ft_export(t_list **env, char *to_export)
+int	ft_export(t_list **env, char *to_export)
 {
 	int	flag;
 	int	i;
@@ -88,13 +130,23 @@ void	ft_export(t_list **env, char *to_export)
 	flag = 0;
 	if(to_export[0] != '_' && (to_export[0] < 'A' || 
 		to_export[0] > 'Z') && (to_export[0] < 'a' || to_export[0] > 'z'))
-		error("ERROR : not a valid identifier!!");
+	{
+		ft_write("minishell : export '", 2);
+		ft_write(to_export, 2);
+		ft_write("': not a valid identifier\n", 2);
+		return(EXIT_FAILURE);
+	}
 	while(to_export && to_export[i] && to_export[i] != '=')
 	{
 		if(to_export[i] < '0' || (to_export[i] >= ':' && to_export[i] <= '@') || 
 			(to_export[i] >= '[' && to_export[i] <= '^') || 
 			to_export[i] >= '{' || to_export[i] == '`')
-			error("Error : invalid parameter name");
+		{
+			ft_write("minishell : export '", 2);
+			ft_write(to_export, 2);
+			ft_write("': not a valid identifier\n", 2);
+			return(EXIT_FAILURE);
+		}
 		i++;
 	}
 	if(to_export[i] == '=')
@@ -106,7 +158,7 @@ void	ft_export(t_list **env, char *to_export)
 	}
 	else if (flag == 1)
 		add_back_lst(env, lst_new(str_ncopy(to_export, str_len(to_export, '\0'))));
-	exit(0);
+	return (EXIT_SUCCESS);
 }
 
 int	check_param(char *str)
@@ -125,7 +177,7 @@ int	check_param(char *str)
 	return(1);
 }
 
-void	ft_unset(t_list **env, char *to_unset)
+int	ft_unset(t_list **env, char *to_unset)
 {
 	t_list *head;
 	t_list *prev;
@@ -133,10 +185,15 @@ void	ft_unset(t_list **env, char *to_unset)
 	head = *env;
 	prev = NULL;
 	if (!check_param(to_unset))
-		error("Error : invalid parameter name");
+	{
+		ft_write("minishell : export '", 2);
+		ft_write(to_unset, 2);
+		ft_write("': not a valid identifier\n", 2);
+		return(EXIT_FAILURE);	
+	}
 	while(head)
 	{
-		if(str_ncomp(head->str, to_unset, str_len(to_unset, '\0') - 1) == 0)
+		if(str_ncomp(head->str, to_unset, str_len(head->str, '=') - 1) == 0 && str_len(head->str, '=') == str_len(to_unset, '\0'))
 			break;
 		prev = head;
 		head = head->next;
@@ -150,19 +207,26 @@ void	ft_unset(t_list **env, char *to_unset)
 		free(head->str);
 		free(head);
 	}
-	exit(0);
+	return (EXIT_SUCCESS);
 }
 
-void	ft_cd(char *str)
+int	ft_cd(char *str)
 {
 	if(chdir(str) == -1)
-		error("ERROR : cd function fails!!");
-	exit(0);
+	{
+		ft_write("minishell : cd: ", 2);
+		ft_write(str, 2);
+		ft_write(": No such file or directory\n", 2);
+		return(EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
 
-void ft_exit()
+int ft_exit()
 {
+	printf("exit\n");
 	exit(0);
+	return(EXIT_SUCCESS);
 }
 
 // int main(int ac, char **av, char **env)
