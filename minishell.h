@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/24 10:17:14 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/24 10:42:33 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct  s_out_in_put
 {
 	enum e_token type;
 	char 					*name;
-	char					*s;
+	int						fd;
 	struct  s_out_in_put	*next;
 	struct  s_out_in_put	*herdoc_next;
 }    t_oip;

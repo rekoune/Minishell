@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/24 10:18:11 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/24 10:42:45 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int main(int ac, char **av, char **env)
 	t_list *enva;
 	(void) ac;
 	(void) av;
+	// int pid = 0;
+	signal(SIGINT,handler);
 
 	signal(SIGINT,handler);
 	enva = get_env(env);
