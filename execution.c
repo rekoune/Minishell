@@ -33,10 +33,7 @@ int	open_in_files(t_oip *input)
 		if(input->type == REDIR_IN)
 			fd = open(input->name, O_RDWR);
 		if(!input->next && input->type == HERE_DOC)
-		{
-			fd = dup(input->fd);
-			close(input->fd);
-		}
+			fd = open(input->s, O_RDONLY , 0640);
 		if(fd == -1)
 		{
 			ft_write("minishell: ", 2);
@@ -47,7 +44,6 @@ int	open_in_files(t_oip *input)
 		}
 		input = input->next;
 	}
-	printf("int file %d\n", fd);
 	return(fd);
 }
 int	get_out_fd(t_execution *list, int *prev_pipe, int *flag, int pipe_fd[2])
@@ -216,8 +212,6 @@ int run_cmd(t_execution *list, t_list **env)
 	{
 		in_fd = get_in_fd(list->input, prev_pipe, &flag);
 		out_fd = get_out_fd(list, &prev_pipe, &flag, pipe_fd);
-		lseek(in_fd, 0, SEEK_SET);
-		printf("in_fd  == %d\n", in_fd);
 		if(check_builtins(list->cmd[0]) > 0 && size == 1)
 		{
 			exit_status = execute_builtins(&list->cmd[1], env, check_builtins(list->cmd[0]), out_fd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   herdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/24 13:14:35 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/24 13:29:26 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,10 @@ int run_here_doc(t_oip *herdoc)
         s = str_join("/tmp/",tmp);
         free(tmp);
         if(!herdoc->next)
+        {
            herdoc->fd = open(s, O_RDWR | O_CREAT | O_TRUNC, 0640);
-        printf("herfd %d\n", herdoc->fd);
+           herdoc->s = str_dup(s, strr_len(s)); 
+        }
         free (s);
         pid = fork();
         if(pid == -1)
