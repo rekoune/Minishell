@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 12:07:57 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 15:58:04 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,30 +66,36 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
     if(outfd == -1)
         exit(1);
     dup2(infd, 0);
-    // dprintf(2,"infd: %d\n",infd);
     if(infd)   
         close(infd);
     if(fd[0])
         close(fd[0]);
     dup2(outfd, 1);
-    // dprintf(2,"outfd: %d\n",outfd);
     if(outfd != 1)
         close(outfd);
-    infd = check_builtins(exec->cmd[0]);
-    if(infd)
+    if(exec->cmd)
+        infd = check_builtins(exec->cmd[0]);
+    if(exec->cmd && infd)
     {
         infd = execute_builtins(&exec->cmd[1], &env, infd, 1);
         exit(infd);   
     }
-    if(!exec->path)
-    {    
-        ft_write("minishell: ", 2);
-        ft_write(exec->cmd[0], 2);
-        ft_write(": command not found\n", 2);
+    if(exec->cmd[0] && !exec->path)
+    {   
+        if(find_c(exec->cmd[0], '/') || !envv("$PATH",env, 0))
+        {
+            ft_write("minishell: ", 2);
+            ft_write(exec->cmd[0], 2);
+            access(exec->cmd[0], X_OK);
+            perror(" ");
+            exit(127);
+        }
+        ft_printf("minishell: %s :command not found\n",exec->cmd[0]);
         exit(127);
     }
-    if (execve(exec->path, exec->cmd, getarray(env)) == -1)
-		perror("execve");
+    if(exec->cmd[0])
+        if (execve(exec->path, exec->cmd, getarray(env)) == -1)
+		    perror("execve");
     exit(1);
 }
 int run_execution(t_execution *execution, t_list *env)
@@ -100,30 +106,30 @@ int run_execution(t_execution *execution, t_list *env)
     int oldread;
     int i;
     
+    pid = 0;
+    i = 0;
     herdoc = get_here_doc(execution);
     if(herdoc)
          pid = run_here_doc(herdoc);
+    if(pid)
+        return (pid);
     fd[0] = 0;
     fd[1] = 1;
-    i = check_builtins(execution->cmd[0]);
-    if(execution->pipe)
-    { 
-        if(pipe(fd) == -1)
-        {
-            perror("minishel:");
-            return(1);
-        }
-    }
-    else if(i)
+    if(execution->cmd[0])
+        i = check_builtins(execution->cmd[0]);
+    if(i && !execution->pipe)
         return(execute_builtins(&execution->cmd[1], &env, i, out_fd(execution->output, 1, 0)));
     i = 0;
     while (execution)
     {
         oldread = fd[0];
-        if(pipe(fd) == -1)
+        if(execution->pipe)
         {
-            perror("minishel:");
-            return(1);
+            if(pipe(fd) == -1)
+            {
+                perror("minishel:");
+                return(1);
+            }  
         }
         pid = fork();
         if(pid == -1)

@@ -6,16 +6,20 @@ CC = cc
 GET = GET_NEXT_LINE/get_next_line.c  GET_NEXT_LINE/get_next_line_utils.c 
 OGET = $(GET:.c=.o)
 NAME = minishell
+PRINTF = ft_printf/libftprintf.a
 
 all: $(NAME)
 
-$(NAME) : $(OFILES)  $(OGET)  minishell.h
-		$(CC) $(CFLAGS) $(OFILES)  $(OGET) -o $(NAME) -lreadline
+$(NAME) : $(OFILES) $(PRINTF) $(OGET)  minishell.h
+		$(CC) $(CFLAGS) $(OFILES) $(PRINTF) $(OGET) -o $(NAME) -lreadline
 
+$(PRINTF):
+	make -C ft_printf
 %.o:%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
+	make -C ft_printf fclean
 	rm -rf $(OFILES)
 	rm -rf $(OGET)
 fclean: clean
