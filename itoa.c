@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 18:05:09 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/23 18:21:38 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 12:15:56 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,14 @@ char	*ft_itoa(int nb)
 	if (p == 0)
 		return (0);
 	return (p);
+}
+
+void	fr_double(char **s)
+{
+	int	i;
+
+	i = 0;
+	while (s && s[i])
+		free(s[i++]);
+	free(s);
 }

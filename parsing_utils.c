@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/23 18:18:58 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 12:17:10 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,14 @@ char *get_path(char *s, t_list *env)
 		path = str_join(p, s);
 		free(p);
 		if (access(path, X_OK) == 0)
+		{
+			fr_double(paths);
 			return (path);
+		}
 		free(path);
 		i++;
 	}
+	fr_double(paths);
 	return (NULL);
 }
 t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)

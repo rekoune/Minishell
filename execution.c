@@ -33,9 +33,7 @@ int	open_in_files(t_oip *input)
 		if(input->type == REDIR_IN)
 			fd = open(input->name, O_RDWR);
 		if(!input->next && input->type == HERE_DOC)
-		{
-			fd = input->fd;
-		}
+			fd = open(input->s, O_RDONLY , 0640);
 		if(fd == -1)
 		{
 			ft_write("minishell: ", 2);
@@ -179,6 +177,7 @@ void 	child_pross(t_execution *list, int	prev_pipe, int in_fd, int out_fd, t_lis
 	execve(list->path, list->cmd, getarray(*env));
 	error("execve fails\n");
 }
+
 
 
 int run_cmd(t_execution *list, t_list **env)
