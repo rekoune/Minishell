@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 17:49:59 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 18:08:06 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,8 +156,7 @@ int						run_cmd(t_execution *list, t_list **env);
 
 //excu tools
 int						check_builtins(char *str);
-int						execute_builtins(char **cmd, t_list **env, int flag,
-							int out_fd);
+int						execute_builtins(char **cmd, t_list **env, int flag, int out_fd);
 
 //utils.c
 char					**getarray(t_list *lst);
