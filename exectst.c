@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 15:58:04 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 16:08:28 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int run_execution(t_execution *execution, t_list *env)
         pid = fork();
         if(pid == -1)
         {
-            perror("minishell:");
+            perror("minishell:2");
             return (1);
         }
         if(pid == 0)

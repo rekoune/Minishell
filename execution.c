@@ -74,8 +74,7 @@ int	get_out_fd(t_execution *list, int *prev_pipe, int *flag, int pipe_fd[2])
 		*flag = 1;
 		if(list->output == NULL)
 		{
-			out_fd = dup(pipe_fd[1]);
-			close(pipe_fd[1]);
+			out_fd = pipe_fd[1];
 		}
 	}
 	return(out_fd);
@@ -93,7 +92,7 @@ int	open_out_files(t_oip *out_file)
 		else if (out_file->type == DREDIR_OUT)
 			fd = open(out_file->name, O_CREAT | O_APPEND | O_WRONLY ,0640);
 		if(fd == -1)
-			error("ERROR: No such file or directory\n");
+			return(fd);
 		if(!out_file->next)
 			return (fd);
 		out_file = out_file->next;
@@ -103,19 +102,19 @@ int	open_out_files(t_oip *out_file)
 
 int	check_builtins(char *str)
 {
-	if(!str_ncomp(str, "echo", 5))
+	if(str && !str_ncomp(str, "echo", 5))
 		return(1);
-	else if(!str_ncomp(str, "cd", 3))
+	else if(str && !str_ncomp(str, "cd", 3))
 		return(2);
-	else if(!str_ncomp(str, "pwd", 4))
+	else if(str && !str_ncomp(str, "pwd", 4))
 		return(3);
-	else if(!str_ncomp(str, "export", 7))
+	else if(str && !str_ncomp(str, "export", 7))
 		return(4);
-	else if(!str_ncomp(str, "unset", 6))
+	else if(str && !str_ncomp(str, "unset", 6))
 		return(5);
-	else if(!str_ncomp(str, "env", 4))
+	else if(str && !str_ncomp(str, "env", 4))
 		return(6);
-	else if(!str_ncomp(str, "exit", 5))
+	else if(str && !str_ncomp(str, "exit", 5))
 		return(7);
 	return(0);
 }
@@ -139,11 +138,15 @@ int	execute_builtins(char **cmd, t_list **env, int flag, int out_fd)
 	return(0);
 }
 
-void 	child_pross(t_execution *list, int in_fd, int out_fd, t_list **env)
+void 	child_pross(t_execution *list, int	prev_pipe, int in_fd, int out_fd, t_list **env)
 {
 	int	flag;
 
 	flag = 0;
+	if(!list->cmd[0])
+		exit(0);
+	printf("in child process in_fd = %d, out_fd == %d, prev_pipe = %d\n", in_fd, out_fd, prev_pipe);
+	close (prev_pipe);
 	if(in_fd == -1 || out_fd == -1)
 		exit(1);
 	flag = check_builtins(list->cmd[0]);
@@ -166,7 +169,7 @@ void 	child_pross(t_execution *list, int in_fd, int out_fd, t_list **env)
 		ft_write(": No such file or directory\n", 2);
 		exit(127);
 	}
-	if(!list->path)
+	if(!list->path && list->cmd[0])
 	{
 		ft_write("minishell: ", 2);
 		ft_write(list->cmd[0], 2);
@@ -222,7 +225,7 @@ int run_cmd(t_execution *list, t_list **env)
 		{
 			pid[i] = fork();
 			if (pid[i++] == 0)
-				child_pross(list, in_fd, out_fd, env);
+				child_pross(list, prev_pipe, in_fd, out_fd, env);
 		}
 		
 		if(in_fd != 0)
@@ -236,6 +239,7 @@ int run_cmd(t_execution *list, t_list **env)
 	i = 0;
 	while(i < size)
 		waitpid(pid[i++], &state, 0);
+	free(pid);
 	if(nf == 0)
 		exit_status = WEXITSTATUS(state);
 	return(exit_status);
