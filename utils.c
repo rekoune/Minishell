@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 08:52:12 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/21 10:30:13 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/25 13:13:56 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	**getarray(t_list *lst)
 {
 	char	**str;
 	int		i;
+	t_list *tmp;
 
 	i = 0;
 	str = malloc((ft_lstsize(lst) + 1) * sizeof(char *));
@@ -25,7 +26,9 @@ char	**getarray(t_list *lst)
 	{
 		str[i] = lst->str;
 		i++;
+		tmp = lst;
 		lst = lst->next;
+		free(tmp);
 	}
 	str[i] = NULL;
 	return (str);

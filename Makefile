@@ -1,4 +1,4 @@
-CFILES = minishell.c utils.c itoa.c herdoc.c ft_split.c exectst.c parsing_utils.c parcing.c tools.c linked_list.c list_utils.c tokenization.c builtins_func.c execution.c
+CFILES = minishell.c utils.c itoa.c herdoc.c ft_split.c exectst.c parsing_utils.c parcing.c tools.c linked_list.c list_utils.c tokenization.c builtins_func.c execution.c free_resources.c
 OFILES = $(CFILES:.c=.o)
 
 CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address

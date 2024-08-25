@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exectst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 12:07:57 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 15:51:33 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
     }
     if(!exec->path)
     {    
-        ft_write("minishell: ", 2);
+        ft_write("minishell: 1", 2);
         ft_write(exec->cmd[0], 2);
         ft_write(": command not found\n", 2);
         exit(127);
@@ -128,7 +128,7 @@ int run_execution(t_execution *execution, t_list *env)
         pid = fork();
         if(pid == -1)
         {
-            perror("minishell:");
+            perror("minishell:2");
             return (1);
         }
         if(pid == 0)
