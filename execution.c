@@ -124,15 +124,15 @@ int	execute_builtins(char **cmd, t_list **env, int flag, int out_fd)
 	if(flag == 1)
 		return (ft_echo(cmd, out_fd));
 	else if(flag == 2)
-		return (ft_cd(cmd[0]));
+		return (ft_cd(cmd[0], *env));
 	else if(flag == 3)
 		return (ft_pwd(out_fd));
 	else if(flag == 4)
-		return (ft_export(env, cmd[0]));
+		return (ft_export(env, cmd[0], out_fd));
 	else if(flag == 5)
 		return (ft_unset(env, cmd[0]));
 	else if(flag == 6)
-		return (ft_env(*env, out_fd));
+		return (ft_env(*env, out_fd, 0));
 	else if(flag == 7)
 		return (ft_exit());
 	return(0);

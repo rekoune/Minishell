@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 17:49:59 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 19:40:34 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ char					*get_next_line(int fd);
 char					*str_ncopy(char *str, int size);
 int						check_char(char c);
 int						str_ncomp(char *s1, char *s2, int size);
-void					error(char *str);
+int						error(char *str);
 int						str_len(char *str, char separator);
 char					*ft_itoa(int nb);
 
@@ -133,19 +133,19 @@ t_lexer_list			*is_tokenized(char *str);
 char					*n_state(enum e_state state);
 char					*n_type(enum e_token type);
 void					add_state(t_lexer_list *head);
-void					check_syntax(t_lexer_list *node);
+int						check_syntax(t_lexer_list *node);
 enum e_token			add_type(t_lexer_list *node);
 
 //builtins_func.c
 int						ft_echo(char **str, int fd);
 int						ft_pwd(int fd);
-int						ft_env(t_list *env, int fd);
-int						ft_export(t_list **env, char *to_export);
+int						ft_env(t_list *env, int fd, int flag);
+int						ft_export(t_list **env, char *to_export, int fd);
 int						ft_unset(t_list **env, char *to_unset);
 int						is_exist(t_list *head, t_list **node, char *to_export);
 int						check_param(char *str);
 t_list					*get_env(char **env);
-int						ft_cd(char *str);
+int						ft_cd(char *str, t_list *env);
 int						ft_exit(void);
 int						ft_write(char *str, int fd);
 

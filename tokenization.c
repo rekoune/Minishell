@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 10:36:48 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/23 17:18:11 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/25 18:56:27 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ enum e_token	add_type(t_lexer_list *node)
 	return(0);
 }
 
-void	more_check(t_lexer_list *head)
+int	more_check(t_lexer_list *head)
 {
 	int	n_quote;
 
 	n_quote = 0;
 	if (head->type == PIPE_LINE)
-		error("ERROR : syntax error\n");
+		return(error("minishell : syntax error\n"));
 	while (head)
 	{
 		if ((head->type == QOUTE || head->type == DOUBLE_QUOTE) && head->state == GENERAL)
@@ -51,22 +51,23 @@ void	more_check(t_lexer_list *head)
 				head = head->next;
 			if (head->next == NULL || head->next->type == PIPE_LINE || head->next->type == REDIR_IN ||
 				 head->next->type == REDIR_OUT || head->next->type == DREDIR_OUT|| head->next->type == HERE_DOC)
-				error("ERROR : syntax error\n");
+				return(error("minishell : syntax error\n"));
 		}
 		else if (head->type == PIPE_LINE && head->state == GENERAL)
 		{
 			if (head->next && head->next->type == WHITE_SPACE)
 				head = head->next;
 			if (head->next == NULL)
-				error("ERROR : syntax error\n");
+				return(error("minishell : syntax error\n"));
 		}
 		head = head->next;
 	}
 	if (n_quote % 2 != 0)
-		error("ERROR : syntax error\n");
+		return(error("minishell : syntax error\n"));
+	return(0);
 }
 
-void	check_syntax(t_lexer_list *head)
+int	check_syntax(t_lexer_list *head)
 {
 	t_lexer_list *node;
 
@@ -78,21 +79,20 @@ void	check_syntax(t_lexer_list *head)
 			if (node->len == 2)
 				node->type = DREDIR_OUT;
 			else if (node->len > 2 && node->state == GENERAL)
-				error("ERROR : syntax error\n");
+				return(error("minishell : syntax error\n"));
 		}
 		else if (node->type == REDIR_IN)
 		{
 			if (node->len == 2)
 				node->type = HERE_DOC;
 			else if (node->len > 2 && node->state == GENERAL)
-				error("ERROR : syntax error\n");
+				return(error("minishell : syntax error\n"));
 		}
 		else if (node->type == PIPE_LINE  && node->len > 1 && node->state == GENERAL)
-			error("ERROR : syntax error\n");
+			return(error("minishell : syntax error\n"));
 		node = node->next;
 	}
-	more_check(head);
-	return;
+	return (more_check(head));
 }
 
 t_lexer_list *set_quote_state (t_lexer_list *head, enum e_token type)
@@ -141,7 +141,6 @@ void	add_state(t_lexer_list *head)
 			head = head->next;
 		}
 	}
-	check_syntax(node);
 }
 
 t_lexer_list	*is_tokenized(char *str)
