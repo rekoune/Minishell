@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 16:08:28 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 16:22:58 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,19 +83,15 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
     if(exec->cmd[0] && !exec->path)
     {   
         if(find_c(exec->cmd[0], '/') || !envv("$PATH",env, 0))
-        {
-            ft_write("minishell: ", 2);
-            ft_write(exec->cmd[0], 2);
-            access(exec->cmd[0], X_OK);
-            perror(" ");
-            exit(127);
-        }
-        ft_printf("minishell: %s :command not found\n",exec->cmd[0]);
+            ft_printf("minishell: %s : No such file or directory\n",exec->cmd[0]);
+        else
+            ft_printf("minishell: %s : command not found\n",exec->cmd[0]);
         exit(127);
     }
-    if(exec->cmd[0])
-        if (execve(exec->path, exec->cmd, getarray(env)) == -1)
-		    perror("execve");
+    if(!exec->cmd[0])
+        exit(0);
+    if (execve(exec->path, exec->cmd, getarray(env)) == -1)
+		perror("execve");
     exit(1);
 }
 int run_execution(t_execution *execution, t_list *env)
