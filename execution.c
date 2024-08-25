@@ -34,8 +34,7 @@ int	open_in_files(t_oip *input)
 			fd = open(input->name, O_RDWR);
 		if(!input->next && input->type == HERE_DOC)
 		{
-			fd = dup(input->fd);
-			close(input->fd);
+			fd = input->fd;
 		}
 		if(fd == -1)
 		{
@@ -47,7 +46,6 @@ int	open_in_files(t_oip *input)
 		}
 		input = input->next;
 	}
-	printf("int file %d\n", fd);
 	return(fd);
 }
 int	get_out_fd(t_execution *list, int *prev_pipe, int *flag, int pipe_fd[2])
@@ -78,8 +76,7 @@ int	get_out_fd(t_execution *list, int *prev_pipe, int *flag, int pipe_fd[2])
 		*flag = 1;
 		if(list->output == NULL)
 		{
-			out_fd = dup(pipe_fd[1]);
-			close(pipe_fd[1]);
+			out_fd = pipe_fd[1];
 		}
 	}
 	return(out_fd);
@@ -97,7 +94,7 @@ int	open_out_files(t_oip *out_file)
 		else if (out_file->type == DREDIR_OUT)
 			fd = open(out_file->name, O_CREAT | O_APPEND | O_WRONLY ,0640);
 		if(fd == -1)
-			error("ERROR: No such file or directory\n");
+			return(fd);
 		if(!out_file->next)
 			return (fd);
 		out_file = out_file->next;
@@ -143,11 +140,13 @@ int	execute_builtins(char **cmd, t_list **env, int flag, int out_fd)
 	return(0);
 }
 
-void 	child_pross(t_execution *list, int in_fd, int out_fd, t_list **env)
+void 	child_pross(t_execution *list, int	prev_pipe, int in_fd, int out_fd, t_list **env)
 {
 	int	flag;
 
 	flag = 0;
+	printf("in child process in_fd = %d, out_fd == %d, prev_pipe = %d\n", in_fd, out_fd, prev_pipe);
+	close (prev_pipe);
 	if(in_fd == -1 || out_fd == -1)
 		exit(1);
 	flag = check_builtins(list->cmd[0]);
@@ -216,8 +215,6 @@ int run_cmd(t_execution *list, t_list **env)
 	{
 		in_fd = get_in_fd(list->input, prev_pipe, &flag);
 		out_fd = get_out_fd(list, &prev_pipe, &flag, pipe_fd);
-		lseek(in_fd, 0, SEEK_SET);
-		printf("in_fd  == %d\n", in_fd);
 		if(check_builtins(list->cmd[0]) > 0 && size == 1)
 		{
 			exit_status = execute_builtins(&list->cmd[1], env, check_builtins(list->cmd[0]), out_fd);
@@ -227,7 +224,7 @@ int run_cmd(t_execution *list, t_list **env)
 		{
 			pid[i] = fork();
 			if (pid[i++] == 0)
-				child_pross(list, in_fd, out_fd, env);
+				child_pross(list, prev_pipe, in_fd, out_fd, env);
 		}
 		
 		if(in_fd != 0)
