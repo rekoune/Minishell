@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/24 13:29:26 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 10:34:07 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_oip  *get_here_doc(t_execution *execution)
     return (firstehrdoc);
 }
 
-void thedoc(t_oip *herdoc)
+void thedoc(t_oip *herdoc, int fd)
 {
     char *dlm;
     char *s;
@@ -55,7 +55,7 @@ void thedoc(t_oip *herdoc)
         if(!str_ncomp(s, dlm,strr_len(dlm)))
             break;
         if(!herdoc->next)
-            write(herdoc->fd, s, strr_len(s));
+            write(fd, s, strr_len(s));
         free(s);
         write(1,">",1);
         s = get_next_line(0);
@@ -63,7 +63,7 @@ void thedoc(t_oip *herdoc)
     free(dlm);
     free(s);
     if(!herdoc->next)
-        close(herdoc->fd);
+        close(fd);
     exit(0); 
 }
 
@@ -75,24 +75,21 @@ void handl(int l)
 int run_here_doc(t_oip *herdoc)
 {
     char *tmp;
-    char *s;
     int pid;
+    int fd;
     int i;
 
     i = 0;
     pid = 0;
     while (herdoc && !pid)
     {
-        herdoc->fd = -1;
-        tmp = ft_itoa(i);
-        s = str_join("/tmp/",tmp);
-        free(tmp);
         if(!herdoc->next)
         {
-           herdoc->fd = open(s, O_RDWR | O_CREAT | O_TRUNC, 0640);
-           herdoc->s = str_dup(s, strr_len(s)); 
+            tmp = ft_itoa(i);
+            herdoc->s = str_join("/tmp/",tmp);
+            free(tmp);
+            fd = open(herdoc->s, O_RDWR | O_CREAT | O_TRUNC, 0640);
         }
-        free (s);
         pid = fork();
         if(pid == -1)
         {
@@ -102,7 +99,7 @@ int run_here_doc(t_oip *herdoc)
         if(pid == 0)
         {
             signal(SIGINT,handl);
-            thedoc(herdoc);
+            thedoc(herdoc, fd);
         }
         wait(&pid);
         herdoc = herdoc->herdoc_next;
