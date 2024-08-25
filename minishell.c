@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 16:30:03 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/25 17:58:34 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int main(int ac, char **av, char **env)
 	(void) av;
 	// int pid = 0;
 
-	signal(SIGINT,handler);
+	signal(SIGINT, handler);
+	signal(SIGQUIT, SIG_IGN);
 	enva = get_env(env);
 	int exit_status = 0;
 	while (1)
