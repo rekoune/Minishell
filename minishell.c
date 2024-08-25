@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 17:58:34 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 20:36:06 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ void print(t_lexer_list *head)
 void handler(int n)
 {
 	n = 0;
-	// rl_replace_line("\033[32mminishell \033[0m> ", 1);
+	// rl_on_new_line(); // Move to a new line
+    // rl_replace_line("\033[32mminishell \033[0m>", 0); // Clear the current line
+    // rl_redisplay(); // Redisplay the prompt
 }
 int main(int ac, char **av, char **env)
 {
