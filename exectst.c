@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exectst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/24 10:17:14 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/25 12:07:57 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ int in_fd(t_oip *input, int fd)
             close(fd);
         if(input->type == REDIR_IN)
             fd = open(input->name, O_RDONLY);
+        if(!input->next && input->type == HERE_DOC)
+            fd = open(input->s, O_RDONLY);
         if(fd < 0)
         {
-            printf("minishell: no such file or directory : %s\n", input->name);
+            perror(input->name);
             return (-1); 
         }
         input = input->next;
@@ -39,12 +41,12 @@ int out_fd(t_oip *output,int fd, int pipe)
         if(fd != 1)
             close(fd);
         if(output->type == REDIR_OUT)
-            fd = open(0, O_WRONLY | O_CREAT | O_APPEND, 0640);
+            fd = open(output->name, O_CREAT | O_TRUNC | O_WRONLY , 0640);
         else if(output->type == DREDIR_OUT)
-            fd = open(0, O_WRONLY | O_CREAT | O_TRUNC, 0640);
+            fd = open(output->name,  O_CREAT | O_APPEND | O_WRONLY , 0640);
         if(fd < 0)
         {
-            perror("minishell:");
+            perror(output->name);
             return (-1);
         }
         output = output->next;
@@ -57,11 +59,6 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
     int infd;
     int outfd;
 
-    if(!exec->path)
-    {   
-        printf("minishell: %s: command not found\n",exec->cmd[0]);
-        exit(127);
-    }
     infd = in_fd(exec->input, old_read);
     if(infd == -1)
         exit (1);
@@ -69,13 +66,28 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
     if(outfd == -1)
         exit(1);
     dup2(infd, 0);
-    dprintf(2,"infd: %d\n",infd);
-    close(infd);
+    // dprintf(2,"infd: %d\n",infd);
+    if(infd)   
+        close(infd);
     if(fd[0])
         close(fd[0]);
     dup2(outfd, 1);
-    dprintf(2,"outfd: %d\n",outfd);
-    close(outfd);
+    // dprintf(2,"outfd: %d\n",outfd);
+    if(outfd != 1)
+        close(outfd);
+    infd = check_builtins(exec->cmd[0]);
+    if(infd)
+    {
+        infd = execute_builtins(&exec->cmd[1], &env, infd, 1);
+        exit(infd);   
+    }
+    if(!exec->path)
+    {    
+        ft_write("minishell: ", 2);
+        ft_write(exec->cmd[0], 2);
+        ft_write(": command not found\n", 2);
+        exit(127);
+    }
     if (execve(exec->path, exec->cmd, getarray(env)) == -1)
 		perror("execve");
     exit(1);
@@ -88,10 +100,12 @@ int run_execution(t_execution *execution, t_list *env)
     int oldread;
     int i;
     
-    i = 0;
     herdoc = get_here_doc(execution);
-    // if(herdoc)
-    //     run_here_doc(herdoc);
+    if(herdoc)
+         pid = run_here_doc(herdoc);
+    fd[0] = 0;
+    fd[1] = 1;
+    i = check_builtins(execution->cmd[0]);
     if(execution->pipe)
     { 
         if(pipe(fd) == -1)
@@ -100,8 +114,9 @@ int run_execution(t_execution *execution, t_list *env)
             return(1);
         }
     }
-    fd[0] = 0;
-    fd[1] = 1;
+    else if(i)
+        return(execute_builtins(&execution->cmd[1], &env, i, out_fd(execution->output, 1, 0)));
+    i = 0;
     while (execution)
     {
         oldread = fd[0];
@@ -120,13 +135,16 @@ int run_execution(t_execution *execution, t_list *env)
             exccmd(execution, env, fd, oldread);
         if(oldread)
             close(oldread);
-        close(fd[1]);
+        if(fd[1] != 1)
+            close(fd[1]);
         execution = execution->next;
         i++;
     }
-    close(fd[0]);
+    if(fd[0])
+        close(fd[0]);
     while (wait(&pid) && i--)
     ;
+    pid = WEXITSTATUS(pid);
     return (pid);
 }
 

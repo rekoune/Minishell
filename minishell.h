@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/24 12:04:20 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 12:16:12 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct  s_out_in_put
 {
 	enum e_token type;
 	char 					*name;
-	int						fd;
+	char					*s;
 	struct  s_out_in_put	*next;
 	struct  s_out_in_put	*herdoc_next;
 }    t_oip;
@@ -154,8 +154,13 @@ int					open_in_files(t_oip *list);
 int					open_out_files(t_oip *out_file);
 int					run_cmd(t_execution *list, t_list **env);
 
+//excu tools
+int	check_builtins(char *str);
+int	execute_builtins(char **cmd, t_list **env, int flag, int out_fd);
+
 //utils.c
 char				**getarray(t_list *lst);
+void	fr_double(char **s);
 
 //execution
 int 				run_execution(t_execution *execution, t_list *env);
