@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 12:17:10 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 18:30:24 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char *get_path(char *s, t_list *env)
 	if(!s)
 		return (0);
 	if (access(s, X_OK) == 0)
-			return (s);
+			return (str_dup(s, str_len(s, '\0')));
 	p = envv("$PATH",env, 0);
 	paths = ft_split(p, ':');
 	free (p);
