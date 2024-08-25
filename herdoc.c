@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   herdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 10:34:07 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 16:47:57 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,9 @@ void thedoc(t_oip *herdoc, int fd)
     exit(0); 
 }
 
-void handl(int l)
+void sig_handel(int l)
 {
+    printf("hona haon hona\n");
 	l = 130;
 	exit(l);
 }
@@ -98,7 +99,7 @@ int run_here_doc(t_oip *herdoc)
         }
         if(pid == 0)
         {
-            signal(SIGINT,handl);
+            signal(SIGINT,sig_handel);
             thedoc(herdoc, fd);
         }
         wait(&pid);
