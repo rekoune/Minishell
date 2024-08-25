@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exectst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 16:32:36 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 16:36:08 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int in_fd(t_oip *input, int fd)
             fd = open(input->s, O_RDONLY);
         if(fd < 0)
         {
-            ft_printf("minishell: %s",input->name);
+            ft_printf("minishell: %s: ",input->name);
             perror("");
             return (-1); 
         }
@@ -47,7 +47,7 @@ int out_fd(t_oip *output,int fd, int pipe)
             fd = open(output->name,  O_CREAT | O_APPEND | O_WRONLY , 0640);
         if(fd < 0)
         {
-            ft_printf("minishell: %s",output->name);
+            ft_printf("minishell: %s: ",output->name);
             perror("");
             return (-1);
         }

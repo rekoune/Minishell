@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 16:11:49 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 16:30:03 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int main(int ac, char **av, char **env)
 		exit_status = run_execution(execution, enva);
 		free_resources(execution);
 		
-		// printf("exit status = %d\n", exit_status);
+		printf("exit status = %d\n", exit_status);
 		}
 		free(str);
 		// open_in_files(execution);
