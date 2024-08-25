@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exectst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 17:06:24 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/25 17:31:04 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,10 @@ int run_execution(t_execution *execution, t_list *env)
         close(fd[0]);
     while (wait(&pid) && i--)
     ;
-    pid = WEXITSTATUS(pid);
+     if (WIFEXITED(pid)) 
+        pid = WEXITSTATUS(pid);
+     else if (WIFSIGNALED(pid))
+        pid = WTERMSIG(pid) + 128;
     return (pid);
 }
 
