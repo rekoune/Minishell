@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   herdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 16:47:57 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/25 17:41:39 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,11 @@ void thedoc(t_oip *herdoc, int fd)
     exit(0); 
 }
 
-void sig_handel(int l)
-{
-    printf("hona haon hona\n");
-	l = 130;
-	exit(l);
-}
+// void sig_handel(int l)
+// {
+// 	l = 130;
+// 	exit(l);
+// }
 int run_here_doc(t_oip *herdoc)
 {
     char *tmp;
@@ -99,13 +98,16 @@ int run_here_doc(t_oip *herdoc)
         }
         if(pid == 0)
         {
-            signal(SIGINT,sig_handel);
+            signal(SIGINT,SIG_DFL);
             thedoc(herdoc, fd);
         }
         wait(&pid);
         herdoc = herdoc->herdoc_next;
         i++;
-        pid = WEXITSTATUS(pid);
+        if (WIFEXITED(pid)) 
+            pid = WEXITSTATUS(pid);
+        else if (WIFSIGNALED(pid))
+            pid = WTERMSIG(pid) + 128;
     }
     return (pid);
 }

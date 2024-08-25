@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 16:44:21 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/25 17:49:59 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,5 @@ void					free_resources(t_execution *execution);
 void					free_lexer(t_lexer_list *list);
 void					fr_double(char **s);
 
-//her_doc.c
-void 					sig_handel(int l);
 
 #endif
