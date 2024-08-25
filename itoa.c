@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 18:05:09 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 12:15:56 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 15:11:01 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,18 @@ void	fr_double(char **s)
 	while (s && s[i])
 		free(s[i++]);
 	free(s);
+}
+
+int	find_c(char *s, char c)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
 }

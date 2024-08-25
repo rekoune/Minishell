@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 12:16:12 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/25 15:51:59 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define MINISHELL_H
 
 #include "GET_NEXT_LINE/get_next_line.h"
+#include "ft_printf/ft_printf.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -161,6 +162,7 @@ int	execute_builtins(char **cmd, t_list **env, int flag, int out_fd);
 //utils.c
 char				**getarray(t_list *lst);
 void	fr_double(char **s);
+int	find_c(char *s, char c);
 
 //execution
 int 				run_execution(t_execution *execution, t_list *env);
