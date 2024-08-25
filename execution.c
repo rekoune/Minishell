@@ -178,6 +178,7 @@ void 	child_pross(t_execution *list, int in_fd, int out_fd, t_list **env)
 }
 
 
+
 int run_cmd(t_execution *list, t_list **env)
 {
 	int	pipe_fd[2];
