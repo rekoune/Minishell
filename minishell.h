@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/26 11:56:11 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/26 15:35:15 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include "/Users/haouky/.brew/opt/readline/include/readline/readline.h"
+// # include "/Users/haouky/.brew/opt/readline/include/readline/readline.h"
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -147,7 +147,7 @@ int						is_exist(t_list *head, t_list **node, char *to_export);
 int						check_param(char *str);
 t_list					*get_env(char **env);
 int						ft_cd(char *str, t_list *env);
-int						ft_exit(void);
+int						ft_exit(char **arg);
 int						ft_write(char *str, int fd);
 
 //excu.c
