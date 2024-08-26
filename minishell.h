@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/26 15:35:15 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/26 19:21:55 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ int						is_exist(t_list *head, t_list **node, char *to_export);
 int						check_param(char *str);
 t_list					*get_env(char **env);
 int						ft_cd(char *str, t_list *env);
-int						ft_exit(char **arg);
+int						ft_exit(char **cmd);
 int						ft_write(char *str, int fd);
 
 //excu.c

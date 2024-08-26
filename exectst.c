@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exectst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/26 09:54:41 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/26 16:31:16 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,14 +125,14 @@ int run_execution(t_execution *execution, t_list *env, int status)
         {
             if(pipe(fd) == -1)
             {
-                perror("minishel:");
+                perror("minishel: pipe: ");
                 return(1);
             }  
         }
         pid = fork();
         if(pid == -1)
         {
-            perror("minishell:2");
+            perror("minishell: fork: ");
             return (1);
         }
         if(pid == 0)
