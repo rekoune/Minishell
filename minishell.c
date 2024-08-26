@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 20:36:06 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/26 12:43:44 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,17 @@ void print(t_lexer_list *head)
 void handler(int n)
 {
 	n = 0;
-	// rl_on_new_line(); // Move to a new line
-    // rl_replace_line("\033[32mminishell \033[0m>", 0); // Clear the current line
-    // rl_redisplay(); // Redisplay the prompt
+    // rl_redisplay(); 
+    // rl_replace_line("\033[32mminishell \033[0m>", 0); 
+	// rl_on_new_line(); 
 }
 int main(int ac, char **av, char **env)
 {
 	char		*str;
 	t_lexer_list	*cmd;
 	t_execution *execution;
-	// int	 i;
-	// char *type;
 	t_list *enva;
-	(void) ac;
 	(void) av;
-	// int pid = 0;
 
 	signal(SIGINT, handler);
 	signal(SIGQUIT, SIG_IGN);
@@ -59,53 +55,26 @@ int main(int ac, char **av, char **env)
 			exit(1);
 		if (str[0])
 		{
-		add_history(str);
-		cmd = is_tokenized(str);
-		// print(cmd);
-		execution = parse(cmd,enva, exit_status);
-		free_lexer(cmd);
-		// exit_status = run_cmd(execution, &enva);
-		exit_status = run_execution(execution, enva);
-		free_resources(execution);
-		
-		printf("exit status = %d\n", exit_status);
+			add_history(str);
+			cmd = is_tokenized(str);
+			ac = check_syntax(cmd);
+			if(!ac)
+			{
+				execution = parse(cmd,enva, exit_status);
+				free_lexer(cmd);
+				// exit_status = run_cmd(execution, &enva);
+				exit_status = run_execution(execution, enva, exit_status);
+				free_resources(execution);
+			}
+			else
+			{
+				free_lexer(cmd);
+				exit_status = ac;
+			}
+			
+			printf("exit status = %d\n", exit_status);
 		}
 		free(str);
-		// open_in_files(execution);
-		// if(!execution->input)
-	
-		// printf("---------------------------------------------------------------------\n");
-		// while (execution)
-		// {
-		// 	printf("******************************************************************\n");
-		// 	i = 0;
-		// 	while(execution->cmd[i])
-		// 		printf("exection>>>>>>>>>>>> == %s\n", execution->cmd[i++]);
-		// 	printf("execution->path >>>>>>>>> ==%s\n ",execution->path);
-		// 	while (execution->input)
-		// 	{
-		// 		// printf("/*/checkin \n");
-		// 		// if(execution->input->type == REDIR_IN|| execution->input->type == HERE_DOC)
-		// 		// 	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>in\n");
-		// 		// printf("/*/endcheckin \n");
-		// 		type = n_type(execution->input->type);
-		// 		printf("input type : %s, name == %s\n", type, execution->input->name);
-		// 		execution->input = execution->input->next;
-		// 	}
-		// 	while (execution->output)
-		// 	{
-		// 		// printf("/*/checkout \n");
-		// 		// if(execution->output->type == REDIR_OUT || execution->output->type == DREDIR_OUT)
-		// 		// 	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>out\n");
-		// 		// printf("/*/endcheckout \n");
-		// 		type = n_type(execution->output->type);
-		// 		printf("input type : %s, name == %s\n", type, execution->output->name);
-		// 		execution->output = execution->output->next;
-		// 	}
-		// 	printf("pipe == %d\n", execution->pipe);
-			
-		// 	execution = execution->next;
-		// }
 	}
 
 }

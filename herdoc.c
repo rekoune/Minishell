@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 17:41:39 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/26 10:27:09 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,42 @@ t_oip  *get_here_doc(t_execution *execution)
     }
     return (firstehrdoc);
 }
+void herdoc_write(int fd, char *s, t_list *env, int status)
+{
+    int i;
+    char *tmp;
+    char *tmp2;
+    int j;
 
-void thedoc(t_oip *herdoc, int fd)
+    i = 0;
+    while (s[i])
+    {
+        if(s[i] == '$')
+        {
+            j = 1;
+            while (s[i + j] && ((s[i + j] >= '0' && s[i + j] <= '9') || (s[i + j] >= 'a' && s[i + j] <= 'z') || (s[i + j] >= 'A' && s[i + j] <= 'Z')))
+                j++;
+            if(s[i + 1] == '?')
+            {
+                tmp2 = ft_itoa(status);
+                i++;
+            }
+            else
+            {
+                tmp = ft_substr(&s[i], 0, j);
+                tmp2 = envv(tmp, env, 0);
+                free (tmp);
+            }
+            write(fd, tmp2, strr_len(tmp2));
+            free(tmp2);
+            i += j - 1;    
+        }
+        else
+            write(fd, &s[i], 1);
+        i++;
+    }
+}
+void thedoc(t_oip *herdoc, int fd, t_list *env, int status)
 {
     char *dlm;
     char *s;
@@ -55,7 +89,7 @@ void thedoc(t_oip *herdoc, int fd)
         if(!str_ncomp(s, dlm,strr_len(dlm)))
             break;
         if(!herdoc->next)
-            write(fd, s, strr_len(s));
+            herdoc_write(fd, s, env, status);
         free(s);
         write(1,">",1);
         s = get_next_line(0);
@@ -72,7 +106,7 @@ void thedoc(t_oip *herdoc, int fd)
 // 	l = 130;
 // 	exit(l);
 // }
-int run_here_doc(t_oip *herdoc)
+int run_here_doc(t_oip *herdoc, t_list *env, int status)
 {
     char *tmp;
     int pid;
@@ -99,7 +133,7 @@ int run_here_doc(t_oip *herdoc)
         if(pid == 0)
         {
             signal(SIGINT,SIG_DFL);
-            thedoc(herdoc, fd);
+            thedoc(herdoc, fd, env, status);
         }
         wait(&pid);
         herdoc = herdoc->herdoc_next;

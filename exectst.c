@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 17:31:04 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/26 09:54:41 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
 		perror("execve");
     exit(1);
 }
-int run_execution(t_execution *execution, t_list *env)
+int run_execution(t_execution *execution, t_list *env, int status)
 {
     t_oip *herdoc;
     int fd[2];
@@ -108,7 +108,7 @@ int run_execution(t_execution *execution, t_list *env)
     i = 0;
     herdoc = get_here_doc(execution);
     if(herdoc)
-         pid = run_here_doc(herdoc);
+         pid = run_here_doc(herdoc, env, status);
     if(pid)
         return (pid);
     fd[0] = 0;

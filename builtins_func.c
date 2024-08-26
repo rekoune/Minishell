@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 11:01:22 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/22 20:00:55 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/25 19:44:34 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,12 @@ int	ft_pwd(int fd)
 	return (EXIT_SUCCESS);
 }
 
-int	ft_env(t_list *env, int fd)
+int	ft_env(t_list *env, int fd, int flag)
 {
 	while(env)
 	{
+		if(flag == 1)
+			ft_write("declare -x ", fd);
 		if(ft_write(env->str, fd) == EXIT_FAILURE || ft_write("\n", fd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		env = env->next;
@@ -120,7 +122,7 @@ int	is_exist(t_list *head, t_list **node, char *to_export)
 	return(0);
 }
 
-int	ft_export(t_list **env, char *to_export)
+int	ft_export(t_list **env, char *to_export, int fd)
 {
 	int	flag;
 	int	i;
@@ -128,6 +130,8 @@ int	ft_export(t_list **env, char *to_export)
 
 	i = 0;
 	flag = 0;
+	if(!to_export)
+		return(ft_env(*env, fd, 1));
 	if(to_export[0] != '_' && (to_export[0] < 'A' || 
 		to_export[0] > 'Z') && (to_export[0] < 'a' || to_export[0] > 'z'))
 	{
@@ -184,6 +188,8 @@ int	ft_unset(t_list **env, char *to_unset)
 
 	head = *env;
 	prev = NULL;
+	if(!to_unset)
+		return(EXIT_SUCCESS);
 	if (!check_param(to_unset))
 	{
 		ft_write("minishell : export '", 2);
@@ -210,15 +216,24 @@ int	ft_unset(t_list **env, char *to_unset)
 	return (EXIT_SUCCESS);
 }
 
-int	ft_cd(char *str)
+int	ft_cd(char *str, t_list *env)
 {
-	if(chdir(str) == -1)
+	char *s;
+	
+	s = NULL;
+	if(!str)
+	{
+		s = envv("$HOME", env, 0);
+		chdir(s);
+	}
+	else if (chdir(str) == -1)
 	{
 		ft_write("minishell : cd: ", 2);
 		ft_write(str, 2);
 		ft_write(": No such file or directory\n", 2);
 		return(EXIT_FAILURE);
 	}
+	free(s);
 	return (EXIT_SUCCESS);
 }
 

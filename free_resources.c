@@ -7,7 +7,7 @@ void	free_in_out(t_oip *list)
 	while(list)
 	{
 		free(list->name);
-		if(list->type == HERE_DOC)
+		if(list->type == HERE_DOC && !list->next)
 			free(list->s);
 		node = list->next;
 		free(list);
