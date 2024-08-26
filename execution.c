@@ -134,7 +134,7 @@ int	execute_builtins(char **cmd, t_list **env, int flag, int out_fd)
 	else if(flag == 6)
 		return (ft_env(*env, out_fd, 0));
 	else if(flag == 7)
-		return (ft_exit());
+		return	(ft_exit(cmd));
 	return(0);
 }
 

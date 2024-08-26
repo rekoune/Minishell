@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 11:01:22 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/25 19:44:34 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/26 16:14:37 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,14 +130,12 @@ int	ft_export(t_list **env, char *to_export, int fd)
 
 	i = 0;
 	flag = 0;
-	if(!to_export)
+	if(!to_export || !to_export[0])
 		return(ft_env(*env, fd, 1));
 	if(to_export[0] != '_' && (to_export[0] < 'A' || 
 		to_export[0] > 'Z') && (to_export[0] < 'a' || to_export[0] > 'z'))
 	{
-		ft_write("minishell : export '", 2);
-		ft_write(to_export, 2);
-		ft_write("': not a valid identifier\n", 2);
+		ft_printf("minishell : export: `%s': not a valid identifier\n", to_export);
 		return(EXIT_FAILURE);
 	}
 	while(to_export && to_export[i] && to_export[i] != '=')
@@ -146,9 +144,7 @@ int	ft_export(t_list **env, char *to_export, int fd)
 			(to_export[i] >= '[' && to_export[i] <= '^') || 
 			to_export[i] >= '{' || to_export[i] == '`')
 		{
-			ft_write("minishell : export '", 2);
-			ft_write(to_export, 2);
-			ft_write("': not a valid identifier\n", 2);
+			ft_printf("minishell : export: `%s': not a valid identifier\n", to_export);
 			return(EXIT_FAILURE);
 		}
 		i++;
@@ -192,9 +188,7 @@ int	ft_unset(t_list **env, char *to_unset)
 		return(EXIT_SUCCESS);
 	if (!check_param(to_unset))
 	{
-		ft_write("minishell : export '", 2);
-		ft_write(to_unset, 2);
-		ft_write("': not a valid identifier\n", 2);
+		ft_printf("minishell : unset: `%s': not a valid identifier\n", to_unset);
 		return(EXIT_FAILURE);	
 	}
 	while(head)
@@ -216,7 +210,7 @@ int	ft_unset(t_list **env, char *to_unset)
 	return (EXIT_SUCCESS);
 }
 
-int	ft_cd(char *str, t_list *env)
+int	ft_cd(char *str, t_list *env) 
 {
 	char *s;
 	
@@ -224,57 +218,69 @@ int	ft_cd(char *str, t_list *env)
 	if(!str)
 	{
 		s = envv("$HOME", env, 0);
-		chdir(s);
+		if(!s)
+		{
+			ft_printf("minishell: cd: HOME not set\n");
+			return(EXIT_FAILURE);
+		}
+		if (chdir(s) == -1)
+		{
+			ft_printf("minishell : cd: %s: No such file or directory\n", s);
+			free(s);
+			return(EXIT_FAILURE);
+		}
 	}
 	else if (chdir(str) == -1)
 	{
-		ft_write("minishell : cd: ", 2);
-		ft_write(str, 2);
-		ft_write(": No such file or directory\n", 2);
+		ft_printf("minishell : cd: %s: No such file or directory\n", str);
 		return(EXIT_FAILURE);
 	}
 	free(s);
 	return (EXIT_SUCCESS);
 }
 
-int ft_exit()
+
+long	ft_atoi(char *str)
 {
-	printf("exit\n");
-	exit(0);
-	return(EXIT_SUCCESS);
+	int		i;
+	long	nb;
+	int		sign;
+
+	i = 0;
+	sign = 1;
+	nb = 0;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if(str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i])
+	{
+		if (str[i] > '9' || str[i] < '0')
+		{
+			ft_printf("minishell: exit: %s: numeric argument required\n", str);
+			exit(255);
+		}
+		nb = nb * 10;
+		nb = nb + (str[i++] - 48);
+	}
+	nb *= sign;
+	return (nb);
 }
 
-// int main(int ac, char **av, char **env)
-// {
-// 	t_list *head;
-// 	(void) ac;
-// 	(void)	av;
-// 	head = get_env(env);
-// 	ft_env(head);
-// 	printf("==============================================================================\n");
-// 	ft_env(head);
-// 	sleep(3);
-// 	ft_export(&head, "abde=ls");
-// 	ft_env(head);
-// 	sleep(3);
-// 	printf("==============================================================================\n");
-// 	ft_export(&head, "abde=rekoune");
-// 	ft_env(head);
-// 	sleep(3);
-// 	ft_export(&head, "hamza=aouky");
-// 	ft_env(head);
-// 	printf("==============================================================================\n");
-// 	sleep(3);
-// 	ft_unset(&head, "abde");
-// 	ft_env(head);
-// 	sleep(3);
-// 	ft_unset(&head, "hamza");
-// 	ft_env(head);
-// 	sleep(3);
-// 	ft_unset(&head, "LESS");
-// 	ft_env(head);
-	
-// 	ft_pwd();
-// 	ft_cd("../pipex");
-// 	ft_pwd();
-// }
+int ft_exit(char **arg)
+{
+	int status;
+
+	status = 0;
+	printf("exit\n");
+	if(!arg[0])
+		exit(status);
+	status = ft_atoi(arg[0]);
+	if(arg[1])
+		ft_printf("minishell: exit: too many arguments\n");
+	else
+		exit(status);
+	return(EXIT_FAILURE);
+}
