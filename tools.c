@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:15:02 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/23 17:16:56 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/25 18:41:08 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ int	str_ncomp(char *s1, char *s2, int size)
 	return(s1[i] - s2[i]);
 }
 
-void	error(char *str)
+int	error(char *str)
 {
 	int i;
 	
 	i = 0;
 	while (str[i])
 		write(2, &str[i++], 1);
-	exit(1);
+	return (258);
 }
 
 int	str_len(char *str, char separator)
