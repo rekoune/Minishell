@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 11:35:46 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/27 14:45:27 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void handler(int n)
 	n = 1;
 	stat = n;
 	rl_on_new_line(); 
-    rl_replace_line("", 0); 
+    rl_replace_line("  ", 0); 
     rl_redisplay(); 
-	ft_write("\n\033[32mminishell \033[0m>", 1);
+	ft_write("\n\033[32mminishell \033[0m$ ", 1);
 }
 int main(int ac, char **av, char **env)
 {
@@ -54,7 +54,7 @@ int main(int ac, char **av, char **env)
 	while (1)
 	{
 	
-		str = readline("\033[32mminishell \033[0m> ");
+		str = readline("\033[32mminishell \033[0m$ ");
 		if(!str)
 			exit(1);
 		if(stat)

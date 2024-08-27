@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/26 10:27:09 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/27 12:43:50 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,6 @@ void thedoc(t_oip *herdoc, int fd, t_list *env, int status)
     exit(0); 
 }
 
-// void sig_handel(int l)
-// {
-// 	l = 130;
-// 	exit(l);
-// }
 int run_here_doc(t_oip *herdoc, t_list *env, int status)
 {
     char *tmp;
