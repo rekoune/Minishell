@@ -3,25 +3,36 @@ OFILES = $(CFILES:.c=.o)
 
 CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 CC = cc
-GET = GET_NEXT_LINE/get_next_line.c  GET_NEXT_LINE/get_next_line_utils.c 
+GET = GET_NEXT_LINE/get_next_line.c GET_NEXT_LINE/get_next_line_utils.c 
 OGET = $(GET:.c=.o)
 NAME = minishell
 PRINTF = ft_printf/libftprintf.a
-READLINE = -I/Users/haouky/.brew/opt/readline/include
+
+
+# Get the Readline installation path
+READLINE_DIR = $(shell brew --prefix readline)
+
+# Set Readline flags
+RFLAGS = -I$(READLINE_DIR)/include
+LDFLAGS = -L$(READLINE_DIR)/lib -lreadline
+
 all: $(NAME)
 
-$(NAME) : $(OFILES) $(PRINTF) $(OGET)  minishell.h
-		$(CC) $(CFLAGS) -lreadline /Users/arekoune/.brew/Cellar/readline/8.2.13/lib/libreadline.a $(OFILES) $(READLINE) $(PRINTF) $(OGET) -o $(NAME) 
+$(NAME): $(OFILES) $(PRINTF) $(OGET) minishell.h
+	$(CC) $(CFLAGS) $(OFILES) $(PRINTF) $(OGET) -o $(NAME) $(LDFLAGS)
 
 $(PRINTF):
 	make -C ft_printf
-%.o:%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(RFLAGS) -c $< -o $@
 
 clean:
 	make -C ft_printf fclean
 	rm -rf $(OFILES)
 	rm -rf $(OGET)
+
 fclean: clean
 	rm -rf $(NAME)
+
 re: fclean all
