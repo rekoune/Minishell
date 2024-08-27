@@ -3,25 +3,32 @@ OFILES = $(CFILES:.c=.o)
 
 CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 CC = cc
-GET = GET_NEXT_LINE/get_next_line.c  GET_NEXT_LINE/get_next_line_utils.c 
+GET = GET_NEXT_LINE/get_next_line.c GET_NEXT_LINE/get_next_line_utils.c 
 OGET = $(GET:.c=.o)
 NAME = minishell
 PRINTF = ft_printf/libftprintf.a
-READLINE = -I Users/haouky/.brew/opt/readline/include/readline
+
+# Set Readline flags (path)
+RFLAGS = -I/Users/haouky/.brew/opt/readline/include
+LDFLAGS = -L/Users/haouky/.brew/opt/readline/lib -lreadline
+
 all: $(NAME)
 
-$(NAME) : $(OFILES) $(PRINTF) $(OGET)  minishell.h
-		$(CC) $(CFLAGS) $(OFILES) $(READLINE) $(PRINTF) $(OGET) -o $(NAME) -lreadline
+$(NAME): $(OFILES) $(PRINTF) $(OGET) minishell.h
+	$(CC) $(CFLAGS) $(OFILES) $(PRINTF) $(OGET) -o $(NAME) $(LDFLAGS)
 
 $(PRINTF):
 	make -C ft_printf
-%.o:%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(RFLAGS) -c $< -o $@
 
 clean:
 	make -C ft_printf fclean
 	rm -rf $(OFILES)
 	rm -rf $(OGET)
+
 fclean: clean
 	rm -rf $(NAME)
+
 re: fclean all
