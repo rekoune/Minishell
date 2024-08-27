@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 09:39:15 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/27 12:22:57 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <signal.h>
 # include <stdlib.h>
 # include <unistd.h>
+#include <errno.h>
+#include <string.h>
 
 //sturct and
 typedef struct s_list
