@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exectst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/26 16:31:16 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:07:09 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,11 @@ int run_execution(t_execution *execution, t_list *env, int status)
     if(execution->cmd[0])
         i = check_builtins(execution->cmd[0]);
     if(i && !execution->pipe)
+    {
+        if(in_fd(execution->input, 0) == -1)
+            return (1);
         return(execute_builtins(&execution->cmd[1], &env, i, out_fd(execution->output, 1, 0)));
+    }
     i = 0;
     while (execution)
     {
