@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 09:38:10 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 10:10:14 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include "/Users/arekoune/.brew/opt/readline/include/readline/readline.h"
 # include <signal.h>
 # include <stdlib.h>
 # include <unistd.h>

@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 09:38:37 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 10:09:59 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ void print(t_lexer_list *head)
 void handler(int n)
 {
 	n = 0;
-    rl_redisplay(); 
-    rl_replace_line("\033[32mminishell \033[0m>", 0); 
 	rl_on_new_line(); 
+    rl_replace_line("", 0); 
+    rl_redisplay(); 
+	ft_write("\n\033[32mminishell \033[0m>", 1);
 }
 int main(int ac, char **av, char **env)
 {
