@@ -6,21 +6,21 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/26 19:21:55 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 09:38:10 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdio.h>
 # include "GET_NEXT_LINE/get_next_line.h"
 # include "ft_printf/ft_printf.h"
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-// # include "/Users/haouky/.brew/opt/readline/include/readline/readline.h"
+# include "/Users/arekoune/.brew/opt/readline/include/readline/readline.h"
 # include <signal.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 
