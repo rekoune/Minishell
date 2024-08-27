@@ -14,12 +14,12 @@ READLINE_DIR = $(shell brew --prefix readline)
 
 # Set Readline flags
 RFLAGS = -I$(READLINE_DIR)/include
-LDFLAGS = -L$(READLINE_DIR)/lib -lreadline
+LDFLAGS = -L$(READLINE_DIR)/lib 
 
 all: $(NAME)
 
 $(NAME): $(OFILES) $(PRINTF) $(OGET) minishell.h
-	$(CC) $(CFLAGS) $(OFILES) $(PRINTF) $(OGET) -o $(NAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(OFILES) $(PRINTF) $(OGET) -o $(NAME) $(LDFLAGS) -lreadline
 
 $(PRINTF):
 	make -C ft_printf
