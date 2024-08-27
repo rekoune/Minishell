@@ -8,9 +8,13 @@ OGET = $(GET:.c=.o)
 NAME = minishell
 PRINTF = ft_printf/libftprintf.a
 
-# Set Readline flags (path)
-RFLAGS = -I/Users/haouky/.brew/opt/readline/include
-LDFLAGS = -L/Users/haouky/.brew/opt/readline/lib -lreadline
+
+# Get the Readline installation path
+READLINE_DIR = $(shell brew --prefix readline)
+
+# Set Readline flags
+RFLAGS = -I$(READLINE_DIR)/include
+LDFLAGS = -L$(READLINE_DIR)/lib -lreadline
 
 all: $(NAME)
 
