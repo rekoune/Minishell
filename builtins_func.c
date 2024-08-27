@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 11:01:22 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/27 14:47:43 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 19:12:59 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	ft_echo(char **str, int fd)
 	flag = 'n';
 	if (!str)
 		return (EXIT_FAILURE);
-	while(str[i] && (!str_ncomp(str[i], "-n", 3) || !skip_n(str[i])))
+	while(str[i] && str[i][0] && (!str_ncomp(str[i], "-n", 3) || !skip_n(str[i])))
 	{
 		flag = 'y';
 		i++;
@@ -75,6 +75,8 @@ t_list	*get_env(char **env)
 	t_list	*head;
 
 	i = 0;
+	if (!env)
+		return (NULL);
 	head = NULL;
 	while(env && env[i])
 	{
@@ -182,8 +184,8 @@ int	check_param(char *str)
 	int i;
 
 	i = 0;
-	if(!str)
-		return(1);
+	if(!str[i])
+		return(0);
 	while(str[i])
 	{
 		if(str[i] < '0' || (str[i] >= ':' && str[i] <= '@') || (str[i] >= '[' && str[i] <= '^') || str[i] >= '{' || str[i] == '`')
@@ -222,6 +224,7 @@ int	ft_unset(t_list **env, char *to_unset)
 			prev->next = head->next;
 		free(head->str);
 		free(head);
+		head = NULL;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -246,7 +249,7 @@ int	ft_cd(char *str, t_list *env)
 			return(EXIT_FAILURE);
 		}
 	}
-	else if (chdir(str) == -1)
+	else if (str[0] && chdir(str) == -1)
 	{
 		ft_printf("minishell : cd: %s: No such file or directory\n", str);
 		return(EXIT_FAILURE);
@@ -254,7 +257,6 @@ int	ft_cd(char *str, t_list *env)
 	free(s);
 	return (EXIT_SUCCESS);
 }
-
 
 long	ft_atoi(char *str)
 {

@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 18:30:24 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 19:44:17 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,15 @@ char *get_path(char *s, t_list *env)
 	fr_double(paths);
 	return (NULL);
 }
+t_lexer_list *empty_arg(t_list **head, t_lexer_list *lxr)
+{
+	while (lxr && (lxr->type == QOUTE || lxr->type == DOUBLE_QUOTE ) && lxr->state == GENERAL)
+		lxr = lxr->next;
+	if(!lxr ||( lxr->type != WORD || lxr->type != ENV || lxr->state != IN_DQUOTE || lxr->state != IN_QUOTE))
+		add_back_lst(head, lst_new(str_dup("",0)));
+	return (lxr);
+}
+
 t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 {
 	char *s;
@@ -76,6 +85,8 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 	char *tmp1;
 
 	s = NULL;
+	if((lxr->type == QOUTE || lxr->type == DOUBLE_QUOTE ) && lxr->state == GENERAL)
+		return (empty_arg(head, lxr));
 	while (lxr && ((lxr->state != GENERAL) || (lxr->type != ' ' && lxr->type != '|' && lxr->type != '<' && lxr->type != '>' && lxr->type != HERE_DOC && lxr->type != DREDIR_OUT)))
 	{
 		if((lxr->type != QOUTE && lxr->type != DOUBLE_QUOTE ) || lxr->state != GENERAL)
