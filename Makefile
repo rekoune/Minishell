@@ -7,11 +7,11 @@ GET = GET_NEXT_LINE/get_next_line.c  GET_NEXT_LINE/get_next_line_utils.c
 OGET = $(GET:.c=.o)
 NAME = minishell
 PRINTF = ft_printf/libftprintf.a
-READLINE = -I Users/haouky/.brew/opt/readline/include/readline
+READLINE = -I/Users/haouky/.brew/opt/readline/include
 all: $(NAME)
 
 $(NAME) : $(OFILES) $(PRINTF) $(OGET)  minishell.h
-		$(CC) $(CFLAGS) $(OFILES) $(READLINE) $(PRINTF) $(OGET) -o $(NAME) -lreadline
+		$(CC) $(CFLAGS) -lreadline /Users/arekoune/.brew/Cellar/readline/8.2.13/lib/libreadline.a $(OFILES) $(READLINE) $(PRINTF) $(OGET) -o $(NAME) 
 
 $(PRINTF):
 	make -C ft_printf
