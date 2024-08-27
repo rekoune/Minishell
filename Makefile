@@ -19,13 +19,13 @@ LDFLAGS = -L$(READLINE_DIR)/lib -lreadline
 all: $(NAME)
 
 $(NAME): $(OFILES) $(PRINTF) $(OGET) minishell.h
-	$(CC) $(CFLAGS) $(OFILES) $(PRINTF) $(OGET) -o $(NAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(OFILES) $(PRINTF) $(OGET) -o $(NAME) -lreadline
 
 $(PRINTF):
 	make -C ft_printf
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(RFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS)  -c $< -o $@
 
 clean:
 	make -C ft_printf fclean

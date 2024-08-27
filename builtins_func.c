@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 11:01:22 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/26 16:14:37 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 12:57:31 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,36 @@ int	ft_pwd(int fd)
 	return (EXIT_SUCCESS);
 }
 
+int	is_empty(char *str)
+{
+	int i;
+
+	i = 0;
+	while(str[i])
+	{
+		if(str[i] == '=')
+			return (0);
+		i++;
+	}
+	return(1);
+}
+
 int	ft_env(t_list *env, int fd, int flag)
 {
 	while(env)
 	{
 		if(flag == 1)
+		{
 			ft_write("declare -x ", fd);
-		if(ft_write(env->str, fd) == EXIT_FAILURE || ft_write("\n", fd) == EXIT_FAILURE)
-			return (EXIT_FAILURE);
+			ft_write(env->str, fd);
+			ft_write("\n", fd);	
+		}
+		else
+			if(!is_empty(env->str))
+			{
+				ft_write(env->str, fd);
+				ft_write("\n", fd);	
+			}
 		env = env->next;
 	}
 	return (EXIT_SUCCESS);
@@ -122,16 +144,12 @@ int	is_exist(t_list *head, t_list **node, char *to_export)
 	return(0);
 }
 
-int	ft_export(t_list **env, char *to_export, int fd)
+int	ft_export(t_list **env, char *to_export)
 {
-	int	flag;
 	int	i;
 	t_list *node;
 
 	i = 0;
-	flag = 0;
-	if(!to_export || !to_export[0])
-		return(ft_env(*env, fd, 1));
 	if(to_export[0] != '_' && (to_export[0] < 'A' || 
 		to_export[0] > 'Z') && (to_export[0] < 'a' || to_export[0] > 'z'))
 	{
@@ -149,14 +167,12 @@ int	ft_export(t_list **env, char *to_export, int fd)
 		}
 		i++;
 	}
-	if(to_export[i] == '=')
-		flag = 1;
-	if(flag == 1 && is_exist(*env, &node, to_export) == 1)
+	if(is_exist(*env, &node, to_export) == 1)
 	{
 		free(node->str);
 		node->str = str_ncopy(to_export, str_len(to_export, '\0'));
 	}
-	else if (flag == 1)
+	else
 		add_back_lst(env, lst_new(str_ncopy(to_export, str_len(to_export, '\0'))));
 	return (EXIT_SUCCESS);
 }
