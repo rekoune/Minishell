@@ -6,11 +6,13 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 10:52:43 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:32:16 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int stat = 0;
 
 void print(t_lexer_list *head)
 {
@@ -30,15 +32,12 @@ void print(t_lexer_list *head)
 }
 void handler(int n)
 {
-	n = 0;
-    // rl_replace_line("  ", 0); 
-	// rl_on_new_line(); 
-    // rl_redisplay(); 
-	// ft_write("\n\033[32mminishell \033[0m$ ", 1);
-}
-void leaks()
-{
-	system("leaks -q minishell");
+	n = 1;
+	stat = n;
+	rl_on_new_line(); 
+    rl_replace_line("", 0); 
+    rl_redisplay(); 
+	ft_write("\n\033[32mminishell \033[0m>", 1);
 }
 int main(int ac, char **av, char **env)
 {
@@ -59,6 +58,11 @@ int main(int ac, char **av, char **env)
 		str = readline("\033[32mminishell \033[0m$ ");
 		if(!str)
 			exit(1);
+		if(stat)
+		{
+			exit_status = stat;
+			stat = 0;
+		}
 		if (str[0])
 		{
 			add_history(str);

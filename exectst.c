@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exectst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/26 16:31:16 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 12:28:01 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ int in_fd(t_oip *input, int fd)
             fd = open(input->s, O_RDONLY);
         if(fd < 0)
         {
-            ft_printf("minishell: %s: ",input->name);
-            perror("");
+            if(!input->name)
+                ft_printf("minishell: : No such file or directory\n");
+            else
+                ft_printf("minishell: %s: %s\n",input->name, strerror(errno));
             return (-1); 
         }
         input = input->next;
@@ -47,8 +49,10 @@ int out_fd(t_oip *output,int fd, int pipe)
             fd = open(output->name,  O_CREAT | O_APPEND | O_WRONLY , 0640);
         if(fd < 0)
         {
-            ft_printf("minishell: %s: ",output->name);
-            perror("");
+             if(!output->name)
+                ft_printf("minishell: : No such file or directory\n");
+            else
+                ft_printf("minishell: %s: %s\n",output->name, strerror(errno));
             return (-1);
         }
         output = output->next;
@@ -100,23 +104,32 @@ int run_execution(t_execution *execution, t_list *env, int status)
 {
     t_oip *herdoc;
     int fd[2];
-    int pid;
+    pid_t *pid;
     int oldread;
     int i;
+    int statu;
+    int size;
     
     pid = 0;
     i = 0;
+    statu = 0;
     herdoc = get_here_doc(execution);
     if(herdoc)
-         pid = run_here_doc(herdoc, env, status);
-    if(pid)
-        return (pid);
+         statu = run_here_doc(herdoc, env, status);
+    if(statu)
+        return (statu);
     fd[0] = 0;
     fd[1] = 1;
     if(execution->cmd[0])
         i = check_builtins(execution->cmd[0]);
     if(i && !execution->pipe)
+    {
+        if(in_fd(execution->input, 0) == -1)
+            return (1);
         return(execute_builtins(&execution->cmd[1], &env, i, out_fd(execution->output, 1, 0)));
+    }
+    size = cmd_lst_size(execution);
+    pid = malloc(sizeof(pid_t) * size);
     i = 0;
     while (execution)
     {
@@ -129,13 +142,13 @@ int run_execution(t_execution *execution, t_list *env, int status)
                 return(1);
             }  
         }
-        pid = fork();
-        if(pid == -1)
+        pid[i] = fork();
+        if(pid[i] == -1)
         {
             perror("minishell: fork: ");
             return (1);
         }
-        if(pid == 0)
+        if(pid[i]  == 0)
             exccmd(execution, env, fd, oldread);
         if(oldread)
             close(oldread);
@@ -146,12 +159,13 @@ int run_execution(t_execution *execution, t_list *env, int status)
     }
     if(fd[0])
         close(fd[0]);
-    while (wait(&pid) && i--)
-    ;
-     if (WIFEXITED(pid)) 
-        pid = WEXITSTATUS(pid);
-     else if (WIFSIGNALED(pid))
-        pid = WTERMSIG(pid) + 128;
-    return (pid);
+    i = 0;
+    while (i < size)
+        waitpid(pid[i++], &statu, 0);
+     if (WIFEXITED(statu)) 
+        statu = WEXITSTATUS(statu);
+     else if (WIFSIGNALED(statu))
+        statu = WTERMSIG(statu) + 128;
+    return (statu);
 }
 
