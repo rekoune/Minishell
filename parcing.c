@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/23 19:12:19 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 19:45:16 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_execution *parse(t_lexer_list *lexer, t_list *env, int status)
 			lexer = fqouts(&some,lexer, env, status);
 		else
 			lexer = lexer->next;
+	// printf("hona\n");
 	}
 	execution->cmd = getarray(some);
 	if(lexer && lexer->type == PIPE_LINE)
@@ -58,7 +59,8 @@ t_execution *parse(t_lexer_list *lexer, t_list *env, int status)
 	}
 	else
 		execution->pipe = 0;
-	execution->path = get_path(execution->cmd[0], env);
+	if(execution->cmd)
+		execution->path = get_path(execution->cmd[0], env);
 	execution->next = parse(lexer, env, status);
 	return (execution);
 }

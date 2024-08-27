@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 14:31:44 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 18:42:18 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ char					**getarray(t_list *lst);
 int						find_c(char *s, char c);
 
 //execution
-int						run_execution(t_execution *execution, t_list *env, int status);
+int						run_execution(t_execution *execution, t_list **env, int status);
 int 					run_here_doc(t_oip *herdoc, t_list *env, int status);
 t_oip					*get_here_doc(t_execution *execution);
 

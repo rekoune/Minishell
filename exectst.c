@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exectst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 12:28:01 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/27 18:46:45 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
 		perror("execve");
     exit(1);
 }
-int run_execution(t_execution *execution, t_list *env, int status)
+int run_execution(t_execution *execution, t_list **env, int status)
 {
     t_oip *herdoc;
     int fd[2];
@@ -115,7 +115,7 @@ int run_execution(t_execution *execution, t_list *env, int status)
     statu = 0;
     herdoc = get_here_doc(execution);
     if(herdoc)
-         statu = run_here_doc(herdoc, env, status);
+         statu = run_here_doc(herdoc, *env, status);
     if(statu)
         return (statu);
     fd[0] = 0;
@@ -126,7 +126,7 @@ int run_execution(t_execution *execution, t_list *env, int status)
     {
         if(in_fd(execution->input, 0) == -1)
             return (1);
-        return(execute_builtins(&execution->cmd[1], &env, i, out_fd(execution->output, 1, 0)));
+        return(execute_builtins(&execution->cmd[1], env, i, out_fd(execution->output, 1, 0)));
     }
     size = cmd_lst_size(execution);
     pid = malloc(sizeof(pid_t) * size);
@@ -149,7 +149,7 @@ int run_execution(t_execution *execution, t_list *env, int status)
             return (1);
         }
         if(pid[i]  == 0)
-            exccmd(execution, env, fd, oldread);
+            exccmd(execution, *env, fd, oldread);
         if(oldread)
             close(oldread);
         if(fd[1] != 1)
@@ -162,6 +162,7 @@ int run_execution(t_execution *execution, t_list *env, int status)
     i = 0;
     while (i < size)
         waitpid(pid[i++], &statu, 0);
+    free(pid);
      if (WIFEXITED(statu)) 
         statu = WEXITSTATUS(statu);
      else if (WIFSIGNALED(statu))
