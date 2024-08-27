@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 10:09:59 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 10:52:43 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,14 @@ void print(t_lexer_list *head)
 void handler(int n)
 {
 	n = 0;
-	rl_on_new_line(); 
-    rl_replace_line("", 0); 
-    rl_redisplay(); 
-	ft_write("\n\033[32mminishell \033[0m>", 1);
+    // rl_replace_line("  ", 0); 
+	// rl_on_new_line(); 
+    // rl_redisplay(); 
+	// ft_write("\n\033[32mminishell \033[0m$ ", 1);
+}
+void leaks()
+{
+	system("leaks -q minishell");
 }
 int main(int ac, char **av, char **env)
 {
@@ -44,6 +48,7 @@ int main(int ac, char **av, char **env)
 	t_list *enva;
 	(void) av;
 
+	// atexit(leaks);
 	signal(SIGINT, handler);
 	signal(SIGQUIT, SIG_IGN);
 	enva = get_env(env);
@@ -51,7 +56,7 @@ int main(int ac, char **av, char **env)
 	while (1)
 	{
 	
-		str = readline("\033[32mminishell \033[0m> ");
+		str = readline("\033[32mminishell \033[0m$ ");
 		if(!str)
 			exit(1);
 		if (str[0])
@@ -63,7 +68,6 @@ int main(int ac, char **av, char **env)
 			{
 				execution = parse(cmd,enva, exit_status);
 				free_lexer(cmd);
-				// exit_status = run_cmd(execution, &enva);
 				exit_status = run_execution(execution, enva, exit_status);
 				free_resources(execution);
 			}

@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 10:10:14 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/27 12:56:23 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ char					*str_join(char *s1, char *s2);
 char					**getarray(t_list *lst);
 char					*str_dup(char *str, int size);
 int						str_len(char *str, char separator);
-int						ft_strncmp(char *s1, char *s2, int n);
 char					*ft_substr(char *s, int st, size_t l);
 char					**ft_split(char *s, char c);
 char					*get_next_line(int fd);
@@ -140,7 +139,7 @@ enum e_token			add_type(t_lexer_list *node);
 int						ft_echo(char **str, int fd);
 int						ft_pwd(int fd);
 int						ft_env(t_list *env, int fd, int flag);
-int						ft_export(t_list **env, char *to_export, int fd);
+int						ft_export(t_list **env, char *to_export);
 int						ft_unset(t_list **env, char *to_unset);
 int						is_exist(t_list *head, t_list **node, char *to_export);
 int						check_param(char *str);
