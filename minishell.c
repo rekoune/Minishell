@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 14:45:27 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/27 15:01:04 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int main(int ac, char **av, char **env)
 	t_list *enva;
 	(void) av;
 
+	// atexit(leaks);
 	signal(SIGINT, handler);
 	signal(SIGQUIT, SIG_IGN);
 	enva = get_env(env);
@@ -71,7 +72,6 @@ int main(int ac, char **av, char **env)
 			{
 				execution = parse(cmd,enva, exit_status);
 				free_lexer(cmd);
-				// exit_status = run_cmd(execution, &enva);
 				exit_status = run_execution(execution, enva, exit_status);
 				free_resources(execution);
 			}

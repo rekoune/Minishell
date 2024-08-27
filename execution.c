@@ -119,6 +119,22 @@ int	check_builtins(char *str)
 	return(0);
 }
 
+int	ft_export_arr(t_list **env, char **cmd, int out_fd)
+{
+	int i;
+
+	i = 0;
+	if(!cmd[0])
+		return(ft_env(*env, out_fd, 1));
+	while(cmd[i])
+	{
+		if (ft_export(env, cmd[i]))
+			return(EXIT_FAILURE);
+		i++;
+	}
+	return(EXIT_SUCCESS);
+}
+
 int	execute_builtins(char **cmd, t_list **env, int flag, int out_fd)
 {
 	if(flag == 1)
@@ -128,7 +144,7 @@ int	execute_builtins(char **cmd, t_list **env, int flag, int out_fd)
 	else if(flag == 3)
 		return (ft_pwd(out_fd));
 	else if(flag == 4)
-		return (ft_export(env, cmd[0], out_fd));
+		return (ft_export_arr(env, cmd, out_fd));
 	else if(flag == 5)
 		return (ft_unset(env, cmd[0]));
 	else if(flag == 6)
