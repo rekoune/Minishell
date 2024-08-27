@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 11:34:16 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/27 12:28:01 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ int in_fd(t_oip *input, int fd)
             fd = open(input->s, O_RDONLY);
         if(fd < 0)
         {
-            ft_printf("minishell: %s: ",input->name);
-            perror("");
+            if(!input->name)
+                ft_printf("minishell: : No such file or directory\n");
+            else
+                ft_printf("minishell: %s: %s\n",input->name, strerror(errno));
             return (-1); 
         }
         input = input->next;
@@ -47,8 +49,10 @@ int out_fd(t_oip *output,int fd, int pipe)
             fd = open(output->name,  O_CREAT | O_APPEND | O_WRONLY , 0640);
         if(fd < 0)
         {
-            ft_printf("minishell: %s: ",output->name);
-            perror("");
+             if(!output->name)
+                ft_printf("minishell: : No such file or directory\n");
+            else
+                ft_printf("minishell: %s: %s\n",output->name, strerror(errno));
             return (-1);
         }
         output = output->next;
