@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 09:42:06 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/28 10:23:17 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void handler(int n)
 	rl_on_new_line(); 
     rl_replace_line("  ", 0); 
     rl_redisplay(); 
-	ft_write("\nminishell$ ", 1);
+	ft_write("\nminishell$ ", 1, 0);
 }
 int main(int ac, char **av, char **env)
 {
@@ -95,7 +95,7 @@ int main(int ac, char **av, char **env)
 		{
 			add_history(str);
 			cmd = is_tokenized(str);
-			// print(cmd);
+			print(cmd);
 			ac = check_syntax(cmd);
 			if(!ac)
 			{

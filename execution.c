@@ -36,9 +36,9 @@ int	open_in_files(t_oip *input)
 			fd = open(input->s, O_RDONLY , 0640);
 		if(fd == -1)
 		{
-			ft_write("minishell: ", 2);
-			ft_write(input->name, 2);
-			ft_write(": ", 2);
+			ft_write("minishell: ", 2, 0);
+			ft_write(input->name, 2, 0);
+			ft_write(": ", 2, 0);
 			perror("");
 			return(-1);
 		}
@@ -56,9 +56,9 @@ int	get_out_fd(t_execution *list, int *prev_pipe, int *flag, int pipe_fd[2])
 		out_fd = open_out_files(list->output);
 		if(out_fd == -1)
 		{
-			ft_write("minishell: ", 2);
-			ft_write(list->output->name, 2);
-			ft_write(": ", 2);
+			ft_write("minishell: ", 2, 0);
+			ft_write(list->output->name, 2, 0);
+			ft_write(": ", 2, 0);
 			perror("");
 			return(-1);
 		}
@@ -198,16 +198,16 @@ void 	child_pross(t_execution *list, int	prev_pipe, int in_fd, int out_fd, t_lis
 	}
 	if(!envv("$PATH",*env, 0))
 	{
-		ft_write("minishell: ", 2);
-		ft_write(list->cmd[0], 2);
-		ft_write(": No such file or directory\n", 2);
+		ft_write("minishell: ", 2, 0);
+		ft_write(list->cmd[0], 2, 0);
+		ft_write(": No such file or directory\n", 2, 0);
 		exit(127);
 	}
 	if(!list->path && list->cmd[0])
 	{
-		ft_write("minishell: ", 2);
-		ft_write(list->cmd[0], 2);
-		ft_write(": command not found\n", 2);
+		ft_write("minishell: ", 2, 0);
+		ft_write(list->cmd[0], 2, 0);
+		ft_write(": command not found\n", 2, 0);
 		exit(127);
 	}
 	execve(list->path, list->cmd, getarray(*env));
