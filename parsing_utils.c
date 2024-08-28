@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 09:41:24 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/28 10:25:05 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char *envv(char *lxr, t_list *env, int status)
 		if(!lxr[j + 1] && env->str[j] == '=')
 		{
 	        s = str_dup(&env->str[j + 1], str_len(&env->str[j + 1], 0));
-            return (s);
+			retur (s);
 		}
 		env = env->next;
     }
