@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 10:23:17 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/28 10:29:39 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int main(int ac, char **av, char **env)
 		{
 			add_history(str);
 			cmd = is_tokenized(str);
-			print(cmd);
+			// print(cmd);
 			ac = check_syntax(cmd);
 			if(!ac)
 			{
