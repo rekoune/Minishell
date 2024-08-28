@@ -6,22 +6,22 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:15:02 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 10:12:04 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/28 13:03:38 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 char	*str_ncopy(char *str, int size)
 {
-	int	i;
-	char *s;
-	
+	int		i;
+	char	*s;
+
 	i = 0;
 	s = malloc((size + 1) * sizeof(char));
 	if (!s)
 		return (NULL);
-	while(i < size && str[i])
+	while (i < size && str[i])
 	{
 		s[i] = str[i];
 		i++;
@@ -32,8 +32,8 @@ char	*str_ncopy(char *str, int size)
 
 int	check_char(char c)
 {
-	if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && c != '_')	
-		return(1);
+	if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && c != '_')
+		return (1);
 	return (0);
 }
 
@@ -45,16 +45,16 @@ int	str_ncomp(char *s1, char *s2, int size)
 	while (s1[i] && s2[i] && i < size)
 	{
 		if (s1[i] != s2[i])
-			return(s1[i] - s2[i]);
+			return (s1[i] - s2[i]);
 		i++;
 	}
-	return(s1[i] - s2[i]);
+	return (s1[i] - s2[i]);
 }
 
 int	error(char *str)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (str[i])
 		write(2, &str[i++], 1);
@@ -67,7 +67,7 @@ int	str_len(char *str, char separator)
 
 	i = 0;
 	if (!str)
-		return(0);
+		return (0);
 	while (str[i] && str[i] != separator)
 		i++;
 	return (i);
