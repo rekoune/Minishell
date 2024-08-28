@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exectst.c                                          :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 18:46:45 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/28 19:02:20 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,12 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
         infd = execute_builtins(&exec->cmd[1], &env, infd, 1);
         exit(infd);   
     }
-    if(exec->cmd[0] && !exec->path)
+    if((exec->cmd[0] && !exec->path) || !exec->cmd[0][0])
     {   
         if(find_c(exec->cmd[0], '/') || !envv("$PATH",env, 0))
-            ft_printf("minishell: %s : No such file or directory\n",exec->cmd[0]);
+            ft_printf("minishell: %s: No such file or directory\n",exec->cmd[0]);
         else
-            ft_printf("minishell: %s : command not found\n",exec->cmd[0]);
+            ft_printf("minishell: %s: command not found\n",exec->cmd[0]);
         exit(127);
     }
     if(!exec->cmd[0])
