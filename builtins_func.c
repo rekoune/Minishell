@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 11:01:22 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/28 10:21:57 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/28 10:32:31 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,12 @@ int	ft_write(char *str, int fd, int flag)
 		if(write(fd, &str[i++], 1) == -1)
 			return(EXIT_FAILURE);
 		if(flag == 1 && str[i - 1] == '=')
+		{
 			write(1, "\"", 1);
+			flag = 2;
+		}
 	}
-	if(flag == 1)
+	if(flag == 2)
 		write(1, "\"", 1);
 	return(EXIT_SUCCESS);
 }
