@@ -6,13 +6,13 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 11:01:22 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/27 19:12:59 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/28 10:21:57 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_write(char *str, int fd)
+int	ft_write(char *str, int fd, int flag)
 {
 	int i;
 
@@ -21,7 +21,11 @@ int	ft_write(char *str, int fd)
 	{
 		if(write(fd, &str[i++], 1) == -1)
 			return(EXIT_FAILURE);
+		if(flag == 1 && str[i - 1] == '=')
+			write(1, "\"", 1);
 	}
+	if(flag == 1)
+		write(1, "\"", 1);
 	return(EXIT_SUCCESS);
 }
 int skip_n(char *str)
@@ -56,15 +60,15 @@ int	ft_echo(char **str, int fd)
 	}
 	while (str[i])
 	{
-		if (ft_write(str[i], fd) == EXIT_FAILURE)
+		if (ft_write(str[i], fd, 0) == EXIT_FAILURE)
 				return (EXIT_FAILURE);
 		if(str[i + 1] != NULL)
-			if (ft_write(" ", fd) == EXIT_FAILURE)	
+			if (ft_write(" ", fd, 0) == EXIT_FAILURE)	
 				return(EXIT_FAILURE);
 		i++;
 	}
 	if (flag == 'n')
-		if (ft_write("\n", fd) == EXIT_FAILURE)
+		if (ft_write("\n", fd, 0) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -92,7 +96,7 @@ int	ft_pwd(int fd)
 
 	if(getcwd(buff, sizeof(buff)) == NULL)
 		return (EXIT_FAILURE);
-	if (ft_write(buff, fd) == EXIT_FAILURE || ft_write("\n", fd) == EXIT_FAILURE)
+	if (ft_write(buff, fd, 0) == EXIT_FAILURE || ft_write("\n", fd, 0) == EXIT_FAILURE)
 		return(EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -117,15 +121,15 @@ int	ft_env(t_list *env, int fd, int flag)
 	{
 		if(flag == 1)
 		{
-			ft_write("declare -x ", fd);
-			ft_write(env->str, fd);
-			ft_write("\n", fd);	
+			ft_write("declare -x ", fd, 0);
+			ft_write(env->str, fd, 1);
+			ft_write("\n", fd, 0);	
 		}
 		else
 			if(!is_empty(env->str))
 			{
-				ft_write(env->str, fd);
-				ft_write("\n", fd);	
+				ft_write(env->str, fd, 0);
+				ft_write("\n", fd, 0);	
 			}
 		env = env->next;
 	}
