@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 19:44:17 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/28 09:41:24 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,15 @@ char *get_path(char *s, t_list *env)
 }
 t_lexer_list *empty_arg(t_list **head, t_lexer_list *lxr)
 {
+	int i;
+	
+	i = 0;
 	while (lxr && (lxr->type == QOUTE || lxr->type == DOUBLE_QUOTE ) && lxr->state == GENERAL)
+	{
+		i++;
 		lxr = lxr->next;
-	if(!lxr ||( lxr->type != WORD || lxr->type != ENV || lxr->state != IN_DQUOTE || lxr->state != IN_QUOTE))
+	}
+	if(!(i % 2))
 		add_back_lst(head, lst_new(str_dup("",0)));
 	return (lxr);
 }

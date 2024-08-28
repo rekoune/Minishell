@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 19:23:34 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/28 09:42:06 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,33 @@ void print(t_lexer_list *head)
 		
 		printf("|%s|         %d,           %s,             %s\n",head->content, head->len, type, state);
 		head = head->next;
+	}
+}
+
+void printexec(t_execution *exec)
+{
+	t_oip *head;
+
+	
+	while (exec)
+	{
+		int i = 0;
+		printf("path= %s\n",exec->path);
+		while (exec->cmd[i])
+			printf("cmd = %s\n",exec->cmd[i++]);
+		head = exec->input;
+		while (head)
+		{
+			printf("in  | type = %s, name %s,\n",n_type(head->type), head->name);
+			head = head->next;
+		}
+		head = exec->output;
+		while (head)
+		{
+			printf("out |type = %s, name %s,\n",n_type(head->type), head->name);
+			head = head->next;
+		}
+		exec = exec->next;
 	}
 }
 void handler(int n)
@@ -73,6 +100,9 @@ int main(int ac, char **av, char **env)
 			if(!ac)
 			{
 				execution = parse(cmd,enva, exit_status);
+				// ft_printf("=====================================================================================================\n");
+				// printexec(execution);
+				// ft_printf("=====================================================================================================\n");
 				free_lexer(cmd);
 				exit_status = run_execution(execution, &enva, exit_status);
 				free_resources(execution);
