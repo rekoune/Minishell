@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 08:52:12 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 19:53:16 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/28 13:02:48 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	**getarray(t_list *lst)
 {
 	char	**str;
 	int		i;
-	t_list *tmp;
+	t_list	*tmp;
 
 	i = 0;
 	str = malloc((ft_lstsize(lst) + 1) * sizeof(char *));
@@ -56,6 +56,7 @@ char	*str_join(char *s1, char *s2)
 	s[i + l] = '\0';
 	return (s);
 }
+
 char	*str_dup(char *str, int size)
 {
 	int		i;
@@ -65,7 +66,7 @@ char	*str_dup(char *str, int size)
 	return_str = malloc(sizeof(char) * (size + 1));
 	if (!return_str)
 		return (NULL);
-	if(!str)
+	if (!str)
 		return (NULL);
 	while (i < size && str[i])
 	{
@@ -75,6 +76,7 @@ char	*str_dup(char *str, int size)
 	return_str[i] = '\0';
 	return (return_str);
 }
+
 static char	*sub(char const *s, unsigned int st, size_t l)
 {
 	size_t	i;
@@ -83,7 +85,7 @@ static char	*sub(char const *s, unsigned int st, size_t l)
 	i = 0;
 	while (s[st + i] != 0 && i < l)
 		i++;
-	c = malloc (i + 1);
+	c = malloc(i + 1);
 	if (c == 0)
 		return (NULL);
 	i = 0;

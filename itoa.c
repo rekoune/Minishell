@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   itoa.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 18:05:09 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/25 15:11:01 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/28 18:13:42 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,33 @@ int	find_c(char *s, char c)
 		i++;
 	}
 	return (0);
+}
+
+long	ft_atoi(char *str)
+{
+	int		i;
+	long	nb;
+	int		sign;
+
+	i = 0;
+	sign = 1;
+	nb = 0;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i])
+	{
+		if (str[i] > '9' || str[i] < '0')
+		{
+			ft_printf("minishell: exit: %s: numeric argument required\n", str);
+			exit(255);
+		}
+		nb = nb * 10;
+		nb = nb + (str[i++] - 48);
+	}
+	nb *= sign;
+	return (nb);
 }
