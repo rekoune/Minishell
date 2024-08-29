@@ -6,26 +6,28 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 10:30:21 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/29 10:58:08 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>
 # include "GET_NEXT_LINE/get_next_line.h"
 # include "ft_printf/ft_printf.h"
+# include <errno.h>
 # include <fcntl.h>
+# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdlib.h>
+# include <string.h>
 # include <unistd.h>
-#include <errno.h>
-#include <string.h>
 
-//sturct and
+// sturct and
+
+extern int stat;
 typedef struct s_list
 {
 	char				*str;
@@ -87,91 +89,124 @@ typedef struct s_execution
 	struct s_execution	*next;
 }						t_execution;
 
-//minishell.c
+// ft_export.c
+int						is_empty(char *str);
+int						skip_n(char *str);
+int						ft_export(t_list **env, char *to_export);
+int						is_exist(t_list *head, t_list **node, char *to_export);
+t_list					*get_env(char **env);
 
-//list_utils.c
-t_lexer_list			*new_node(char *str);
-void					add_back(t_lexer_list **head, t_lexer_list *new);
+// ft_unset
+int						ft_unset(t_list **env, char *to_unset);
+int						check_param(char *str);
+t_list					*ft_find(t_list *head, t_list **prev, char *to_unset);
 
-//linked_list_utils
+// check_syntax.c
+int						check_syntax(t_lexer_list *node);
+int						check_redir_synx(t_lexer_list **head);
+int						is_redir(enum e_token type);
+int						more_check(t_lexer_list *head);
+
+// execution.c
+int						run_execution(t_execution *execution, t_list **env,
+							int status);
+int						in_fd(t_oip *input, int fd);
+int						out_fd(t_oip *output, int fd, int pipe);
+void					exccmd(t_execution *exec, t_list *env, int *fd,
+							int old_read);
+
+// builtins_func.c
+int						ft_env(t_list *env, int fd, int flag);
+int						ft_cd(char *str, t_list *env);
+int						ft_exit(char **cmd);
+int						ft_echo(char **str, int fd);
+int						ft_pwd(int fd);
+
+// builtins_utils.c
+int						check_builtins(char *str);
+int						ft_export_arr(t_list **env, char **cmd, int out_fd);
+int						ft_unset_arr(t_list **env, char **arg);
+int						execute_builtins(char **cmd, t_list **env, int flag,
+							int out_fd);
+int						skip_n(char *str);
+
+// free_resources.c
+void					free_resources(t_execution *execution);
+void					free_lexer(t_lexer_list *list);
+void					fr_double(char **s);
+
+// ft_split.c
+// static int			cw(char const *s, char c);
+// static int			lenw(char const *s, char c);
+// void					fr(char **s, int i);
+// static char			**msp(char **str, char *s, int word, char c);
+char					**ft_split(char *s, char c);
+
+// herdoc.c
+t_oip					*get_here_doc(t_execution *execution);
+void					herdoc_write(int fd, char *s, t_list *env, int status);
+void					thedoc(t_oip *herdoc, int fd, t_list *env, int status);
+int						run_here_doc(t_oip *herdoc, t_list *env, int status);
+
+// itoa.c
+// static char				*rev(char *c);
+char					*ft_itoa(int nb);
+void					fr_double(char **s);
+int						find_c(char *s, char c);
+long					ft_atoi(char *str);
+
+// linked_list.c
 void					add_back_lst(t_list **head, t_list *new);
 void					fadd_back_lst(t_oip **head, t_oip *new);
-int						ft_lstsize(t_list *lst);
 t_oip					*flst_new(char *s);
 t_list					*lst_new(char *s);
 int						cmd_lst_size(t_execution *lst);
 
-//parcing.c
+// list_utils.c
+int						ft_lstsize(t_list *lst);
+void					add_back(t_lexer_list **head, t_lexer_list *new);
+t_lexer_list			*new_node(char *str);
+int						ft_write(char *str, int fd, int flag);
+
+// minishell.c
+void					printexec(t_execution *exec);
+void					handler(int n);
+
+// parcing.c
 t_execution				*parse(t_lexer_list *lxr, t_list *env, int status);
 
-//parcing utils
+// parcing utils
 t_lexer_list			*fqouts(t_list **head, t_lexer_list *lxr, t_list *env,
 							int status);
 t_lexer_list			*ftqouts(t_oip **head, t_lexer_list *lxr, t_stat *stat,
 							t_list *env);
 char					*envv(char *variabl, t_list *env, int status);
 char					*get_path(char *s, t_list *env);
+t_lexer_list			*empty_arg(t_list **head, t_lexer_list *lxr);
 
-//helper func
-char					*str_join(char *s1, char *s2);
-char					**getarray(t_list *lst);
-char					*str_dup(char *str, int size);
-int						str_len(char *str, char separator);
-char					*ft_substr(char *s, int st, size_t l);
-char					**ft_split(char *s, char c);
-char					*get_next_line(int fd);
+// tokenization.c
+t_lexer_list			*is_tokenized(char *str);
+int						get_spec_char(t_lexer_list **list, char *str, int i,
+							int j);
+t_lexer_list			*set_quote_state(t_lexer_list *head, enum e_token type);
+void					add_state(t_lexer_list *head);
+enum e_token			add_type(t_lexer_list *node);
+char					*n_state(enum e_state state);
+char					*n_type(enum e_token type);
 
-//tools.c
+// tools.c
 char					*str_ncopy(char *str, int size);
 int						check_char(char c);
 int						str_ncomp(char *s1, char *s2, int size);
 int						error(char *str);
 int						str_len(char *str, char separator);
-char					*ft_itoa(int nb);
 
-//tokenization.c
-t_lexer_list			*is_tokenized(char *str);
-char					*n_state(enum e_state state);
-char					*n_type(enum e_token type);
-void					add_state(t_lexer_list *head);
-int						check_syntax(t_lexer_list *node);
-enum e_token			add_type(t_lexer_list *node);
-
-//builtins_func.c
-int						ft_echo(char **str, int fd);
-int						ft_pwd(int fd);
-int						ft_env(t_list *env, int fd, int flag);
-int						ft_export(t_list **env, char *to_export);
-int						ft_unset(t_list **env, char *to_unset);
-int						is_exist(t_list *head, t_list **node, char *to_export);
-int						check_param(char *str);
-t_list					*get_env(char **env);
-int						ft_cd(char *str, t_list *env);
-int						ft_exit(char **cmd);
-int						ft_write(char *str, int fd, int flag);
-
-//excu.c
-int						open_in_files(t_oip *list);
-int						open_out_files(t_oip *out_file);
-int						run_cmd(t_execution *list, t_list **env);
-
-//excu tools
-int						check_builtins(char *str);
-int						execute_builtins(char **cmd, t_list **env, int flag, int out_fd);
-
-//utils.c
+// utils.c
 char					**getarray(t_list *lst);
 int						find_c(char *s, char c);
-
-//execution
-int						run_execution(t_execution *execution, t_list **env, int status);
-int 					run_here_doc(t_oip *herdoc, t_list *env, int status);
-t_oip					*get_here_doc(t_execution *execution);
-
-//free_resources.c
-void					free_resources(t_execution *execution);
-void					free_lexer(t_lexer_list *list);
-void					fr_double(char **s);
-
+char					*str_join(char *s1, char *s2);
+char					*str_dup(char *str, int size);
+// static char				*sub(char const *s, unsigned int st, size_t l);
+char					*ft_substr(char *s, int st, size_t l);
 
 #endif

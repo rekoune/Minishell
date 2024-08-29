@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 19:51:48 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/29 11:11:41 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void handler(int n)
 	n = 1;
 	stat = n;
 	rl_on_new_line(); 
-    rl_replace_line("  ", 0); 
+    rl_replace_line("    ", 0); 
     rl_redisplay(); 
 	ft_write("\nminishell$ ", 1, 0);
 }
@@ -82,13 +82,13 @@ int main(int ac, char **av, char **env)
 	while (1)
 	{
 	
-		// str = readline("\033[32mminishell \033[0m$ ");
 		str = readline("minishell$ ");
 		if(!str)
 			exit(1);
-		if(stat)
+		if(stat )
 		{
-			exit_status = stat;
+			if(!exit_status)
+				exit_status = stat;
 			stat = 0;
 		}
 		if (str[0])
@@ -112,8 +112,6 @@ int main(int ac, char **av, char **env)
 				free_lexer(cmd);
 				exit_status = ac;
 			}
-			
-			// printf("exit status = %d\n", exit_status);
 		}
 		free(str);
 	}
