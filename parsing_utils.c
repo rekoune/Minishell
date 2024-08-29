@@ -6,36 +6,12 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/29 09:27:50 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 14:08:07 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *envv(char *lxr, t_list *env, int status)
-{
-	int j;
-    char *s;
-	
-	while (env)
-	{
-		j = 0;
-		if(lxr[j + 1] == '?')
-		{
-			s = ft_itoa(status);
-			return (s);
-		}
-		while (env->str[j] && lxr[j + 1] && lxr[j + 1] == env->str[j])
-			j++;
-		if(!lxr[j + 1] && env->str[j] == '=')
-		{
-	        s = str_dup(&env->str[j + 1], str_len(&env->str[j + 1], 0));
-            return (s);
-		}
-		env = env->next;
-    }
-    return (NULL);
-}
 
 char *get_path(char *s, t_list *env)
 {
@@ -68,21 +44,68 @@ char *get_path(char *s, t_list *env)
 	fr_double(paths);
 	return (NULL);
 }
-t_lexer_list *empty_arg(t_list **head, t_lexer_list *lxr)
+
+char *envv(char *lxr, t_list *env, int status)
 {
-	int i;
+	int j;
+    char *s;
 	
-	i = 0;
-	while (lxr && (lxr->type == QOUTE || lxr->type == DOUBLE_QUOTE ) && lxr->state == GENERAL)
+	while (env)
 	{
-		i++;
-		lxr = lxr->next;
-	}
-	if(!(i % 2))
-		add_back_lst(head, lst_new(str_dup("",0)));
-	return (lxr);
+		j = 0;
+		if(lxr[j + 1] == '?')
+		{
+			s = ft_itoa(status);
+			return (s);
+		}
+		while (env->str[j] && lxr[j + 1] && lxr[j + 1] == env->str[j])
+			j++;
+		if(!lxr[j + 1] && env->str[j] == '=')
+		{
+	        s = str_dup(&env->str[j + 1], str_len(&env->str[j + 1], 0));
+			return (s);
+		}
+		env = env->next;
+    }
+    return (NULL);
 }
 
+char *eenvv(char *vvalue,char *prev, t_list **head, int what)
+{
+	char *tmp;
+	char **dp;
+	int i;
+	int size;
+	
+	i = 0;
+	size = 0;
+	if(!vvalue)
+	{
+		if(what)
+			return (str_dup("", 0));
+		return (vvalue);
+	}
+	dp = ft_split(vvalue, ' ');
+	while (dp[size])
+		size++;
+	free(vvalue);
+	if(size > 1 && what)
+	{
+		fr_double(dp);
+		return (NULL);
+	}
+	tmp = str_join(prev,dp[i++]);
+	if(size > 1)
+		add_back_lst(head, lst_new(tmp));
+	else
+		return (tmp);
+	while (i < size - 1)	
+		add_back_lst(head, lst_new(dp[i++]));
+	if(dp[i])
+		tmp = dp[i];
+	free(dp);
+	return (tmp);
+}
 t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 {
 	char *s;
@@ -90,18 +113,18 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 	char *tmp1;
 
 	s = NULL;
-	if((lxr->type == QOUTE || lxr->type == DOUBLE_QUOTE ) && lxr->state == GENERAL)
-		return (empty_arg(head, lxr));
 	while (lxr && ((lxr->state != GENERAL) || (lxr->type != ' ' && lxr->type != '|' && lxr->type != '<' && lxr->type != '>' && lxr->type != HERE_DOC && lxr->type != DREDIR_OUT)))
 	{
 		if((lxr->type != QOUTE && lxr->type != DOUBLE_QUOTE ) || lxr->state != GENERAL)
 		{
 			tmp = s;
-            if(lxr->type == ENV && lxr->state != IN_QUOTE && lxr->len != 1)
+            if(lxr->type == ENV && lxr->state == GENERAL && lxr->len != 1)
+				s = eenvv(envv(lxr->content, env, status) , s, head, 0);
+            else if(lxr->type == ENV && lxr->state == IN_DQUOTE && lxr->len != 1)
 			{
 				tmp1 = envv(lxr->content, env, status);
-                s = str_join(s, tmp1);
-				free(tmp1);
+				s = str_join(s, tmp1);
+				free (tmp1);
 			}
             else 
 			    s = str_join(s,lxr->content);
@@ -109,6 +132,8 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 		}
 		lxr = lxr->next;
 	}
+	if(!s)
+		s = str_dup("",0);
 	add_back_lst(head, lst_new(s));
 	return (lxr);
 }
@@ -129,11 +154,30 @@ t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *en
 			if(lxr->type == ENV && lxr->state != IN_QUOTE && stat->type != HERE_DOC && lxr->len != 1)
 			{
 				tmp1 = envv(lxr->content, env, stat->exstat);
-                s = str_join(s, tmp1);
-				free(tmp1);
+				if(lxr->state == GENERAL)
+				{
+                	tmp1 = eenvv(tmp1 , s, 0, 1);
+					if(!tmp1)
+					{
+						stat->type = WORD;
+						s = str_join(s, lxr->content);
+					}
+					else 
+					{
+						s = str_join(s, tmp1);
+						free (tmp1);
+					}
+				}
+				else
+				{
+					s = str_join(s, tmp1);
+					free(tmp1);
+				}
 			}
             else 
+			{
 			    s = str_join(s,lxr->content);
+			}
 			free(tmp);
 		}
 		lxr = lxr->next;
