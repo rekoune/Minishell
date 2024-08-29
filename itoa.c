@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 18:05:09 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 18:13:42 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 11:19:09 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	*rev(char *c)
 
 	i = 0;
 	l = strr_len(c) - 1;
-	v = malloc (l + 2);
+	v = malloc(l + 2);
 	if (v == 0)
 		return (0);
 	while (i <= l)
@@ -102,10 +102,7 @@ long	ft_atoi(char *str)
 	while (str[i])
 	{
 		if (str[i] > '9' || str[i] < '0')
-		{
-			ft_printf("minishell: exit: %s: numeric argument required\n", str);
-			exit(255);
-		}
+			exit(ft_error("exit: ", str, ": numeric argument required", 255));
 		nb = nb * 10;
 		nb = nb + (str[i++] - 48);
 	}

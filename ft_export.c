@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins_func.c                                    :+:      :+:    :+:   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 11:01:22 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/28 18:35:36 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 11:08:51 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,21 +78,15 @@ int	ft_export(t_list **env, char *to_export)
 	i = 0;
 	if (to_export[0] != '_' && (to_export[0] < 'A' || to_export[0] > 'Z')
 		&& (to_export[0] < 'a' || to_export[0] > 'z'))
-	{
-		ft_printf("minishell : export: `%s': not a valid identifier\n",
-			to_export);
-		return (EXIT_FAILURE);
-	}
+		return (ft_error("export: `", to_export, "': not a valid identifier",
+				EXIT_FAILURE));
 	while (to_export && to_export[i] && to_export[i] != '=')
 	{
 		if (to_export[i] < '0' || (to_export[i] >= ':' && to_export[i] <= '@')
 			|| (to_export[i] >= '[' && to_export[i] <= '^')
 			|| to_export[i] >= '{' || to_export[i] == '`')
-		{
-			ft_printf("minishell : export: `%s': not a valid identifier\n",
-				to_export);
-			return (EXIT_FAILURE);
-		}
+			return (ft_error("export: `", to_export,
+					"': not a valid identifier", EXIT_FAILURE));
 		i++;
 	}
 	ft_replace(env, to_export);

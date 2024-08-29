@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins_rest.c                                    :+:      :+:    :+:   */
+/*   builtins_func.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 17:17:21 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/28 17:17:43 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 11:08:25 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,22 +82,17 @@ int	ft_cd(char *str, t_list *env)
 	{
 		s = envv("$HOME", env, 0);
 		if (!s)
-		{
-			ft_printf("minishell: cd: HOME not set\n");
-			return (EXIT_FAILURE);
-		}
+			return (ft_error("cd: HOME not set", NULL, NULL, EXIT_FAILURE));
 		if (chdir(s) == -1)
 		{
-			ft_printf("minishell : cd: %s: No such file or directory\n", s);
 			free(s);
-			return (EXIT_FAILURE);
+			return (ft_error("cd: ", s, ": No such file or directory",
+					EXIT_FAILURE));
 		}
 	}
 	else if (str[0] && chdir(str) == -1)
-	{
-		ft_printf("minishell : cd: %s: No such file or directory\n", str);
-		return (EXIT_FAILURE);
-	}
+		return (ft_error("cd: ", str, ": No such file or directory",
+				EXIT_FAILURE));
 	free(s);
 	return (EXIT_SUCCESS);
 }
@@ -112,7 +107,7 @@ int	ft_exit(char **arg)
 		exit(status);
 	status = ft_atoi(arg[0]);
 	if (arg[1])
-		ft_printf("minishell: exit: too many arguments\n");
+		ft_error("exit: too many arguments", NULL, NULL, 0);
 	else
 		exit(status);
 	return (EXIT_FAILURE);
