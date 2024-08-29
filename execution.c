@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/29 12:02:47 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 15:15:03 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ int in_fd(t_oip *input, int fd)
             fd = open(input->name, O_RDONLY);
         if(!input->next && input->type == HERE_DOC)
             fd = open(input->s, O_RDONLY);
+        if(input->type == WORD)
+           return (ft_error(input->name, ": ambiguous redirect", NULL, -1));
         if(fd < 0)
         {
-            if(!input->name)
-                ft_error("minishell: : No such file or directory", NULL, NULL, 0);
+            if(!input->name || !input->name[0])
+                ft_error(": No such file or directory", NULL, NULL, 0);
             else
                 ft_error(input->name, ": ", strerror(errno), 0);
             return (-1); 
@@ -47,9 +49,11 @@ int out_fd(t_oip *output,int fd, int pipe)
             fd = open(output->name, O_CREAT | O_TRUNC | O_WRONLY , 0640);
         else if(output->type == DREDIR_OUT)
             fd = open(output->name,  O_CREAT | O_APPEND | O_WRONLY , 0640);
+        if(output->type == WORD)
+           return (ft_error(output->name, ": ambiguous redirect", NULL, -1));
         if(fd < 0)
         {
-             if(!output->name)
+             if(!output->name || !output->name[0])
                 ft_error(": No such file or directory", NULL, NULL, 0);
             else
                 ft_error(output->name, ": ",  strerror(errno), 0);
@@ -166,7 +170,9 @@ int run_execution(t_execution *execution, t_list **env, int status)
      if (WIFEXITED(statu)) 
         statu = WEXITSTATUS(statu);
      else if (WIFSIGNALED(statu))
+     {
         statu = WTERMSIG(statu) + 128;
+        stat = statu;
+     }
     return (statu);
 }
-

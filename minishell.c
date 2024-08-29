@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/29 14:03:53 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 14:16:56 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void handler(int n)
 	n = 1;
 	stat = n;
 	rl_on_new_line(); 
-    rl_replace_line("  ", 0); 
+    rl_replace_line("    ", 0); 
     rl_redisplay(); 
 	ft_write("\nminishell$ ", 1, 0);
 }
@@ -81,12 +81,14 @@ int main(int ac, char **av, char **env)
 	int exit_status = 0;
 	while (1)
 	{
+	
 		str = readline("minishell$ ");
 		if(!str)
 			exit(1);
-		if(stat)
+		if(stat )
 		{
-			exit_status = stat;
+			if(!exit_status)
+				exit_status = stat;
 			stat = 0;
 		}
 		if (str[0])
@@ -98,9 +100,7 @@ int main(int ac, char **av, char **env)
 			if(!ac)
 			{
 				execution = parse(cmd,enva, exit_status);
-				// ft_printf("=====================================================================================================\n");
 				// printexec(execution);
-				// ft_printf("=====================================================================================================\n");
 				free_lexer(cmd);
 				exit_status = run_execution(execution, &enva, exit_status);
 				free_resources(execution);
@@ -110,8 +110,6 @@ int main(int ac, char **av, char **env)
 				free_lexer(cmd);
 				exit_status = ac;
 			}
-			
-			// printf("exit status = %d\n", exit_status);
 		}
 		free(str);
 	}
