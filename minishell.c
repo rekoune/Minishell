@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 09:42:06 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/28 19:51:48 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void handler(int n)
 	rl_on_new_line(); 
     rl_replace_line("  ", 0); 
     rl_redisplay(); 
-	ft_write("\nminishell$ ", 1);
+	ft_write("\nminishell$ ", 1, 0);
 }
 int main(int ac, char **av, char **env)
 {
@@ -100,9 +100,9 @@ int main(int ac, char **av, char **env)
 			if(!ac)
 			{
 				execution = parse(cmd,enva, exit_status);
-				// ft_printf("=====================================================================================================\n");
-				// printexec(execution);
-				// ft_printf("=====================================================================================================\n");
+				ft_printf("=====================================================================================================\n");
+				printexec(execution);
+				ft_printf("=====================================================================================================\n");
 				free_lexer(cmd);
 				exit_status = run_execution(execution, &enva, exit_status);
 				free_resources(execution);
