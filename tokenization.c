@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 10:36:48 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/27 11:33:09 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/28 10:08:27 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ t_lexer_list	*is_tokenized(char *str)
 			if (spe_char == '$')
 			{
 				j++;
-				if (str[i + j] == '?')
+				if (str[i + j] == '?' || (str[i + 1] >= '0' && str[i + 1] <= '9'))
 					j++;
 				else
 					while (str[i + j] && !check_char(str[i + j]))

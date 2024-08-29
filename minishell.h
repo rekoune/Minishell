@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 10:26:45 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/28 10:30:21 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int						check_param(char *str);
 t_list					*get_env(char **env);
 int						ft_cd(char *str, t_list *env);
 int						ft_exit(char **cmd);
-int						ft_write(char *str, int fd);
+int						ft_write(char *str, int fd, int flag);
 
 //excu.c
 int						open_in_files(t_oip *list);

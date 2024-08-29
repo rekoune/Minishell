@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 10:25:05 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/29 09:11:37 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char *envv(char *lxr, t_list *env, int status)
 		if(!lxr[j + 1] && env->str[j] == '=')
 		{
 	        s = str_dup(&env->str[j + 1], str_len(&env->str[j + 1], 0));
-			retur (s);
+			return (s);
 		}
 		env = env->next;
     }
@@ -69,21 +69,39 @@ char *get_path(char *s, t_list *env)
 	fr_double(paths);
 	return (NULL);
 }
-t_lexer_list *empty_arg(t_list **head, t_lexer_list *lxr)
+
+char *eenvv(char *vvalue,char *prev, t_list **head, int what)
 {
+	char *tmp;
+	char **dp;
 	int i;
+	int size;
 	
 	i = 0;
-	while (lxr && (lxr->type == QOUTE || lxr->type == DOUBLE_QUOTE ) && lxr->state == GENERAL)
+	size = 0;
+	dp = ft_split(vvalue, ' ');
+	while (dp[size])
+		size++;
+	free(vvalue);
+	if(size > 2 && what)
 	{
-		i++;
-		lxr = lxr->next;
+		fr_double(dp);
+		return (NULL);
 	}
-	if(!(i % 2))
-		add_back_lst(head, lst_new(str_dup("",0)));
-	return (lxr);
+	tmp = str_join(prev,dp[i++]);
+	if(size > 2)
+	{
+		add_back_lst(head, lst_new(tmp));
+		free(tmp);
+	}
+	else
+		return (tmp);
+	while (i < size - 1)	
+		add_back_lst(head, lst_new(dp[i++]));
+	tmp = dp[i];
+	free(dp);
+	return (tmp);
 }
-
 t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 {
 	char *s;
@@ -91,8 +109,6 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 	char *tmp1;
 
 	s = NULL;
-	if((lxr->type == QOUTE || lxr->type == DOUBLE_QUOTE ) && lxr->state == GENERAL)
-		return (empty_arg(head, lxr));
 	while (lxr && ((lxr->state != GENERAL) || (lxr->type != ' ' && lxr->type != '|' && lxr->type != '<' && lxr->type != '>' && lxr->type != HERE_DOC && lxr->type != DREDIR_OUT)))
 	{
 		if((lxr->type != QOUTE && lxr->type != DOUBLE_QUOTE ) || lxr->state != GENERAL)
@@ -101,8 +117,7 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
             if(lxr->type == ENV && lxr->state != IN_QUOTE && lxr->len != 1)
 			{
 				tmp1 = envv(lxr->content, env, status);
-                s = str_join(s, tmp1);
-				free(tmp1);
+				s = eenvv(tmp1 , s, head, 0);
 			}
             else 
 			    s = str_join(s,lxr->content);
@@ -110,6 +125,8 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 		}
 		lxr = lxr->next;
 	}
+	if(!s)
+		s = str_dup("",0);
 	add_back_lst(head, lst_new(s));
 	return (lxr);
 }
@@ -130,8 +147,14 @@ t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *en
 			if(lxr->type == ENV && lxr->state != IN_QUOTE && stat->type != HERE_DOC && lxr->len != 1)
 			{
 				tmp1 = envv(lxr->content, env, stat->exstat);
-                s = str_join(s, tmp1);
-				free(tmp1);
+                tmp1 = eenvv(tmp1 , s, 0, 1);
+				if(!tmp1)
+				{
+					stat->type = WORD;
+					s = str_join(s, lxr->content);
+				}
+				else
+					s = tmp1;
 			}
             else 
 			    s = str_join(s,lxr->content);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exectst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/27 18:46:45 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 09:15:25 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int in_fd(t_oip *input, int fd)
             fd = open(input->name, O_RDONLY);
         if(!input->next && input->type == HERE_DOC)
             fd = open(input->s, O_RDONLY);
+        if(input->type == WORD)
+            ft_printf("test\n");
         if(fd < 0)
         {
             if(!input->name)
@@ -76,7 +78,6 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
         close(infd);
     if(fd[0])
         close(fd[0]);
-    dup2(outfd, 1);
     if(outfd != 1)
         close(outfd);
     if(exec->cmd)
@@ -86,7 +87,7 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
         infd = execute_builtins(&exec->cmd[1], &env, infd, 1);
         exit(infd);   
     }
-    if(exec->cmd[0] && !exec->path)
+    if((exec->cmd[0] && !exec->path) || !exec->cmd[0][0])
     {   
         if(find_c(exec->cmd[0], '/') || !envv("$PATH",env, 0))
             ft_printf("minishell: %s : No such file or directory\n",exec->cmd[0]);
