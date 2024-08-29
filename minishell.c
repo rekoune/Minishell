@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 18:50:37 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 14:03:53 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,6 @@ int main(int ac, char **av, char **env)
 	int exit_status = 0;
 	while (1)
 	{
-	
-		// str = readline("\033[32mminishell \033[0m$ ");
 		str = readline("minishell$ ");
 		if(!str)
 			exit(1);

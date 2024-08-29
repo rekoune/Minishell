@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 18:45:51 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 11:41:41 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 # include "GET_NEXT_LINE/get_next_line.h"
-# include "ft_printf/ft_printf.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -86,6 +85,10 @@ typedef struct s_execution
 	int					pipe;
 	struct s_execution	*next;
 }						t_execution;
+
+// ft_error.c
+int						ft_error(char *str1, char *str2, char *str3,
+							int exit_status);
 
 // ft_export.c
 int						is_empty(char *str);

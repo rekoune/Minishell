@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 19:02:20 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 12:02:47 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ int in_fd(t_oip *input, int fd)
         if(fd < 0)
         {
             if(!input->name)
-                ft_printf("minishell: : No such file or directory\n");
+                ft_error("minishell: : No such file or directory", NULL, NULL, 0);
             else
-                ft_printf("minishell: %s: %s\n",input->name, strerror(errno));
+                ft_error(input->name, ": ", strerror(errno), 0);
             return (-1); 
         }
         input = input->next;
@@ -50,9 +50,9 @@ int out_fd(t_oip *output,int fd, int pipe)
         if(fd < 0)
         {
              if(!output->name)
-                ft_printf("minishell: : No such file or directory\n");
+                ft_error(": No such file or directory", NULL, NULL, 0);
             else
-                ft_printf("minishell: %s: %s\n",output->name, strerror(errno));
+                ft_error(output->name, ": ",  strerror(errno), 0);
             return (-1);
         }
         output = output->next;
@@ -89,9 +89,9 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
     if((exec->cmd[0] && !exec->path) || !exec->cmd[0][0])
     {   
         if(find_c(exec->cmd[0], '/') || !envv("$PATH",env, 0))
-            ft_printf("minishell: %s: No such file or directory\n",exec->cmd[0]);
+            ft_error(exec->cmd[0], ": No such file or directory", NULL, 0);
         else
-            ft_printf("minishell: %s: command not found\n",exec->cmd[0]);
+            ft_error(exec->cmd[0], ": command not found", NULL, 0);
         exit(127);
     }
     if(!exec->cmd[0])

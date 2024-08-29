@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 18:36:09 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/28 18:36:10 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 11:09:00 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,8 @@ int	ft_unset(t_list **env, char *to_unset)
 	if (!to_unset)
 		return (EXIT_SUCCESS);
 	if (!check_param(to_unset))
-	{
-		ft_printf("minishell : unset: `%s': not a valid identifier\n",
-			to_unset);
-		return (EXIT_FAILURE);
-	}
+		return (ft_error("unset: `", to_unset, "': not a valid identifier",
+				EXIT_FAILURE));
 	head = ft_find(head, &prev, to_unset);
 	if (head)
 	{
