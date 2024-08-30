@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 09:10:34 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/30 17:08:31 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_execution *parse(t_lexer_list *lexer, t_list *env, int status)
 		{
 			stat.type = lexer->type;
 			lexer = lexer->next;
-			if(lexer->type == WHITE_SPACE)
+			while(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
 			lexer = ftqouts(&execution->input,lexer, &stat, env);
 		}
@@ -41,7 +41,7 @@ t_execution *parse(t_lexer_list *lexer, t_list *env, int status)
 		{
 			stat.type = lexer->type;
 			lexer = lexer->next;
-			if(lexer->type == WHITE_SPACE)
+			while(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
 			lexer = ftqouts(&execution->output,lexer, &stat, env);
 		}
@@ -58,7 +58,7 @@ t_execution *parse(t_lexer_list *lexer, t_list *env, int status)
 	}
 	else
 		execution->pipe = 0;
-		execution->path = get_path(execution->cmd[0], env);
+	execution->path = get_path(execution->cmd[0], env);
 	execution->next = parse(lexer, env, status);
 	return (execution);
 }
