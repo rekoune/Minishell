@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 18:36:22 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/30 18:53:00 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,8 @@ t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *en
 	node->type = stat->type;
 	if(stat->type == HERE_DOC && st != GENERAL)
 		node->s = str_dup("", 0); 
+	else
+		node->s = NULL;
 	fadd_back_lst(head, node);
 	return (lxr);
 }
