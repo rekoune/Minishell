@@ -6,13 +6,13 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/29 14:16:56 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/30 15:47:27 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int stat = 0;
+int stat1 = 0;
 
 void print(t_lexer_list *head)
 {
@@ -60,11 +60,11 @@ void printexec(t_execution *exec)
 void handler(int n)
 {
 	n = 1;
-	stat = n;
+	stat1 = n;
+	ft_write("\n", 1, 0);
 	rl_on_new_line(); 
-    rl_replace_line("    ", 0); 
+    rl_replace_line("", 0); 
     rl_redisplay(); 
-	ft_write("\nminishell$ ", 1, 0);
 }
 int main(int ac, char **av, char **env)
 {
@@ -85,11 +85,11 @@ int main(int ac, char **av, char **env)
 		str = readline("minishell$ ");
 		if(!str)
 			exit(1);
-		if(stat )
+		if(stat1 )
 		{
 			if(!exit_status)
-				exit_status = stat;
-			stat = 0;
+				exit_status = stat1;
+			stat1 = 0;
 		}
 		if (str[0])
 		{

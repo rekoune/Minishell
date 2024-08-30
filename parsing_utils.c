@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/29 14:08:07 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/30 15:28:38 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char *get_path(char *s, t_list *env)
 	i = 0;
 	if(!s)
 		return (0);
-	if (access(s, X_OK) == 0)
+	if (access(s, X_OK) == 0 || find_c(s, '/'))
 			return (str_dup(s, str_len(s, '\0')));
 	p = envv("$PATH",env, 0);
 	paths = ft_split(p, ':');

@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 10:36:48 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/28 16:44:11 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/30 15:32:38 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ enum e_token	add_type(t_lexer_list *node)
 {
 	if (!check_char(node->content[0]) && node->content[0] != '$')
 		return (WORD);
-	else if (node->content[0] == ' ')
+	else if (node->content[0] == ' ' || node->content[0] == '\t')
 		return (WHITE_SPACE);
 	else if (node->content[0] == '\'')
 		return (QOUTE);

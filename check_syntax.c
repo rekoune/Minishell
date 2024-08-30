@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:42:52 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/28 16:43:00 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/30 15:44:10 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_redir_synx(t_lexer_list **head)
 {
-	if ((*head)->next && (*head)->next->type == WHITE_SPACE)
+	while ((*head)->next && (*head)->next->type == WHITE_SPACE)
 		(*head) = (*head)->next;
 	if ((*head)->next == NULL || (*head)->next->type == PIPE_LINE
 		|| (*head)->next->type == REDIR_IN || (*head)->next->type == REDIR_OUT
@@ -48,7 +48,7 @@ int	more_check(t_lexer_list *head)
 				return (error("minishell : syntax error\n"));
 		if (head->type == PIPE_LINE && head->state == GENERAL)
 		{
-			if (head->next && head->next->type == WHITE_SPACE)
+			while (head->next && head->next->type == WHITE_SPACE)
 				head = head->next;
 			if (head->next == NULL)
 				return (error("minishell : syntax error\n"));

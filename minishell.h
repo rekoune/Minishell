@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/29 14:11:31 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/29 16:44:47 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <sys/stat.h>
 
 // sturct and
 
-extern int stat;
+extern int stat1;
 typedef struct s_list
 {
 	char				*str;
@@ -91,6 +92,7 @@ typedef struct s_execution
 // ft_error.c
 int						ft_error(char *str1, char *str2, char *str3,
 							int exit_status);
+void					execve_error(char *str, int macro);
 
 // ft_export.c
 int						is_empty(char *str);

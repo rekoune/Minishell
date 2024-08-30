@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/29 15:15:03 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/30 15:59:36 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
 {
     int infd;
     int outfd;
+    struct stat state;
 
     infd = in_fd(exec->input, old_read);
     if(infd == -1)
@@ -92,7 +93,7 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
     }
     if((exec->cmd[0] && !exec->path) || !exec->cmd[0][0])
     {   
-        if(find_c(exec->cmd[0], '/') || !envv("$PATH",env, 0))
+        if(!envv("$PATH",env, 0))
             ft_error(exec->cmd[0], ": No such file or directory", NULL, 0);
         else
             ft_error(exec->cmd[0], ": command not found", NULL, 0);
@@ -100,9 +101,10 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
     }
     if(!exec->cmd[0])
         exit(0);
+    if(stat(exec->cmd[0], &state) == 0 && S_ISDIR(state.st_mode))
+        exit (ft_error(exec->cmd[0], ": is a directory", NULL, 126));
     if (execve(exec->path, exec->cmd, getarray(env)) == -1)
-		perror("execve");
-    exit(1);
+        execve_error(exec->cmd[0], errno);
 }
 int run_execution(t_execution *execution, t_list **env, int status)
 {
@@ -172,7 +174,7 @@ int run_execution(t_execution *execution, t_list **env, int status)
      else if (WIFSIGNALED(statu))
      {
         statu = WTERMSIG(statu) + 128;
-        stat = statu;
+        stat1 = statu;
      }
     return (statu);
 }
