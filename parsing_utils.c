@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 18:53:00 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/30 19:02:43 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,11 @@ char *eenvv(char *vvalue,char *prev, t_list **head, int what)
 	while (dp[size])
 		size++;
 	free(vvalue);
+	if(!dp[0])
+	{
+		fr_double(dp);
+		return (NULL);
+	}
 	if(size > 1 && what)
 	{
 		fr_double(dp);
