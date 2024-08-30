@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 17:14:31 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/30 18:36:22 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char *envv(char *lxr, t_list *env, int status)
 		}
 		while (env->str[j] && lxr[j + 1] && lxr[j + 1] == env->str[j])
 			j++;
-		if(!lxr[j + 1] && env->str[j] == '=')
+		if(!lxr[j + 1] && env->str[j] == '=' && env->str[j + 1])
 		{
 	        s = str_dup(&env->str[j + 1], str_len(&env->str[j + 1], 0));
 			return (s);
@@ -150,6 +150,7 @@ t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *en
 	char *tmp;
 	char *tmp1;
 	t_oip *node;
+	enum e_state st;
 	
 	s = NULL;
 	while (lxr && ((lxr->state != GENERAL) || (lxr->type != ' ' && lxr->type != '|' && lxr->type != '<' && lxr->type != '>' && lxr->type != HERE_DOC && lxr->type != DREDIR_OUT)))
@@ -181,15 +182,16 @@ t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *en
 				}
 			}
             else 
-			{
 			    s = str_join(s,lxr->content);
-			}
 			free(tmp);
+			st = lxr->state;
 		}
 		lxr = lxr->next;
 	}
 	node = flst_new(s);
 	node->type = stat->type;
+	if(stat->type == HERE_DOC && st != GENERAL)
+		node->s = str_dup("", 0); 
 	fadd_back_lst(head, node);
 	return (lxr);
 }
