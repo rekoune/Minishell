@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 15:28:38 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/30 17:14:31 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,10 @@ char *eenvv(char *vvalue,char *prev, t_list **head, int what)
 	if(size > 1)
 		add_back_lst(head, lst_new(tmp));
 	else
+	{
+		fr_double(dp);
 		return (tmp);
+	}
 	while (i < size - 1)	
 		add_back_lst(head, lst_new(dp[i++]));
 	if(dp[i])
@@ -111,6 +114,7 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 	char *s;
 	char *tmp;
 	char *tmp1;
+	enum e_token type;
 
 	s = NULL;
 	while (lxr && ((lxr->state != GENERAL) || (lxr->type != ' ' && lxr->type != '|' && lxr->type != '<' && lxr->type != '>' && lxr->type != HERE_DOC && lxr->type != DREDIR_OUT)))
@@ -130,11 +134,13 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 			    s = str_join(s,lxr->content);
 			free(tmp);
 		}
+		type = lxr->type;
 		lxr = lxr->next;
 	}
-	if(!s)
+	if(!s && type != ENV)
 		s = str_dup("",0);
-	add_back_lst(head, lst_new(s));
+	if(s)
+		add_back_lst(head, lst_new(s));
 	return (lxr);
 }
 
