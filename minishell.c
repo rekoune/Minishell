@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 17:15:08 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/30 18:39:30 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,7 @@ int main(int ac, char **av, char **env)
 			exit(1);
 		if(stat1 )
 		{
-			if(!exit_status)
-				exit_status = stat1;
+			exit_status = stat1;
 			stat1 = 0;
 		}
 		if (str[0])

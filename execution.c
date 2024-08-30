@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 16:41:44 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/30 18:36:44 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
     int infd;
     int outfd;
     struct stat state;
-
+    
+    signal(SIGINT,SIG_DFL);
+    signal(SIGQUIT,SIG_DFL);
     infd = in_fd(exec->input, old_read);
     if(infd == -1)
         exit (1);
