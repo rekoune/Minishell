@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 17:12:51 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/30 18:24:27 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,8 @@ char					**ft_split(char *s, char c);
 
 // herdoc.c
 t_oip					*get_here_doc(t_execution *execution);
-void					herdoc_write(int fd, char *s, t_list *env, int status);
-void					thedoc(t_oip *herdoc, int fd, t_list *env, int status);
+void herdoc_write(int fd, char *s, t_list *env, t_stat *status);
+void thedoc(t_oip *herdoc, int fd, t_list *env, t_stat *status);
 int						run_here_doc(t_oip *herdoc, t_list *env, int status);
 
 // itoa.c
