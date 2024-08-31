@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 18:53:19 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 11:02:51 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void herdoc_write(int fd, char *s, t_list *env, t_stat *status)
             else
             {
                 tmp = ft_substr(&s[i], 0, j);
-                tmp2 = envv(tmp, env, 0);
+                tmp2 = get_varibl(tmp, env, 0);
                 free (tmp);
             }
             write(fd, tmp2, strr_len(tmp2));
@@ -84,7 +84,7 @@ void thedoc(t_oip *herdoc, int fd, t_list *env, t_stat *status)
     dlm = str_join(herdoc->name, "\n");
     write(1,">",1);
     s = get_next_line(0);
-     while (s)
+    while (s)
     {
         if(!str_ncomp(s, dlm,strr_len(dlm)))
             break;
@@ -141,6 +141,8 @@ int run_here_doc(t_oip *herdoc, t_list *env, int statu)
             thedoc(herdoc, fd, env, &status);
         }
         wait(&pid);
+        if(!herdoc->next)
+            close(fd);
         herdoc = herdoc->herdoc_next;
         i++;
         if (WIFEXITED(pid)) 

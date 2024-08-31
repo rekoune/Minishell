@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 18:36:44 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 11:48:30 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,16 +86,16 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
     dup2(outfd, 1);
     if(outfd != 1)
         close(outfd);
-    if(exec->cmd)
+    if(exec->cmd[0])
         infd = check_builtins(exec->cmd[0]);
-    if(exec->cmd && infd)
+    if(exec->cmd && exec->cmd[0] && infd)
     {
         infd = execute_builtins(&exec->cmd[1], &env, infd, 1);
         exit(infd);   
     }
-    if((exec->cmd[0] && !exec->path) || !exec->cmd[0][0])
+    if((exec->cmd[0] && !exec->path) ||(exec->cmd[0] && !exec->cmd[0][0]))
     {   
-        if(!envv("$PATH",env, 0))
+        if(!get_varibl("$PATH",env, 0))
             ft_error(exec->cmd[0], ": No such file or directory", NULL, 0);
         else
             ft_error(exec->cmd[0], ": command not found", NULL, 0);
