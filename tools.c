@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:15:02 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 13:03:38 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/31 10:38:25 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ char	*str_ncopy(char *str, int size)
 
 int	check_char(char c)
 {
-	if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && c != '_')
+	if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < '0' || c > '9')
+		&& c != '_')
 		return (1);
 	return (0);
 }

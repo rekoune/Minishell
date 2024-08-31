@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/31 11:35:42 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 11:58:56 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ int main(int ac, char **av, char **env)
 	(void) av;
 
 	// atexit(leaks);
-	signal(SIGINT, handler);
-	signal(SIGQUIT, SIG_IGN);
 	enva = get_env(env);
 	int exit_status = 0;
 	while (1)
 	{
+	signal(SIGINT, handler);
+	signal(SIGQUIT, SIG_IGN);
 	
 		str = readline("minishell$ ");
 		if(!str)
