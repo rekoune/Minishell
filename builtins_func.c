@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 17:17:21 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/31 11:02:51 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 11:58:28 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ int	ft_pwd(int fd)
 	char	buff[1024];
 
 	if (getcwd(buff, sizeof(buff)) == NULL)
+	{
+		ft_write("minishell: No such file or directory\n", 2, 0);
 		return (EXIT_FAILURE);
+	}
 	if (ft_write(buff, fd, 0) == EXIT_FAILURE || ft_write("\n", fd,
 			0) == EXIT_FAILURE)
 		return (EXIT_FAILURE);

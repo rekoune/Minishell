@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/31 11:48:30 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 12:00:14 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ int run_execution(t_execution *execution, t_list **env, int status)
          statu = run_here_doc(herdoc, *env, status);
     if(statu)
         return (statu);
+    signal(SIGINT, SIG_IGN);
     fd[0] = 0;
     fd[1] = 1;
     if(execution->cmd[0])
