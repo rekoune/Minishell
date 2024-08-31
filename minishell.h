@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/31 12:22:24 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 16:56:08 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ int						check_syntax(t_lexer_list *node);
 int						check_redir_synx(t_lexer_list **head);
 int						is_redir(enum e_token type);
 int						more_check(t_lexer_list *head);
+int						check_pipe(t_lexer_list *head);
 
 // execution.c
 int						run_execution(t_execution *execution, t_list **env,

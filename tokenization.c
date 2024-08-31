@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 10:36:48 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/30 15:32:38 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/31 16:59:30 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	add_state(t_lexer_list *head)
 		node->type = add_type(node);
 		node = node->next;
 	}
-	node = head;
 	while (head)
 	{
 		if (head->type == QOUTE || head->type == DOUBLE_QUOTE)
