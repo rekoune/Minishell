@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 10:33:48 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/20 10:19:39 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 10:42:58 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*mini_join(char *s1, char *s2, char *str)
 	int	i;
 	int	j;
 
-	i = 0;  
+	i = 0;
 	j = 0;
 	if (s1 != 0)
 		while (s1[i])
