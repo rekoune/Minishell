@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 11:01:22 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/29 11:08:51 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/31 10:25:51 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ void	ft_replace(t_list **env, char *to_export)
 {
 	t_list	*node;
 
-	if (is_exist(*env, &node, to_export) == 1)
+	if (is_exist(*env, &node, to_export) == 1 && !is_empty(to_export))
 	{
 		free(node->str);
 		node->str = str_ncopy(to_export, str_len(to_export, '\0'));
 	}
-	else
+	else if (is_exist(*env, &node, to_export) == 0)
 		add_back_lst(env, lst_new(str_ncopy(to_export, str_len(to_export,
 						'\0'))));
 }
@@ -61,7 +61,8 @@ int	is_exist(t_list *head, t_list **node, char *to_export)
 {
 	while (head)
 	{
-		if (str_ncomp(head->str, to_export, str_len(to_export, '=')) == 0)
+		if (str_ncomp(head->str, to_export, str_len(to_export, '=') - 1) == 0
+			&& str_len(head->str, '=') == str_len(to_export, '='))
 		{
 			*node = head;
 			return (1);

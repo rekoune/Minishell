@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   herdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 18:53:19 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/30 20:29:37 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,12 @@ void thedoc(t_oip *herdoc, int fd, t_list *env, t_stat *status)
         close(fd);
     exit(0); 
 }
-
+void exit_herdoc(int sig)
+{
+    (void)sig;
+    printf("\n");
+    exit (1);
+}
 int run_here_doc(t_oip *herdoc, t_list *env, int statu)
 {
     char *tmp;
@@ -108,11 +113,13 @@ int run_here_doc(t_oip *herdoc, t_list *env, int statu)
     int fd;
     int i;
     t_stat status;
+    i = 0;
     
 
-    status.exstat = statu;
-    i = 0;
     pid = 0;
+    status.exstat = statu;
+    if (herdoc)
+        signal(SIGINT, SIG_IGN);
     while (herdoc && !pid)
     {
         if(!herdoc->next)
@@ -129,6 +136,7 @@ int run_here_doc(t_oip *herdoc, t_list *env, int statu)
             free(tmp);
             fd = open(herdoc->s, O_RDWR | O_CREAT | O_TRUNC, 0640);
         }
+        close (fd);
         pid = fork();
         if(pid == -1)
         {
@@ -137,7 +145,7 @@ int run_here_doc(t_oip *herdoc, t_list *env, int statu)
         }
         if(pid == 0)
         {
-            signal(SIGINT,SIG_DFL);
+            signal(SIGINT,exit_herdoc);
             thedoc(herdoc, fd, env, &status);
         }
         wait(&pid);
