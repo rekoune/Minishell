@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:42:52 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/30 15:44:10 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/31 16:53:17 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,33 @@ int	is_redir(enum e_token type)
 	return (0);
 }
 
+int	check_pipe(t_lexer_list *head)
+{
+	while (head && (head->type == WHITE_SPACE && head->state == GENERAL))
+		head = head->next;
+	if (head && head->type == PIPE_LINE && head->state == GENERAL)
+		return (0);
+	while (head)
+	{
+		if (head->type == PIPE_LINE && head->state == GENERAL)
+		{
+			head = head->next;
+			while (head && head->type == WHITE_SPACE)
+				head = head->next;
+			if (!head || (head->type == PIPE_LINE && head->state == GENERAL))
+				return (0);
+		}
+		head = head->next;
+	}
+	return (1);
+}
+
 int	more_check(t_lexer_list *head)
 {
 	int	n_quote;
 
 	n_quote = 0;
-	if (head->type == PIPE_LINE)
+	if (!check_pipe(head))
 		return (error("minishell : syntax error\n"));
 	while (head)
 	{
@@ -46,13 +67,6 @@ int	more_check(t_lexer_list *head)
 		else if (is_redir(head->type) && head->state == GENERAL)
 			if (check_redir_synx(&head))
 				return (error("minishell : syntax error\n"));
-		if (head->type == PIPE_LINE && head->state == GENERAL)
-		{
-			while (head->next && head->next->type == WHITE_SPACE)
-				head = head->next;
-			if (head->next == NULL)
-				return (error("minishell : syntax error\n"));
-		}
 		head = head->next;
 	}
 	if (n_quote % 2 != 0)
