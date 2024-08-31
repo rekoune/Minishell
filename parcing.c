@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 10:16:25 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 17:08:31 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 12:22:24 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_execution *parse(t_lexer_list *lexer, t_list *env, int status)
 			lexer = lexer->next;
 			while(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
-			lexer = ftqouts(&execution->input,lexer, &stat, env);
+			lexer = redirections(&execution->input,lexer, &stat, env);
 		}
 		else if(lexer->type == REDIR_OUT || lexer->type == DREDIR_OUT)
 		{
@@ -43,10 +43,10 @@ t_execution *parse(t_lexer_list *lexer, t_list *env, int status)
 			lexer = lexer->next;
 			while(lexer->type == WHITE_SPACE)
 				lexer = lexer->next;
-			lexer = ftqouts(&execution->output,lexer, &stat, env);
+			lexer = redirections(&execution->output,lexer, &stat, env);
 		}
 		else if(lexer->type != WHITE_SPACE)
-			lexer = fqouts(&some,lexer, env, status);
+			lexer = cmd_arg(&some,lexer, env, status);
 		else
 			lexer = lexer->next;
 	}

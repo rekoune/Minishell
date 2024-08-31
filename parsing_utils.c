@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/31 11:55:35 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 12:22:24 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char *env_for_args(char *vvalue,char *prev, t_list **head)
 	fr_double(dp);
 	return (tmp);
 }
-t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
+t_lexer_list  *cmd_arg(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 {
 	char *s;
 	char *tmp;
@@ -158,7 +158,7 @@ char *env_for_red(char *vvalue, char *prev, int *check, t_lexer_list *lxr)
 	return (vvalue);
 }
 
-t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *env)
+t_lexer_list  *redirections(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *env)
 {
 	char *s;
 	char *tmp;
