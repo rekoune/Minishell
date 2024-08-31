@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/31 12:00:14 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 12:19:15 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,13 @@ void exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
     if (execve(exec->path, exec->cmd, getarray(env)) == -1)
         execve_error(exec->cmd[0], errno);
 }
+void sig_handl(int sig)
+{
+    if(sig == SIGINT)
+        write(1, "\n", 1);
+    else if(sig == SIGQUIT)
+        write(1,"Quit: 3\n", 8);
+}
 int run_execution(t_execution *execution, t_list **env, int status)
 {
     t_oip *herdoc;
@@ -126,7 +133,8 @@ int run_execution(t_execution *execution, t_list **env, int status)
          statu = run_here_doc(herdoc, *env, status);
     if(statu)
         return (statu);
-    signal(SIGINT, SIG_IGN);
+    signal(SIGINT, sig_handl);
+    signal(SIGQUIT, sig_handl); 
     fd[0] = 0;
     fd[1] = 1;
     if(execution->cmd[0])

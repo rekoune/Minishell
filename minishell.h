@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/31 11:02:51 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 12:22:24 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,9 +180,9 @@ void					handler(int n);
 t_execution				*parse(t_lexer_list *lxr, t_list *env, int status);
 
 // parcing utils
-t_lexer_list			*fqouts(t_list **head, t_lexer_list *lxr, t_list *env,
+t_lexer_list			*cmd_arg(t_list **head, t_lexer_list *lxr, t_list *env,
 							int status);
-t_lexer_list			*ftqouts(t_oip **head, t_lexer_list *lxr, t_stat *stat,
+t_lexer_list			*redirections(t_oip **head, t_lexer_list *lxr, t_stat *stat,
 							t_list *env);
 char					*get_varibl(char *variabl, t_list *env, int status);
 char					*get_path(char *s, t_list *env);

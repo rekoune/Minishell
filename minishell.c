@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/31 11:58:56 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 12:09:34 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,14 @@ void printexec(t_execution *exec)
 }
 void handler(int n)
 {
-	n = 1;
-	stat1 = n;
-	ft_write("\n", 1, 0);
-	rl_on_new_line(); 
-    rl_replace_line("", 0); 
-    rl_redisplay(); 
+	if(n == SIGINT)
+	{
+		stat1 = n;
+		ft_write("\n", 1, 0);
+		rl_on_new_line(); 
+    	rl_replace_line("", 0); 
+    	rl_redisplay(); 
+	}	
 }
 int main(int ac, char **av, char **env)
 {
@@ -79,9 +81,8 @@ int main(int ac, char **av, char **env)
 	int exit_status = 0;
 	while (1)
 	{
-	signal(SIGINT, handler);
-	signal(SIGQUIT, SIG_IGN);
-	
+		signal(SIGINT, handler);
+		signal(SIGQUIT, SIG_IGN);
 		str = readline("minishell$ ");
 		if(!str)
 			exit(1);
