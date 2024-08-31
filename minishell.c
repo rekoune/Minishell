@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/31 12:09:34 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 12:28:19 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void handler(int n)
 {
 	if(n == SIGINT)
 	{
-		stat1 = n;
+		stat1 = 1;
 		ft_write("\n", 1, 0);
 		rl_on_new_line(); 
     	rl_replace_line("", 0); 
