@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:27:32 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 19:02:43 by haouky           ###   ########.fr       */
+/*   Updated: 2024/08/31 11:55:35 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char *get_path(char *s, t_list *env)
 		return (0);
 	if (access(s, X_OK) == 0 || find_c(s, '/'))
 			return (str_dup(s, str_len(s, '\0')));
-	p = envv("$PATH",env, 0);
+	p = get_varibl("$PATH",env, 0);
 	paths = ft_split(p, ':');
 	free (p);
 	while (paths && paths[i])
@@ -45,7 +45,7 @@ char *get_path(char *s, t_list *env)
 	return (NULL);
 }
 
-char *envv(char *lxr, t_list *env, int status)
+char *get_varibl(char *lxr, t_list *env, int status)
 {
 	int j;
     char *s;
@@ -70,7 +70,7 @@ char *envv(char *lxr, t_list *env, int status)
     return (NULL);
 }
 
-char *eenvv(char *vvalue,char *prev, t_list **head, int what)
+char *env_for_args(char *vvalue,char *prev, t_list **head)
 {
 	char *tmp;
 	char **dp;
@@ -79,39 +79,21 @@ char *eenvv(char *vvalue,char *prev, t_list **head, int what)
 	
 	i = 0;
 	size = 0;
-	if(!vvalue)
-	{
-		if(what)
-			return (str_dup("", 0));
-		return (vvalue);
-	}
 	dp = ft_split(vvalue, ' ');
-	while (dp[size])
+	while (dp && dp[size])
 		size++;
 	free(vvalue);
-	if(!dp[0])
+	if(!dp || !dp[0])
 	{
-		fr_double(dp);
-		return (NULL);
+		free(dp);
+		return (str_dup(prev, strr_len(prev)));
 	}
-	if(size > 1 && what)
-	{
-		fr_double(dp);
-		return (NULL);
-	}
-	tmp = str_join(prev,dp[i++]);
-	if(size > 1)
-		add_back_lst(head, lst_new(tmp));
-	else
-	{
-		fr_double(dp);
-		return (tmp);
-	}
-	while (i < size - 1)	
-		add_back_lst(head, lst_new(dp[i++]));
-	if(dp[i])
-		tmp = dp[i];
-	free(dp);
+	tmp = str_join(prev,dp[i]);
+	add_back_lst(head, lst_new(tmp));
+	while (++i < size - 1)
+		add_back_lst(head, lst_new(str_dup(dp[i], strr_len(dp[i]))));
+	tmp = str_dup(dp[i], strr_len(dp[i]));
+	fr_double(dp);
 	return (tmp);
 }
 t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
@@ -128,10 +110,10 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 		{
 			tmp = s;
             if(lxr->type == ENV && lxr->state == GENERAL && lxr->len != 1)
-				s = eenvv(envv(lxr->content, env, status) , s, head, 0);
+				s = env_for_args(get_varibl(lxr->content, env, status) , s, head);
             else if(lxr->type == ENV && lxr->state == IN_DQUOTE && lxr->len != 1)
 			{
-				tmp1 = envv(lxr->content, env, status);
+				tmp1 = get_varibl(lxr->content, env, status);
 				s = str_join(s, tmp1);
 				free (tmp1);
 			}
@@ -147,6 +129,33 @@ t_lexer_list  *fqouts(t_list **head,t_lexer_list *lxr, t_list *env, int status)
 	if(s)
 		add_back_lst(head, lst_new(s));
 	return (lxr);
+}
+
+char *env_for_red(char *vvalue, char *prev, int *check, t_lexer_list *lxr)
+{
+	char **dp;
+	int i;
+	int size;
+	
+	i = 0;
+	size = 0;
+	dp = ft_split(vvalue, ' ');
+	while (dp && dp[size])
+		size++;
+	fr_double(dp);
+	if(size > 1)
+	{
+		free(vvalue);
+		*check = -1000;
+		return (NULL);
+	}
+	else if(size < 1 && (!prev && (!lxr ||(lxr && (lxr->type != -1 && lxr->type != '\"' && lxr->type != '\'' && lxr->type != '$')))))
+	{
+		free(vvalue);
+		*check = -1000;
+		return (NULL);
+	}
+	return (vvalue);
 }
 
 t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *env)
@@ -165,20 +174,18 @@ t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *en
 			tmp = s;
 			if(lxr->type == ENV && lxr->state != IN_QUOTE && stat->type != HERE_DOC && lxr->len != 1)
 			{
-				tmp1 = envv(lxr->content, env, stat->exstat);
+				tmp1 = get_varibl(lxr->content, env, stat->exstat);
 				if(lxr->state == GENERAL)
 				{
-                	tmp1 = eenvv(tmp1 , s, 0, 1);
-					if(!tmp1)
+                	tmp1 = env_for_red(tmp1 , s, &stat->exstat, lxr->next);
+					if(stat->exstat == -1000)
 					{
 						stat->type = WORD;
 						s = str_join(s, lxr->content);
 					}
 					else 
-					{
 						s = str_join(s, tmp1);
-						free (tmp1);
-					}
+					free (tmp1);
 				}
 				else
 				{
@@ -191,6 +198,8 @@ t_lexer_list  *ftqouts(t_oip **head,t_lexer_list *lxr, t_stat *stat, t_list  *en
 			free(tmp);
 			st = lxr->state;
 		}
+		if(!s)
+			s = str_dup("", 0);
 		lxr = lxr->next;
 	}
 	node = flst_new(s);

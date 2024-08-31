@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_func.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 17:17:21 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/31 09:43:17 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/31 11:58:28 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	ft_cd(char *str, t_list *env)
 	s = NULL;
 	if (!str)
 	{
-		s = envv("$HOME", env, 0);
+		s = get_varibl("$HOME", env, 0);
 		if (!s)
 			return (ft_error("cd: HOME not set", NULL, NULL, EXIT_FAILURE));
 		if (chdir(s) == -1)

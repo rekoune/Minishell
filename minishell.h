@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/30 18:34:18 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/31 11:02:51 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ t_lexer_list			*fqouts(t_list **head, t_lexer_list *lxr, t_list *env,
 							int status);
 t_lexer_list			*ftqouts(t_oip **head, t_lexer_list *lxr, t_stat *stat,
 							t_list *env);
-char					*envv(char *variabl, t_list *env, int status);
+char					*get_varibl(char *variabl, t_list *env, int status);
 char					*get_path(char *s, t_list *env);
 t_lexer_list			*empty_arg(t_list **head, t_lexer_list *lxr);
 

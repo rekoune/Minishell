@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 08:52:12 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/28 13:02:48 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/31 10:08:18 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ char	*str_dup(char *str, int size)
 	char	*return_str;
 
 	i = 0;
+	if (!str)
+		return (NULL);
 	return_str = malloc(sizeof(char) * (size + 1));
 	if (!return_str)
-		return (NULL);
-	if (!str)
 		return (NULL);
 	while (i < size && str[i])
 	{
