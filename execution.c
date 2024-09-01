@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 10:28:14 by haouky           ###   ########.fr       */
+/*   Updated: 2024/09/01 11:23:21 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,17 +80,19 @@ int	work(t_execution *execution, t_list **env, int *fd)
 int	builtins(t_execution *execution, t_list **env, int i, int status)
 {
 	int	fd[2];
-
+	int	out_exit[2];
+	
 	fd[0] = in_fd(execution->input, 0);
 	if (fd[0] == -1)
 		return (1);
 	if (fd[0])
 		close(fd[0]);
-	fd[0] = out_fd(execution->output, 1, 0);
-	if (fd[0] == -1)
+	fd[1] = out_fd(execution->output, 1, 0);
+	if (fd[1] == -1)
 		return (1);
-	fd[1] = status;
-	i = execute_builtins(&execution->cmd[1], env, i, fd);
+	out_exit[0] =  fd[1];
+	out_exit[1] =  status;
+	i = execute_builtins(&execution->cmd[1], env, i, out_exit);
 	if (fd[1] != 1)
 		close(fd[1]);
 	return (i);

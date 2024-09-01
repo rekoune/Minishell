@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 10:07:32 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/09/01 11:16:10 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,10 @@ int	main(int ac, char **av, char **env)
 		signal(SIGQUIT, SIG_IGN);
 		str = readline("minishell$ ");
 		if (!str)
+		{
+			printf("her\n");
 			exit(exit_status);
+		}
 		if (g_status)
 		{
 			exit_status = g_status;
