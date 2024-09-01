@@ -3,160 +3,84 @@
 /*                                                        :::      ::::::::   */
 /*   herdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:48:20 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/31 12:03:22 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/08/31 19:47:30 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishell.h"
 
-
-t_oip  *get_here_doc(t_execution *execution)
+void	exit_herdoc(int sig)
 {
-    t_oip *inp;
-    t_oip *sinp;
-    t_oip *firstehrdoc;
-
-    sinp = 0;
-    firstehrdoc = 0;
-    while (execution)
-    {
-        inp = execution->input;
-        while (inp)
-        {
-            if(inp->type == HERE_DOC)
-            {
-                if(sinp)
-                    sinp->herdoc_next = inp;
-                else
-                    firstehrdoc = inp;
-                sinp = inp;   
-            }
-            inp = inp->next;
-        }
-        execution = execution->next;
-    }
-    return (firstehrdoc);
-}
-void herdoc_write(int fd, char *s, t_list *env, t_stat *status)
-{
-    int i;
-    char *tmp;
-    char *tmp2;
-    int j;
-
-    i = 0;
-    while (s[i])
-    {
-        if(s[i] == '$' && status->type == HERE_DOC)
-        {
-            j = 1;
-            while (s[i + j] && ((s[i + j] >= '0' && s[i + j] <= '9') || (s[i + j] >= 'a' && s[i + j] <= 'z') || (s[i + j] >= 'A' && s[i + j] <= 'Z')))
-                j++;
-            if(s[i + 1] == '?')
-            {
-                tmp2 = ft_itoa(status->exstat);
-                i++;
-            }
-            else
-            {
-                tmp = ft_substr(&s[i], 0, j);
-                tmp2 = get_varibl(tmp, env, 0);
-                free (tmp);
-            }
-            write(fd, tmp2, strr_len(tmp2));
-            free(tmp2);
-            i += j - 1;    
-        }
-        else
-            write(fd, &s[i], 1);
-        i++;
-    }
-}
-void thedoc(t_oip *herdoc, int fd, t_list *env, t_stat *status)
-{
-    char *dlm;
-    char *s;
-    
-    dlm = str_join(herdoc->name, "\n");
-    write(1,">",1);
-    s = get_next_line(0);
-    while (s)
-    {
-        if(!str_ncomp(s, dlm,strr_len(dlm)))
-            break;
-        if(!herdoc->next)
-            herdoc_write(fd, s, env, status);
-        free(s);
-        write(1,">",1);
-        s = get_next_line(0);
-    } 
-    free(dlm);
-    free(s);
-    if(!herdoc->next)
-        close(fd);
-    exit(0); 
-}
-void exit_herdoc(int sig)
-{
-    (void)sig;
-    printf("\n");
-    exit (1);
-}
-int run_here_doc(t_oip *herdoc, t_list *env, int statu)
-{
-    char *tmp;
-    int pid;
-    int fd;
-    int i;
-    t_stat status;
-    i = 0;
-    
-
-    pid = 0;
-    status.exstat = statu;
-    signal(SIGINT, SIG_IGN);
-    while (herdoc && !pid)
-    {
-        if(!herdoc->next)
-        {
-            tmp = ft_itoa(i);
-            if(herdoc->s && !herdoc->s[0])
-            {
-                status.type = WORD;
-                free(herdoc->s);
-            }
-            else
-                status.type = HERE_DOC;
-            herdoc->s = str_join("/tmp/",tmp);
-            free(tmp);
-            fd = open(herdoc->s, O_RDWR | O_CREAT | O_TRUNC, 0640);
-        }
-        close (fd);
-        pid = fork();
-        if(pid == -1)
-        {
-            perror("minishel:");
-            return (-1);
-        }
-        if(pid == 0)
-        {
-            signal(SIGINT,exit_herdoc);
-            thedoc(herdoc, fd, env, &status);
-        }
-        wait(&pid);
-        if(!herdoc->next)
-            close(fd);
-        herdoc = herdoc->herdoc_next;
-        i++;
-        if (WIFEXITED(pid)) 
-            pid = WEXITSTATUS(pid);
-        else if (WIFSIGNALED(pid))
-            pid = WTERMSIG(pid) + 128;
-    }
-    return (pid);
+	(void)sig;
+	printf("\n");
+	exit(1);
 }
 
+int	open_herdoc_file(int i, t_oip *herdoc, t_stat *status)
+{
+	int		fd;
+	char	*tmp;
+
+	tmp = ft_itoa(i);
+	if (herdoc->s && !herdoc->s[0])
+	{
+		status->type = WORD;
+		free(herdoc->s);
+	}
+	else
+		status->type = HERE_DOC;
+	herdoc->s = str_join("/tmp/", tmp);
+	free(tmp);
+	fd = open(herdoc->s, O_RDWR | O_CREAT | O_TRUNC, 0640);
+	return (fd);
+}
+
+int	fork_4_herdoc(t_oip *herdoc, int fd, t_list *env, t_stat status)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("minishel:");
+		return (-1);
+	}
+	if (pid == 0)
+	{
+		signal(SIGINT, exit_herdoc);
+		thedoc(herdoc, fd, env, &status);
+	}
+	wait(&pid);
+	if (!herdoc->next)
+		close(fd);
+	if (WIFEXITED(pid))
+		pid = WEXITSTATUS(pid);
+	else if (WIFSIGNALED(pid))
+		pid = WTERMSIG(pid) + 128;
+	return (pid);
+}
+
+int	run_here_doc(t_oip *herdoc, t_list *env, int statu)
+{
+	int		pid;
+	int		fd;
+	int		i;
+	t_stat	status;
+
+	i = 0;
+	pid = 0;
+	status.exstat = statu;
+	signal(SIGINT, SIG_IGN);
+	while (herdoc && !pid)
+	{
+		if (!herdoc->next)
+			fd = open_herdoc_file(i, herdoc, &status);
+		pid = fork_4_herdoc(herdoc, fd, env, status);
+		i++;
+		herdoc = herdoc->herdoc_next;
+	}
+	return (pid);
+}
