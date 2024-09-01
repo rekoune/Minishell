@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 10:36:48 by arekoune          #+#    #+#             */
-/*   Updated: 2024/09/01 09:54:27 by haouky           ###   ########.fr       */
+/*   Updated: 2024/09/01 11:41:47 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,46 +134,4 @@ t_lexer_list	*is_tokenized(char *str)
 	}
 	add_state(list);
 	return (list);
-}
-
-char	*n_state(enum e_state state)
-{
-	char	*str;
-
-	str = NULL;
-	if (state == GENERAL)
-		str = "GENERAL";
-	else if (state == IN_QUOTE)
-		str = "IN_QUOTE";
-	else if (state == IN_DQUOTE)
-		str = "IN_DQUOTE";
-	return (str);
-}
-
-char	*n_type(enum e_token type)
-{
-	char	*str;
-
-	str = NULL;
-	if (type == WORD)
-		str = "WORD";
-	else if (type == WHITE_SPACE)
-		str = "WHITE_SPACE";
-	else if (type == QOUTE)
-		str = "QOUTE";
-	else if (type == DOUBLE_QUOTE)
-		str = "DOUBLE_QUOTE";
-	else if (type == ENV)
-		str = "ENV";
-	else if (type == PIPE_LINE)
-		str = "PIPE_LINE";
-	else if (type == REDIR_IN)
-		str = "REDIR_IN";
-	else if (type == REDIR_OUT)
-		str = "REDIR_OUT";
-	else if (type == DREDIR_OUT)
-		str = "DREDIR_OUT";
-	else if (type == HERE_DOC)
-		str = "HERE_DOC";
-	return (str);
 }

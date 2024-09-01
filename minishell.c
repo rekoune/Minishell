@@ -3,62 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 11:16:10 by haouky           ###   ########.fr       */
+/*   Updated: 2024/09/01 11:40:50 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int		g_status = 0;
-
-void	print(t_lexer_list *head)
-{
-	char	*type;
-	char	*state;
-
-	printf(" content       len          type                state\n");
-	printf("=========================================================\n");
-	while (head)
-	{
-		state = n_state(head->state);
-		type = n_type(head->type);
-		printf("|%s|         %d,           %s,             %s\n", head->content,
-			head->len, type, state);
-		head = head->next;
-	}
-}
-
-void	printexec(t_execution *exec)
-{
-	t_oip	*head;
-	int		i;
-
-	while (exec)
-	{
-		i = 0;
-		printf("path= %s\n", exec->path);
-		while (exec->cmd[i])
-			printf("cmd = %s\n", exec->cmd[i++]);
-		head = exec->input;
-		while (head)
-		{
-			printf("in  | type = %s, name %s,\n", n_type(head->type),
-				head->name);
-			head = head->next;
-		}
-		head = exec->output;
-		while (head)
-		{
-			printf("out |type = %s, name %s,\n", n_type(head->type),
-				head->name);
-			head = head->next;
-		}
-		exec = exec->next;
-	}
-}
 
 void	handler(int n)
 {
@@ -80,12 +32,10 @@ void	ft_minishell(char *str, t_list **env, int *exit_status)
 
 	add_history(str);
 	cmd = is_tokenized(str);
-	// print(cmd);
 	flag = check_syntax(cmd);
 	if (!flag)
 	{
 		execution = parse(cmd, *env, *exit_status);
-		// printexec(execution);
 		free_lexer(cmd);
 		*exit_status = run_execution(execution, env, *exit_status);
 		free_resources(execution);
@@ -105,9 +55,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)av;
 	(void)ac;
-	// atexit(leaks);
 	enva = get_env(env);
-	exit_status = 0;
 	exit_status = 0;
 	while (1)
 	{
@@ -115,10 +63,7 @@ int	main(int ac, char **av, char **env)
 		signal(SIGQUIT, SIG_IGN);
 		str = readline("minishell$ ");
 		if (!str)
-		{
-			printf("her\n");
 			exit(exit_status);
-		}
 		if (g_status)
 		{
 			exit_status = g_status;
