@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 10:00:25 by haouky           ###   ########.fr       */
+/*   Updated: 2024/09/01 10:20:39 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	builtins(t_execution *execution, t_list **env, int i, int status)
 	if (fd[0] == -1)
 		return (1);
 	fd[1] = status;
-	i = execute_builtins(&execution->cmd[1], env, i, fd[0]);
+	i = execute_builtins(&execution->cmd[1], env, i, fd);
 	if (fd[1] != 1)
 		close(fd[1]);
 	return (i);
