@@ -6,24 +6,24 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 09:45:32 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/09/01 10:10:41 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdio.h>
 # include "GET_NEXT_LINE/get_next_line.h"
 # include <errno.h>
 # include <fcntl.h>
-# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdlib.h>
 # include <string.h>
-# include <unistd.h>
 # include <sys/stat.h>
+# include <unistd.h>
 
 // sturct and
 
@@ -115,10 +115,12 @@ int						check_pipe(t_lexer_list *head);
 // execution.c
 int						run_execution(t_execution *execution, t_list **env,
 							int status);
-int						in_fd(t_oip *input, int fd);
-int						out_fd(t_oip *output, int fd, int pipe);
+
+// execution2.c
 void					exccmd(t_execution *exec, t_list *env, int *fd,
 							int old_read);
+int						out_fd(t_oip *output, int fd, int pipe);
+int						in_fd(t_oip *input, int fd);
 
 // builtins_func.c
 int						ft_env(t_list *env, int fd, int flag);
@@ -132,7 +134,7 @@ int						check_builtins(char *str);
 int						ft_export_arr(t_list **env, char **cmd, int out_fd);
 int						ft_unset_arr(t_list **env, char **arg);
 int						execute_builtins(char **cmd, t_list **env, int flag,
-							int out_fd);
+							int *out_exit);
 int						skip_n(char *str);
 
 // free_resources.c
@@ -141,20 +143,19 @@ void					free_lexer(t_lexer_list *list);
 void					fr_double(char **s);
 
 // ft_split.c
-// static int			cw(char const *s, char c);
-// static int			lenw(char const *s, char c);
-// void					fr(char **s, int i);
-// static char			**msp(char **str, char *s, int word, char c);
 char					**ft_split(char *s, char c);
 
 // herdoc.c
-t_oip					*get_here_doc(t_execution *execution);
-void herdoc_write(int fd, char *s, t_list *env, t_stat *status);
-void thedoc(t_oip *herdoc, int fd, t_list *env, t_stat *status);
 int						run_here_doc(t_oip *herdoc, t_list *env, int status);
 
+// herdoc2.c
+t_oip					*get_here_doc(t_execution *execution);
+void					thedoc(t_oip *herdoc, int fd, t_list *env,
+							t_stat *status);
+void					herdoc_write(int fd, char *s, t_list *env,
+							t_stat *status);
+
 // itoa.c
-// static char				*rev(char *c);
 char					*ft_itoa(int nb);
 void					fr_double(char **s);
 int						find_c(char *s, char c);
@@ -179,15 +180,23 @@ void					handler(int n);
 
 // parcing.c
 t_execution				*parse(t_lexer_list *lxr, t_list *env, int status);
+char					*get_path(char *s, t_list *env);
 
 // parcing utils
 t_lexer_list			*cmd_arg(t_list **head, t_lexer_list *lxr, t_list *env,
 							int status);
-t_lexer_list			*redirections(t_oip **head, t_lexer_list *lxr, t_stat *stat,
-							t_list *env);
+t_lexer_list			*redirections(t_oip **head, t_lexer_list *lxr,
+							t_stat *stat, t_list *env);
+
+// parcing utils2
 char					*get_varibl(char *variabl, t_list *env, int status);
-char					*get_path(char *s, t_list *env);
-t_lexer_list			*empty_arg(t_list **head, t_lexer_list *lxr);
+char					*env4_arg(char *vvalue, char *prev, t_list **head);
+char					*env_for_red(char *vvalue, char *prev, int *check,
+							t_lexer_list *lxr);
+
+//func_4_Lg_line.c
+int						alphan(char c);
+int						redpip(t_lexer_list *lxr);
 
 // tokenization.c
 t_lexer_list			*is_tokenized(char *str);

@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 12:56:50 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 09:35:46 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/09/01 10:07:32 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	// atexit(leaks);
 	enva = get_env(env);
+	exit_status = 0;
 	exit_status = 0;
 	while (1)
 	{
