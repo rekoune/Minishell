@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 12:09:53 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/09/01 12:12:42 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,6 @@ t_lexer_list			*new_node(char *str);
 int						ft_write(char *str, int fd, int flag);
 
 // minishell.c
-void					printexec(t_execution *exec);
 void					handler(int n);
 
 // parcing.c
@@ -215,7 +214,6 @@ char					**getarray(t_list *lst);
 int						find_c(char *s, char c);
 char					*str_join(char *s1, char *s2);
 char					*str_dup(char *str, int size);
-// static char				*sub(char const *s, unsigned int st, size_t l);
 char					*ft_substr(char *s, int st, size_t l);
 
 #endif
