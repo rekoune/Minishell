@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 11:23:21 by haouky           ###   ########.fr       */
+/*   Updated: 2024/09/01 17:08:18 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ int	exucut(t_execution *execution, int *fd, t_list **env)
 		if (pipe(fd) == -1)
 		{
 			perror("minishel: pipe: ");
-			return (-11);
+			return (-1);
 		}
 	}
 	pid = fork();
-	if (pid == 1)
+	if (pid == -1)
 	{
 		perror("minishell: fork: ");
-		return (1);
+		return (-1);
 	}
 	if (pid == 0)
 		exccmd(execution, *env, fd, oldread);
@@ -62,6 +62,8 @@ int	work(t_execution *execution, t_list **env, int *fd)
 	while (execution)
 	{
 		pid[i++] = exucut(execution, fd, env);
+		if(pid[i - 1] == -1)
+			return (-1);
 		execution = execution->next;
 	}
 	if (fd[0])
