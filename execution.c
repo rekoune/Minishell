@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 10:10:22 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/09/01 10:26:23 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	sig_handl(int sig)
 		write(1, "Quit: 3\n", 8);
 }
 
-int exucut(t_execution *execution, int *fd, t_list **env )
+int	exucut(t_execution *execution, int *fd, t_list **env)
 {
-	int pid;
-	int oldread;
+	int	pid;
+	int	oldread;
 
 	oldread = fd[0];
 	if (execution->pipe)
@@ -49,13 +49,13 @@ int exucut(t_execution *execution, int *fd, t_list **env )
 	return (pid);
 }
 
-int work(t_execution *execution, t_list **env, int *fd)
+int	work(t_execution *execution, t_list **env, int *fd)
 {
-	int size;
-	int statu;
+	int		size;
+	int		statu;
 	pid_t	*pid;
-	int i;
-	
+	int		i;
+
 	size = cmd_lst_size(execution);
 	pid = malloc(sizeof(pid_t) * size);
 	i = 0;
@@ -75,6 +75,25 @@ int work(t_execution *execution, t_list **env, int *fd)
 	else if (WIFSIGNALED(statu))
 		statu = WTERMSIG(statu) + 128;
 	return (statu);
+}
+
+int	builtins(t_execution *execution, t_list **env, int i, int status)
+{
+	int	fd[2];
+
+	fd[0] = in_fd(execution->input, 0);
+	if (fd[0] == -1)
+		return (1);
+	if (fd[0])
+		close(fd[0]);
+	fd[0] = out_fd(execution->output, 1, 0);
+	if (fd[0] == -1)
+		return (1);
+	fd[1] = status;
+	i = execute_builtins(&execution->cmd[1], env, i, fd[0]);
+	if (fd[1] != 1)
+		close(fd[1]);
+	return (i);
 }
 
 int	run_execution(t_execution *execution, t_list **env, int status)
@@ -98,21 +117,6 @@ int	run_execution(t_execution *execution, t_list **env, int status)
 	if (execution->cmd[0])
 		i = check_builtins(execution->cmd[0]);
 	if (i && !execution->pipe)
-	{
-		fd[0] = in_fd(execution->input, 0);
-		if (fd[0] == -1)
-			return (1);
-		if (fd[0])
-			close(fd[0]);
-		fd[0] = out_fd(execution->output, 1, 0);
-		if (fd[0] == -1)
-			return (1);
-		fd[1] = status;
-		i = execute_builtins(&execution->cmd[1], env, i, fd);
-		if (fd[1] != 1)
-			close(fd[1]);
-		return (i);
-	}
-	return(work(execution, env, fd));
-
+		return (builtins(execution, env, i, status));
+	return (work(execution, env, fd));
 }
