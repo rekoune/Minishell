@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 10:29:59 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/09/01 11:42:12 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 // sturct and
 
-extern int g_status;
+extern int	g_status;
 typedef struct s_list
 {
 	char				*str;
@@ -205,8 +205,6 @@ int						get_spec_char(t_lexer_list **list, char *str, int i,
 t_lexer_list			*set_quote_state(t_lexer_list *head, enum e_token type);
 void					add_state(t_lexer_list *head);
 enum e_token			add_type(t_lexer_list *node);
-char					*n_state(enum e_state state);
-char					*n_type(enum e_token type);
 
 // tools.c
 char					*str_ncopy(char *str, int size);
