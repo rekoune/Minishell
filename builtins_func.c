@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 17:17:21 by arekoune          #+#    #+#             */
-/*   Updated: 2024/09/01 11:05:31 by haouky           ###   ########.fr       */
+/*   Updated: 2024/09/01 11:14:42 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ int	ft_exit(char **arg, int exit_status)
 		exit_status = 0;
 	else
 		printf("exit\n");
-	
 	if (!arg[0])
 		exit(exit_status);
 	exit_status = ft_atoi(arg[0]);

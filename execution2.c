@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 19:50:39 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 11:02:33 by haouky           ###   ########.fr       */
+/*   Updated: 2024/09/01 11:10:19 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,7 @@ void	setup_files(t_execution *exec, t_list *env, int *fd, int old_read)
 	if (exec->cmd[0])
 		inout[0] = check_builtins(exec->cmd[0]);
 	if (exec->cmd && exec->cmd[0] && inout[0])
-	{
-		inout[0] = execute_builtins(&exec->cmd[1], &env, inout[0], out_exit);
-		exit(inout[0]);
-	}
+		exit (execute_builtins(&exec->cmd[1], &env, inout[0], out_exit));
 }
 
 void	exccmd(t_execution *exec, t_list *env, int *fd, int old_read)
