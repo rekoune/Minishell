@@ -81,7 +81,7 @@ int	builtins(t_execution *execution, t_list **env, int i, int status)
 {
 	int	fd[2];
 	int	out_exit[2];
-	
+
 	fd[0] = in_fd(execution->input, 0);
 	if (fd[0] == -1)
 		return (1);
@@ -90,8 +90,8 @@ int	builtins(t_execution *execution, t_list **env, int i, int status)
 	fd[1] = out_fd(execution->output, 1, 0);
 	if (fd[1] == -1)
 		return (1);
-	out_exit[0] =  fd[1];
-	out_exit[1] =  status;
+	out_exit[0] = fd[1];
+	out_exit[1] = status;
 	i = execute_builtins(&execution->cmd[1], env, i, out_exit);
 	if (fd[1] != 1)
 		close(fd[1]);
