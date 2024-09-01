@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 10:00:51 by haouky           ###   ########.fr       */
+/*   Updated: 2024/09/01 10:26:49 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 // sturct and
 
-extern int				g_stat1;
+extern int g_status;
 typedef struct s_list
 {
 	char				*str;
@@ -125,7 +125,7 @@ int						in_fd(t_oip *input, int fd);
 // builtins_func.c
 int						ft_env(t_list *env, int fd, int flag);
 int						ft_cd(char *str, t_list *env);
-int						ft_exit(char **cmd);
+int						ft_exit(char **cmd, int exit_status);
 int						ft_echo(char **str, int fd);
 int						ft_pwd(int fd);
 
@@ -134,7 +134,7 @@ int						check_builtins(char *str);
 int						ft_export_arr(t_list **env, char **cmd, int out_fd);
 int						ft_unset_arr(t_list **env, char **arg);
 int						execute_builtins(char **cmd, t_list **env, int flag,
-							int out_fd);
+							int *out_exit);
 int						skip_n(char *str);
 
 // free_resources.c
