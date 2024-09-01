@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_func.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 17:17:21 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/31 11:58:28 by haouky           ###   ########.fr       */
+/*   Updated: 2024/09/01 09:45:12 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,18 +100,15 @@ int	ft_cd(char *str, t_list *env)
 	return (EXIT_SUCCESS);
 }
 
-int	ft_exit(char **arg)
+int	ft_exit(char **arg, int exit_status)
 {
-	int	status;
-
-	status = 0;
 	printf("exit\n");
 	if (!arg[0])
-		exit(status);
-	status = ft_atoi(arg[0]);
+		exit(exit_status);
+	exit_status = ft_atoi(arg[0]);
 	if (arg[1])
 		ft_error("exit: too many arguments", NULL, NULL, 0);
 	else
-		exit(status);
+		exit(exit_status);
 	return (EXIT_FAILURE);
 }

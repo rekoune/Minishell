@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/31 16:56:08 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/09/01 09:45:32 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 // sturct and
 
-extern int stat1;
+extern int g_status;
 typedef struct s_list
 {
 	char				*str;
@@ -123,7 +123,7 @@ void					exccmd(t_execution *exec, t_list *env, int *fd,
 // builtins_func.c
 int						ft_env(t_list *env, int fd, int flag);
 int						ft_cd(char *str, t_list *env);
-int						ft_exit(char **cmd);
+int						ft_exit(char **cmd, int exit_status);
 int						ft_echo(char **str, int fd);
 int						ft_pwd(int fd);
 

@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 17:17:28 by arekoune          #+#    #+#             */
-/*   Updated: 2024/08/28 17:19:19 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/09/01 09:44:05 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,22 @@ int	ft_unset_arr(t_list **env, char **arg)
 	return (exit_status);
 }
 
-int	execute_builtins(char **cmd, t_list **env, int flag, int out_fd)
+int	execute_builtins(char **cmd, t_list **env, int flag, int *out_exit)
 {
 	if (flag == 1)
-		return (ft_echo(cmd, out_fd));
+		return (ft_echo(cmd, out_exit[0]));
 	else if (flag == 2)
 		return (ft_cd(cmd[0], *env));
 	else if (flag == 3)
-		return (ft_pwd(out_fd));
+		return (ft_pwd(out_exit[0]));
 	else if (flag == 4)
-		return (ft_export_arr(env, cmd, out_fd));
+		return (ft_export_arr(env, cmd, out_exit[0]));
 	else if (flag == 5)
 		return (ft_unset_arr(env, cmd));
 	else if (flag == 6)
-		return (ft_env(*env, out_fd, 0));
+		return (ft_env(*env, out_exit[0], 0));
 	else if (flag == 7)
-		return (ft_exit(cmd));
+		return (ft_exit(cmd, out_exit[1]));
 	return (0);
 }
 
