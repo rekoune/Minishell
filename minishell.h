@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 11:34:27 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 10:26:49 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/09/01 10:29:59 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int						check_builtins(char *str);
 int						ft_export_arr(t_list **env, char **cmd, int out_fd);
 int						ft_unset_arr(t_list **env, char **arg);
 int						execute_builtins(char **cmd, t_list **env, int flag,
-							int *out_exit);
+							int out_exit[2]);
 int						skip_n(char *str);
 
 // free_resources.c
