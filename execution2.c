@@ -6,7 +6,7 @@
 /*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 19:50:39 by haouky            #+#    #+#             */
-/*   Updated: 2024/09/01 10:26:29 by haouky           ###   ########.fr       */
+/*   Updated: 2024/09/01 11:02:33 by haouky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,30 +66,31 @@ int	out_fd(t_oip *output, int fd, int pipe)
 
 void	setup_files(t_execution *exec, t_list *env, int *fd, int old_read)
 {
-	int	fd[2];
-	int	st[2];
+	int	inout[2];
+	int	out_exit[2];
 
-	fd[0] = in_fd(exec->input, old_read);
-	if (fd[0] == -1)
+	out_exit[0] = 1;
+	out_exit[1] = -1;
+	inout[0] = in_fd(exec->input, old_read);
+	if (inout[0] == -1)
 		exit(1);
-	fd[1] = out_fd(exec->output, fd[1], exec->pipe);
-	if (fd[1] == -1)
+	inout[1] = out_fd(exec->output, fd[1], exec->pipe);
+	if (inout[1] == -1)
 		exit(1);
-	dup2(fd[0], 0);
+	dup2(inout[0], 0);
+	if (inout[0])
+		close(inout[0]);
 	if (fd[0])
 		close(fd[0]);
-	if (fd[0])
-		close(fd[0]);
-	dup2(fd[1], 1);
-	if (fd[1] != 1)
-		close(fd[1]);
+	dup2(inout[1], 1);
+	if (inout[1] != 1)
+		close(inout[1]);
 	if (exec->cmd[0])
-		fd[0] = check_builtins(exec->cmd[0]);
-	if (exec->cmd && exec->cmd[0] && fd[0])
+		inout[0] = check_builtins(exec->cmd[0]);
+	if (exec->cmd && exec->cmd[0] && inout[0])
 	{
-		st[0] = 1;
-		fd[0] = execute_builtins(&exec->cmd[1], &env, fd[0], st);
-		exit(fd[0]);
+		inout[0] = execute_builtins(&exec->cmd[1], &env, inout[0], out_exit);
+		exit(inout[0]);
 	}
 }
 
