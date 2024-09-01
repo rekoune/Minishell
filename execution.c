@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: haouky <haouky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 09:00:40 by haouky            #+#    #+#             */
-/*   Updated: 2024/08/31 12:19:15 by haouky           ###   ########.fr       */
+/*   Updated: 2024/09/01 09:28:19 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ int run_execution(t_execution *execution, t_list **env, int status)
      else if (WIFSIGNALED(statu))
      {
         statu = WTERMSIG(statu) + 128;
-        stat1 = statu;
+        g_status = statu;
      }
     return (statu);
 }
