@@ -6,7 +6,7 @@
 /*   By: arekoune <arekoune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 17:17:28 by arekoune          #+#    #+#             */
-/*   Updated: 2024/09/01 09:44:05 by arekoune         ###   ########.fr       */
+/*   Updated: 2024/09/01 10:30:10 by arekoune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	ft_unset_arr(t_list **env, char **arg)
 	return (exit_status);
 }
 
-int	execute_builtins(char **cmd, t_list **env, int flag, int *out_exit)
+int	execute_builtins(char **cmd, t_list **env, int flag, int out_exit[2])
 {
 	if (flag == 1)
 		return (ft_echo(cmd, out_exit[0]));
